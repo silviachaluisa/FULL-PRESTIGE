@@ -16,7 +16,7 @@ export const Bienvenida = () => {
                     <img src={logo} alt="Full Prestige" className="logo mb-5" />
 
                     
-                    <Link to="/sistema">
+                    <Link to="/login">
                         <button className="mt-5 bg-black border border-white text-red-600 px-8 py-2 rounded-full hover:bg-gray-900 transition-colors">
                             INGRESAR AL SISTEMA
                         </button>
