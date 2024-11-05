@@ -1,11 +1,26 @@
 import logo from '../assets/imagenes/logo.jpg';
 import user from '../assets/imagenes/user.jpg';
 import React from 'react';
+import {useState} from 'react'
+import { useNavigate } from 'react-router-dom';
+
 
 export const Login = () => {
+  const [username, setUsername]= useState('');
+  const [password, setPassword]= useState('');
+  const navigate=useNavigate();
+
+
   const handleLogin = (event) => {
     event.preventDefault();
     console.log("Iniciar sesión");
+
+    //Validacion simple (Para reemplazar con la API real)
+    if(username=='admin' && password=='123'){
+      navigate('/administrador');
+    }else{
+      alert('Credenciales incorrectas');
+    }
   };
 
   return (
@@ -15,7 +30,7 @@ export const Login = () => {
 
         <form
           onSubmit={handleLogin}
-          className="bg-black border-2 border-red-600 p-14 rounded-lg shadow-lg w-full max-w-md"
+          className="bg-black border-4 border-red-600 p-16 rounded-lg shadow-lg w-full max-w-md "
         >
           <div className="flex justify-center mb-5">
             <img
@@ -31,21 +46,28 @@ export const Login = () => {
             <input
               type="text"
               id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
-              className="border border-red-600 bg-gray-200 rounded-lg py-2 px-4 w-full focus:outline-none focus:border-red-700"
+              className="border-2 border-red-600 bg-gray-200 rounded-lg py-2 px-4 w-full focus:outline-none focus:border-red-700"
               style={{ minWidth: '300px' }}
             />
           </div>
+
+
           <div className="mb-4">
             <label htmlFor="password" className="block text-sm font-semibold mb-2 text-white">Contraseña</label>
             <input
               type="password"
               id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
-              className="border border-red-600 bg-gray-200 rounded-lg py-2 px-4 w-full focus:outline-none focus:border-red-600"
+              className="border-2 border-red-600 bg-gray-200 rounded-lg py-2 px-4 w-full focus:outline-none focus:border-red-600"
               style={{ minWidth: '300px' }}
             />
           </div>
+
 
           <div className="flex items-center mb-4">
             <input
@@ -55,6 +77,7 @@ export const Login = () => {
             />
             <label htmlFor="rememberMe" className="text-sm text-white">Recordar Contraseña</label>
           </div>
+
 
           <div className="flex justify-center">
             <button
