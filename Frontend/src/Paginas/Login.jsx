@@ -1,17 +1,33 @@
+import React from 'react';
 import logo from '../assets/imagenes/logo.jpg';
 import user from '../assets/imagenes/user.jpg';
-import React from 'react';
-import {useState} from 'react'
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
 
 
 export const Login = () => {
   const [username, setUsername]= useState('');
   const [password, setPassword]= useState('');
+  const [rememberMe, setRememberMe]= useState(false);
+
+
+  //Al montar el componente, verificar si hay datos guardados
+  useEffect(() => {
+    const storedUsername = localStorage.getItem('username');
+    const storedPassword = localStorage.getItem('password');
+    const storedRememberMe = localStorage.getItem('rememberMe');
+
+    if(storedUsername && storedPassword && storedRememberMe ){
+      setUsername(storedUsername);
+      setPassword(storedPassword);
+      setRememberMe(storedRememberMe);
+    }
+  },[]);
+
   const navigate=useNavigate();
 
-
-  const handleLogin = (event) => {
+  const handleLogin=(event)  =>{
     event.preventDefault();
     console.log("Iniciar sesión");
 
@@ -21,8 +37,31 @@ export const Login = () => {
     }else{
       alert('Credenciales incorrectas');
     }
+
+    // Logica de autenticación
+    console.log("Iniciar sesión con", username, password);
+
+    //Si la opción de recordar esta activida se guarda en el localstorage
+    if(rememberMe){
+      localStorage.setItem('username', username);
+      localStorage.setItem('password', password);
+      localStorage.setItem('rememberMe', rememberMe);
+    } else {
+      //Si no se eliminan los datos
+      localStorage.removeItem('username');
+      localStorage.removeItem('password');
+      localStorage.removeItem('rememberMe');
+    }
   };
 
+
+
+
+  
+ 
+
+
+ 
   return (
     <div className="bg-black flex justify-center items-center h-screen">
       <div className="flex flex-col items-center">

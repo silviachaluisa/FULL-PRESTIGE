@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../assets/imagenes/logo.jpg'; // Asegúrate de que la ruta sea correcta
+import logo from '../../assets/imagenes/logo.jpg'; // Asegúrate de que la ruta sea correcta
 import { Link } from 'react-router-dom';
 import { FaUserAlt, FaCog, FaCalendarAlt, FaCar, FaWallet } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -13,7 +13,7 @@ export const Administrador = () => {
         const confirmLogout = window.confirm ("¿Estas seguro de que deseas cerrar sesión? ");
         
         if (confirmLogout === true) {
-        navigate('/');
+        navigate('/login');
         }
 
     };
