@@ -17,6 +17,7 @@ function App() {
         <BrowserRouter>
         
         <AuthProvider>
+            
         <Routes>
                 <Route path="/" element={<Bienvenida />} /> {/* Ruta principal */}
                 <Route path="/login" element={<Login />} />
