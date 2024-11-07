@@ -1,9 +1,9 @@
 import React from 'react';
-import logo from '../../assets/imagenes/logo.jpg'; // Asegúrate de que la ruta sea correcta
+import logo from '../assets/imagenes/logo.jpg'; // Asegúrate de que la ruta sea correcta
 import { Link } from 'react-router-dom';
 import { FaUserAlt, FaCog, FaCalendarAlt, FaCar, FaWallet } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import AuthContext from '../../context/AuthProvider';
+import AuthContext from '../context/AuthProvider';
 import { useContext } from 'react';
 
 export const Dashboard = () => {
