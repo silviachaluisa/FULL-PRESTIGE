@@ -16,8 +16,7 @@ function App() {
     return (
         <BrowserRouter>
         
-        <AuthProvider>
-            
+        <AuthProvider> 
         <Routes>
                 <Route path="/" element={<Bienvenida />} /> {/* Ruta principal */}
                 <Route path="/login" element={<Login />} />
