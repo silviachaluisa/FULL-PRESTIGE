@@ -3,9 +3,10 @@ import React from 'react';
 import {BrowserRouter,Routes,Route} from 'react-router-dom'
 import { Bienvenida } from './Paginas/Bienvenida'
 import { Login } from './Paginas/Login'
-import {Administrador} from './Paginas/Administrador/ModuloAdministrador.jsx'
+import {Administrador} from './Paginas/Administrador/DashboardAdmin.jsx'
 import {Asistencia} from './Paginas/Administrador/ControlAsistencia.jsx'
 import{RegistrarAsistencia} from './Paginas/Administrador/RegistrarAsitencia.jsx'
+import {ClientesVehiculos } from './Paginas/Administrador/TablaClientes.jsx'
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
                 <Route path="/administrador" element={<Administrador />} />
                 <Route path="/control-asistencia" element={<Asistencia />} />
                 <Route path="/registrar-asistencia" element={<RegistrarAsistencia />} />
+                <Route path="/historial-clientes" element={<ClientesVehiculos />} />
             </Routes>
         </BrowserRouter>
     );

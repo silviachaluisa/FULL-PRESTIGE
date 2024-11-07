@@ -9,19 +9,19 @@ import { Link } from 'react-router-dom';
 export const Login = () => {
   const [username, setUsername]= useState('');
   const [password, setPassword]= useState('');
-  const [rememberMe, setRememberMe]= useState(false);
+  
 
 
   //Al montar el componente, verificar si hay datos guardados
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
     const storedPassword = localStorage.getItem('password');
-    const storedRememberMe = localStorage.getItem('rememberMe');
+   
 
-    if(storedUsername && storedPassword && storedRememberMe ){
+    if(storedUsername && storedPassword ){
       setUsername(storedUsername);
       setPassword(storedPassword);
-      setRememberMe(storedRememberMe);
+      
     }
   },[]);
 
@@ -41,17 +41,7 @@ export const Login = () => {
     // Logica de autenticación
     console.log("Iniciar sesión con", username, password);
 
-    //Si la opción de recordar esta activida se guarda en el localstorage
-    if(rememberMe){
-      localStorage.setItem('username', username);
-      localStorage.setItem('password', password);
-      localStorage.setItem('rememberMe', rememberMe);
-    } else {
-      //Si no se eliminan los datos
-      localStorage.removeItem('username');
-      localStorage.removeItem('password');
-      localStorage.removeItem('rememberMe');
-    }
+    
   };
 
 
@@ -108,15 +98,7 @@ export const Login = () => {
           </div>
 
 
-          <div className="flex items-center mb-4">
-            <input
-              type="checkbox"
-              id="rememberMe"
-              className="mr-2 border-red-600 focus:ring-red-500"
-            />
-            <label htmlFor="rememberMe" className="text-sm text-white">Recordar Contraseña</label>
-          </div>
-
+          
 
           <div className="flex justify-center">
             <button
