@@ -15,7 +15,7 @@ import {RegistrarClientes} from './Paginas/Administrador/RegistrarClientes.jsx'
 function App() {
     return (
         <BrowserRouter>
-        
+    
         <AuthProvider> 
         <Routes>
                 <Route path="/" element={<Bienvenida />} /> {/* Ruta principal */}
