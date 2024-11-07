@@ -3,9 +3,13 @@ import logo from '../../assets/imagenes/logo.jpg'; // Asegúrate de que la ruta 
 import { Link } from 'react-router-dom';
 import { FaUserAlt, FaCog, FaCalendarAlt, FaCar, FaWallet } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import AuthContext from '../../context/AuthProvider';
+import { useContext } from 'react';
 
-export const Administrador = () => {
+export const Dashboard = () => {
     const navigate = useNavigate(); //Para inicializar useNavigate
+    // Consumir el contexto
+  const {auth, setAuth} = useContext(AuthContext)
     
     //Función para manejar el clic en el botón "Cerrar Sesión"
     const handleLogout=() =>{
@@ -34,12 +38,12 @@ export const Administrador = () => {
 
                     <div className="flex items-center space-x-2">
                         <span className='w-3 h-3 bg-green-500 rounded-full inline-block'></span>
-                        <span>Modo-Administrador</span>
+                        <span>{auth.nombre}</span>
                     </div>
 
                     <div className="flex items-center space-x-2">
                         <FaUserAlt className='text-white'/>
-                        <span>Hola-Administrador</span>  
+                        <span>{auth.cargo} </span>  
                     </div>
 
                     <div className='flex items-center'>
@@ -94,4 +98,4 @@ export const Administrador = () => {
     );
 };
 
-export default Administrador;
+export default Dashboard;
