@@ -7,6 +7,7 @@ import {Administrador} from './Paginas/Administrador/DashboardAdmin.jsx'
 import {Asistencia} from './Paginas/Administrador/ControlAsistencia.jsx'
 import{RegistrarAsistencia} from './Paginas/Administrador/RegistrarAsitencia.jsx'
 import {ClientesVehiculos } from './Paginas/Administrador/TablaClientes.jsx'
+import {RegistrarClientes} from './Paginas/Administrador/RegistrarClientes.jsx'
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
                 <Route path="/control-asistencia" element={<Asistencia />} />
                 <Route path="/registrar-asistencia" element={<RegistrarAsistencia />} />
                 <Route path="/historial-clientes" element={<ClientesVehiculos />} />
+                <Route path="/registrar-clientes" element={<RegistrarClientes />} />
             </Routes>
         </BrowserRouter>
     );
