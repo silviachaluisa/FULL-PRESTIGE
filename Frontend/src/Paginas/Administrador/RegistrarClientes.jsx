@@ -51,7 +51,7 @@ export const RegistrarClientes= () => {
           
           {/* --------------------------------------------------------------------------------------- */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha</label>
+            <label className="block font-semibold mb-2">Cédula</label>
             <input
               type="text"
               required
@@ -61,7 +61,7 @@ export const RegistrarClientes= () => {
           {/* --------------------------------------------------------------------------------------- */}
           {/* --------------------------------------------------------------------------------------- */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha</label>
+            <label className="block font-semibold mb-2">Contacto</label>
             <input
               type="text"
               required
@@ -71,7 +71,7 @@ export const RegistrarClientes= () => {
           {/* --------------------------------------------------------------------------------------- */}
           {/* --------------------------------------------------------------------------------------- */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha</label>
+            <label className="block font-semibold mb-2">Email</label>
             <input
               type="text"
               required
@@ -81,7 +81,7 @@ export const RegistrarClientes= () => {
           {/* --------------------------------------------------------------------------------------- */}
           {/* --------------------------------------------------------------------------------------- */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha</label>
+            <label className="block font-semibold mb-2">Dirección</label>
             <input
               type="text"
               required
@@ -91,7 +91,7 @@ export const RegistrarClientes= () => {
           {/* --------------------------------------------------------------------------------------- */}
           {/* --------------------------------------------------------------------------------------- */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha</label>
+            <label className="block font-semibold mb-2">N° Orden</label>
             <input
               type="text"
               required
@@ -101,7 +101,7 @@ export const RegistrarClientes= () => {
           {/* --------------------------------------------------------------------------------------- */}
           {/* --------------------------------------------------------------------------------------- */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha</label>
+            <label className="block font-semibold mb-2">Marca</label>
             <input
               type="text"
               required
@@ -111,7 +111,7 @@ export const RegistrarClientes= () => {
           {/* --------------------------------------------------------------------------------------- */}
           {/* --------------------------------------------------------------------------------------- */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha</label>
+            <label className="block font-semibold mb-2">Modelo</label>
             <input
               type="text"
               required
@@ -121,7 +121,7 @@ export const RegistrarClientes= () => {
           {/* --------------------------------------------------------------------------------------- */}
           {/* --------------------------------------------------------------------------------------- */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha</label>
+            <label className="block font-semibold mb-2">Placa</label>
             <input
               type="text"
               required
@@ -131,9 +131,9 @@ export const RegistrarClientes= () => {
           {/* --------------------------------------------------------------------------------------- */}
           {/* --------------------------------------------------------------------------------------- */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha</label>
+            <label className="block font-semibold mb-2">Fecha de Ingreso</label>
             <input
-              type="text"
+              type="date"
               required
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
             />
@@ -141,16 +141,16 @@ export const RegistrarClientes= () => {
           {/* --------------------------------------------------------------------------------------- */}
           {/* --------------------------------------------------------------------------------------- */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha</label>
+            <label className="block font-semibold mb-2">Fecha de Salida</label>
             <input
-              type="text"
+              type="date"
               required
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
             />
           </div>
           {/* --------------------------------------------------------------------------------------- */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Hora de Ingreso</label>
+            <label className="block font-semibold mb-2">Descripción del trabajo</label>
             <input
               type="text"
               required
@@ -161,7 +161,7 @@ export const RegistrarClientes= () => {
          
           {/* --------------------------------------------------------------------------------------- */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Hora de Salida</label>
+            <label className="block font-semibold mb-2">Técnico a cargo</label>
             <input
               type="text"
               required

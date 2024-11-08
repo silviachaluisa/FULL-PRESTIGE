@@ -53,7 +53,7 @@ export const RegistrarPagos= () => {
           <div className="mb-4">
             <label className="block font-semibold mb-2">Fecha</label>
             <input
-              type="text"
+              type="date"
               required
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
             />
@@ -61,7 +61,7 @@ export const RegistrarPagos= () => {
           {/* --------------------------------------------------------------------------------------- */}
           {/* --------------------------------------------------------------------------------------- */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha</label>
+            <label className="block font-semibold mb-2">Adelanto</label>
             <input
               type="text"
               required
@@ -71,7 +71,7 @@ export const RegistrarPagos= () => {
           {/* --------------------------------------------------------------------------------------- */}
           {/* --------------------------------------------------------------------------------------- */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha</label>
+            <label className="block font-semibold mb-2">Permisos</label>
             <input
               type="text"
               required
@@ -81,7 +81,7 @@ export const RegistrarPagos= () => {
           {/* --------------------------------------------------------------------------------------- */}
           {/* --------------------------------------------------------------------------------------- */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha</label>
+            <label className="block font-semibold mb-2">Faltas</label>
             <input
               type="text"
               required
@@ -91,7 +91,7 @@ export const RegistrarPagos= () => {
           {/* --------------------------------------------------------------------------------------- */}
           {/* --------------------------------------------------------------------------------------- */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha</label>
+            <label className="block font-semibold mb-2">Multas</label>
             <input
               type="text"
               required
@@ -101,7 +101,7 @@ export const RegistrarPagos= () => {
           {/* --------------------------------------------------------------------------------------- */}
           {/* --------------------------------------------------------------------------------------- */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha</label>
+            <label className="block font-semibold mb-2">Atrasos</label>
             <input
               type="text"
               required
@@ -109,66 +109,7 @@ export const RegistrarPagos= () => {
             />
           </div>
           {/* --------------------------------------------------------------------------------------- */}
-          {/* --------------------------------------------------------------------------------------- */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha</label>
-            <input
-              type="text"
-              required
-              className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
-            />
-          </div>
-          {/* --------------------------------------------------------------------------------------- */}
-          {/* --------------------------------------------------------------------------------------- */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha</label>
-            <input
-              type="text"
-              required
-              className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
-            />
-          </div>
-          {/* --------------------------------------------------------------------------------------- */}
-          {/* --------------------------------------------------------------------------------------- */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha</label>
-            <input
-              type="text"
-              required
-              className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
-            />
-          </div>
-          {/* --------------------------------------------------------------------------------------- */}
-          {/* --------------------------------------------------------------------------------------- */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha</label>
-            <input
-              type="text"
-              required
-              className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
-            />
-          </div>
-          {/* --------------------------------------------------------------------------------------- */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">Hora de Ingreso</label>
-            <input
-              type="text"
-              required
-              className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
-            />
-          </div>
-          
-         
-          {/* --------------------------------------------------------------------------------------- */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">Hora de Salida</label>
-            <input
-              type="text"
-              required
-              className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
-            />
-          </div>
-          {/* --------------------------------------------------------------------------------------- */}
+        
 
           <div className="mb-4 col-span-2">
             <label className="block font-semibold mb-2">Observaciones</label>

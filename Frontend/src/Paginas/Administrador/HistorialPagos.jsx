@@ -82,11 +82,11 @@ const brandLogos = {
       
 
       <div>
-        <h2 className=" bg-black px-4 py-2  border-2 border-white text-red-600 text-center text-xl font-semibold mb-4">CONTROL DE PAGOS</h2>
+        <h2 className=" bg-black px-4 py-2  border-2 border-white text-red-600 text-center text-xl font-semibold mb-4">HISTORIAL DE PAGOS</h2>
       </div>
 
       {/* Historial de Clientes/Vehículos */}
-      <main className="flex-grow w-full max-w-5xl  p-6 bg-white shadow mt-6 rounded-lg mx-auto border border-black">
+      <main className="flex-grow w-full   p-6 bg-white shadow mt-6 rounded-lg mx-auto border border-black">
       {/* max-w-5xl (Esto hace que el formulario se limite al ancho y no cubra toda la pantalla)*/} 
         
         {/* Formulario de Búsqueda */}

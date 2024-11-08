@@ -42,7 +42,7 @@ export const Asistencia = () => {
       </header>
 
       <div>
-        <h2 className="bg-black px-4 py-2 text-center text-red-600 text-xl font-bold mb-3 mt-1">CONTROL DE ASISTENCIA</h2>
+        <h2 className="bg-black px-4 py-2 text-center text-red-600 text-xl font-bold mb-3 mt-1">HISTORIAL DE ASISTENCIA</h2>
       </div>
 
       <main className=" flex-grow w-full max-w-5xl p-6 bg-white  shadow mt-2 mb-4 rounded-lg mx-auto border border-black">
