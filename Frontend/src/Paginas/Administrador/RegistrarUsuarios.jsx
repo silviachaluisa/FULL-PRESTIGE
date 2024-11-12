@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import logo from '../../assets/imagenes/logo.jpg';
 import { useNavigate } from 'react-router-dom';
 
-export const RegistrarClientes= () => {
+export const RegistrarUsuarios= () => {
   const navigate = useNavigate();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
@@ -43,7 +43,7 @@ export const RegistrarClientes= () => {
       </div>
 
       <h2 className="text-red-600 text-3xl font-bold text-center mb-5 border-t-2 border-b-2 border-red-700 w-full py-4">
-        REGISTRAR CLIENTE
+        REGISTRAR USUARIOS
       </h2>
 
       <div className="w-full max-w-7xl px-10">
@@ -59,16 +59,7 @@ export const RegistrarClientes= () => {
             />
           </div>
           {/* --------------------------------------------------------------------------------------- */}
-          {/* --------------------------------------------------------------------------------------- */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">Contacto</label>
-            <input
-              type="text"
-              required
-              className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
-            />
-          </div>
-          {/* --------------------------------------------------------------------------------------- */}
+
           {/* --------------------------------------------------------------------------------------- */}
           <div className="mb-4">
             <label className="block font-semibold mb-2">Email</label>
@@ -91,87 +82,28 @@ export const RegistrarClientes= () => {
           {/* --------------------------------------------------------------------------------------- */}
           {/* --------------------------------------------------------------------------------------- */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">N° Orden</label>
-            <input
-              type="text"
-              required
-              className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
-            />
-          </div>
-          {/* --------------------------------------------------------------------------------------- */}
-          {/* --------------------------------------------------------------------------------------- */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">Marca</label>
-            <input
-              type="text"
-              required
-              className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
-            />
-          </div>
-          {/* --------------------------------------------------------------------------------------- */}
-          {/* --------------------------------------------------------------------------------------- */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">Modelo</label>
-            <input
-              type="text"
-              required
-              className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
-            />
-          </div>
-          {/* --------------------------------------------------------------------------------------- */}
-          {/* --------------------------------------------------------------------------------------- */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">Placa</label>
-            <input
-              type="text"
-              required
-              className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
-            />
-          </div>
-          {/* --------------------------------------------------------------------------------------- */}
-          {/* --------------------------------------------------------------------------------------- */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha de Ingreso</label>
-            <input
-              type="date"
-              required
-              className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
-            />
-          </div>
-          {/* --------------------------------------------------------------------------------------- */}
-          {/* --------------------------------------------------------------------------------------- */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha de Salida</label>
-            <input
-              type="date"
-              required
-              className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
-            />
-          </div>
-          {/* --------------------------------------------------------------------------------------- */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">Descripción del trabajo</label>
-            <textarea
-              rows="3"
-              className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
-            ></textarea>
-          </div>
-          
-         
-          {/* --------------------------------------------------------------------------------------- */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">Tecnico Responsable</label>
+            <label className="block font-semibold mb-2">Cargo</label>
             <select
                 required
                 className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
             >
                 <option value="">Selecciona una opción</option>
-                <option value="activo">Tecnico A</option>
-                <option value="inactivo">Tecnico B</option>
-                <option value="inactivo">Tecnico C</option>
+                <option value="activo">Gerente</option>
+                <option value="inactivo">Administrador</option>
+                <option value="inactivo">Tecnico</option>
             </select>
             </div>
-
+          {/* --------------------------------------------------------------------------------------- */}
+          {/* --------------------------------------------------------------------------------------- */}
+          <div className="mb-4">
+            <label className="block font-semibold mb-2">Contraseña</label>
+            <input
+              type="text"
+              required
+              className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
+            />
+          </div>
+          {/* --------------------------------------------------------------------------------------- */}
           {/* --------------------------------------------------------------------------------------- */}
           <div className="mb-4">
             <label className="block font-semibold mb-2">Estado</label>
@@ -180,13 +112,12 @@ export const RegistrarClientes= () => {
                 className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
             >
                 <option value="">Selecciona una opción</option>
-                <option value="activo">Pendiente</option>
-                <option value="inactivo">Finalizado</option>
-                <option value="inactivo">Entregado</option>
+                <option value="activo">Activo</option>
+                <option value="inactivo">Inactivo</option>
             </select>
             </div>
-             {/* --------------------------------------------------------------------------------------- */}
-
+          {/* --------------------------------------------------------------------------------------- */}
+          
           <div className="mb-4 col-span-2">
             <label className="block font-semibold mb-2">Observaciones</label>
             <textarea
@@ -220,4 +151,4 @@ export const RegistrarClientes= () => {
   );
 };
 
-export default RegistrarClientes;
+export default RegistrarUsuarios;

@@ -11,6 +11,8 @@ import ClientesVehiculos  from './Paginas/Administrador/HistorialClientes.jsx'
 import RegistrarClientes from './Paginas/Administrador/RegistrarClientes.jsx'
 import Pagos from './Paginas/Administrador/HistorialPagos.jsx'
 import RegistrarPagos from './Paginas/Administrador/RegistrarPagos.jsx';
+import Usuarios from './Paginas/Administrador/HistorialUsuarios.jsx';
+import RegistrarUsuarios from './Paginas/Administrador/RegistrarUsuarios.jsx';
 
 
 
@@ -29,6 +31,8 @@ function App() {
                 <Route path="/registrar-clientes" element={<RegistrarClientes />} />
                 <Route path="/historial-pagos" element={<Pagos />} />
                 <Route path="/registrar-pagos" element={<RegistrarPagos />} />
+                <Route path="/historial-usuarios" element={<Usuarios />} />
+                <Route path="/registrar-usuarios" element={<RegistrarUsuarios />} />
             </Routes>
         </AuthProvider>
            

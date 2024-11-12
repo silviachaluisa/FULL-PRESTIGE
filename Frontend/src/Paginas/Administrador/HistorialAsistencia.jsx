@@ -44,6 +44,7 @@ export const Asistencia = () => {
       <div>
         <h2 className="bg-black px-4 py-2 text-center text-red-600 text-xl font-bold mb-3 mt-1">HISTORIAL DE ASISTENCIA</h2>
       </div>
+      {/* Historial de Asistencia */}
 
       <main className=" flex-grow w-full max-w-5xl p-6 bg-white  shadow mt-2 mb-4 rounded-lg mx-auto border border-black">
 
@@ -66,7 +67,10 @@ export const Asistencia = () => {
               <th className="p-2 border border-gray-300">Hora de Ingreso</th>
               <th className="p-2 border border-gray-300">Hora de Salida</th>
               <th className="p-2 border border-gray-300">Observaciones</th>
+              <th className="p-2 border border-gray-300">Opciones</th>
             </tr>
+
+            
           </thead>
 
           <tbody>
@@ -76,7 +80,13 @@ export const Asistencia = () => {
               <td className="p-2 border border-gray-300">08:00 AM</td>
               <td className="p-2 border border-gray-300">05:00 PM</td>
               <td className="p-2 border border-gray-300">Pagarle Horas extras</td>
+              <td className="border border-black px-4 py-2">
+                  <button className="text-black hover:text-blue-700">
+                    ✏️
+                  </button>
+                </td>
             </tr>
+            
           </tbody>
         </table>
 

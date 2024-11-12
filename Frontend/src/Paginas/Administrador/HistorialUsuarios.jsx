@@ -17,7 +17,7 @@ import susukiLogo from '../../assets/LogosAutos/Susuki.png'
 import toyotaLogo from '../../assets/LogosAutos/Toyota.png'
 
 
-export const Pagos = () => {
+export const Usuarios = () => {
   const navigate= useNavigate();
   const handleLogout=()=>{
     const confirmLogout = window.confirm ("¿Deseas abandonar la página?")
@@ -82,13 +82,13 @@ const brandLogos = {
       
 
       <div>
-        <h2 className=" bg-black px-4 py-2  border-2 border-white text-red-600 text-center text-xl font-semibold mb-4">HISTORIAL DE PAGOS</h2>
+        <h2 className=" bg-black px-4 py-2  border-2 border-white text-red-600 text-center text-xl font-semibold mb-4">USUARIOS REGISTRADOS</h2>
       </div>
 
-      {/* Historial de Pagos */}
-      <main className="flex-grow w-full max-w-5xl p-6 bg-white shadow mt-6 rounded-lg mx-auto border border-black">
+      {/* Historial de Clientes/Vehículos */}
+      <main className="flex-grow  max-w-5lx  p-6 bg-white shadow mt-6 rounded-lg mx-auto border border-black">
       {/* max-w-5xl (Esto hace que el formulario se limite al ancho y no cubra toda la pantalla)*/} 
-        
+      {/* w-full  (Para ponerlo en toda la pantalla)*/}
         {/* Formulario de Búsqueda */}
         <div className="flex items-center justify-between bg-gray-300 p-4 rounded-lg mb-6">
           <input
@@ -106,37 +106,36 @@ const brandLogos = {
 
         {/* Tabla de Historial */}
         <div className="overflow-x-auto ">
-          <h1 className='font-bold'>Se muestran los valores de cada campo a continuación: </h1> 
           <table className="w-full text-center border-collapse border border-black ">
             <thead className="bg-black text-white font-mono  ">
-  
               <tr>
                 {[
-                  'Fecha', 'Adelanto', 'Permisos', 'Faltas', 'Multas', 
-                  'Atrasos', 'Subtotal', 'Observaciones','Opciones'
+                  'Cédula', 'Email', 'Dirección', 
+                  'Cargo', 'Contraseña','Estado', 'Observaciones', 'Opciones'
                 ].map((header) => (
                   <th key={header} className="border border-black px-4 py-2">{header}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              
+              {/* Ejemplo de fila con datos quemados */}
               <tr>
-                <td className="border border-black px-4 py-2">30</td>
-                <td className="border border-black px-4 py-2">60,00</td>
-                <td className="border border-black px-4 py-2">40</td>
-                <td className="border border-black px-4 py-2">20,00</td>
-                <td className="border border-black px-4 py-2">0,00</td>
-                <td className="border border-black px-4 py-2">30,00</td>
-                <td className="border border-black px-4 py-2">80,00</td>
-                <td className="border border-black px-4 py-2">20,00</td>
-               
+                <td className="border border-black px-4 py-2">1234567890</td>
+                <td className="border border-black px-4 py-2">0998765432</td>
+                <td className="border border-black px-4 py-2">cliente@example.com</td>
+                <td className="border border-black px-4 py-2">Av. Principal #123</td>
+                <td className="border border-black px-4 py-2">001</td>
+                <td className="border border-black px-4 py-2">Toyota</td>
+                <td className="border border-black px-4 py-2">Ninguna</td>
+            
+                
                 <td className="border border-black px-4 py-2">
                   <button className="text-black hover:text-blue-700">
                     ✏️
                   </button>
                 </td>
               </tr>
+              
             </tbody>
           </table>
         </div>
@@ -166,4 +165,4 @@ const brandLogos = {
   );
 };
 
-export default Pagos;
+export default Usuarios;
