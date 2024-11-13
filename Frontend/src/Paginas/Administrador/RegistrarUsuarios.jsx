@@ -42,7 +42,7 @@ export const RegistrarUsuarios= () => {
         </button>
       </div>
 
-      <h2 className="text-red-600 text-3xl font-bold text-center mb-5 border-t-2 border-b-2 border-red-700 w-full py-4">
+      <h2 className="text-red-600 text-3xl font-bold text-center mb-5 border-t-2 border-b-2 border-red-700 w-full py-2">
         REGISTRAR USUARIOS
       </h2>
 

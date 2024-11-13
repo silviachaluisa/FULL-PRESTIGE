@@ -4,20 +4,19 @@ import { useNavigate } from 'react-router-dom';
 
 export const RegistrarAsistencia = () => {
   const navigate = useNavigate();
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false); // Estado para mostrar el mensaje de éxito
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const handleSave = (event) => {
-    event.preventDefault(); // Previene el envío del formulario
+    event.preventDefault();
     const confirmSave = window.confirm("¿Deseas guardar la información?");
     
     if (confirmSave) {
       console.log("Datos guardados");
-      setShowSuccessMessage(true); // Muestra el mensaje de éxito
+      setShowSuccessMessage(true);
 
-      // Oculta el mensaje después de 3 segundos
       setTimeout(() => {
         setShowSuccessMessage(false);
-        navigate('/registrar-asistencia'); // Navega a la página deseada después de guardar
+        navigate('/historial-asistencia');
       }, 3000);
     }
   };
@@ -25,26 +24,28 @@ export const RegistrarAsistencia = () => {
   const handleLogout = () => {
     const confirmLogout = window.confirm("¿Deseas abandonar la página?");
     if (confirmLogout === true) {
-      navigate('/control-asistencia');
+      navigate('/historial-asistencia');
     }
   };
 
   return (
-    <div className="bg-black flex flex-col items-center text-white">
-        <div className='w-full'>
-        <div className="flex justify-center">
-          <img src={logo} alt="Full Prestige" className="mb-5" style={{ width: '250px', height: 'auto' }} />
-        </div>
-          <h2 className="bg-black text-red-600 text-3xl font-bold text-center mb-5 border-t-2 border-b-2 border-red-700">
-            REGISTRAR ASISTENCIA
-          </h2>
-        </div>
-       <div className="w-full max-w-md p-6 bg-black text-white">
-        
+    <div className="bg-black text-white min-h-screen flex flex-col items-center">
+      {/* Contenedor de la cabecera */}
+      <div className="w-full flex justify-between items-center p-4">
+        <img src={logo} alt="Full Prestige" style={{ width: '150px', height: 'auto' }} />
+        <button 
+          onClick={handleLogout}
+          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
+        >
+          VOLVER
+        </button>
+      </div>
+      <h2 className=" text-red-600 text-3xl font-bold text-center mb-5 border-t-2 border-b-2 border-red-700 w-full py-2">
+        REGISTRAR ASISTENCIA
+      </h2>
 
-        
-        
 
+      <div className="w-full max-w-md p-6 bg-black text-white">
         <form onSubmit={handleSave} className="border-2 border-red-600 p-6 rounded-lg mb-7">
           <div className="mb-4">
             <label className="block font-semibold mb-2">Fecha</label>
@@ -90,7 +91,7 @@ export const RegistrarAsistencia = () => {
 
         <button
           type="button"
-          onClick={handleLogout} // Función para regresar
+          onClick={handleLogout}
           className="py-2 px-6 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-800"
         >
           VOLVER
@@ -107,7 +108,6 @@ export const RegistrarAsistencia = () => {
       <footer className="mt-8 w-full text-center text-white">
         <p className="py-4 border-t border-white text-sm">Empresa Dedicada al Cuidado y Mantenimiento de tu Vehículo</p>
       </footer>
-      
     </div>
   );
 };

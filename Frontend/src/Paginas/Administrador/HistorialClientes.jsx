@@ -23,10 +23,12 @@ export const ClientesVehiculos = () => {
     const confirmLogout = window.confirm ("¿Deseas abandonar la página?")
     if(confirmLogout===true){
         navigate('/administrador');
-    }
-
-    
+    }  
 };
+
+const handleNewClick =()=>{
+  navigate('/registrar-clientes')
+}
 const brandLogos = {
   bmw: BMWLogo,
   chevrolet: chevroletLogo,
@@ -99,7 +101,9 @@ const brandLogos = {
           <button className="ml-2 px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-800">
             Buscar
           </button>
-          <button className="ml-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-800">
+          <button 
+          onClick={handleNewClick}
+          className="ml-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-800">
             Nuevo
           </button>
         </div>

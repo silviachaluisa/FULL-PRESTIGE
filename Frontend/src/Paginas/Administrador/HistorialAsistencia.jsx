@@ -11,12 +11,12 @@ export const Asistencia = () => {
     const handleLogout=()=>{
         const confirmLogout = window.confirm ("¿Deseas abandonar la página?")
         if(confirmLogout===true){
-            navigate('/administrador');
+            navigate('/dashboard');
         }
     };
 
-    const handleRegistro=()=> {
-      navigate('/registrar-asistencia');
+    const handleNuevo=()=> {
+       navigate('/registrar-asistencia');
     };
 
     
@@ -56,7 +56,13 @@ export const Asistencia = () => {
             className="border border-gray-400 p-2 rounded-l w-full"
           />
           <button className="bg-green-500 text-white px-4 py-2 rounded-r">Buscar</button>
+          <button 
+            onClick={handleNuevo} 
+            className="ml-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-800">
+            Nuevo
+          </button>
         </div>
+        
 
        
         <table className="w-full border-collapse border border-gray-300 text-center mb-6">
@@ -91,14 +97,7 @@ export const Asistencia = () => {
         </table>
 
         
-        <div className="flex space-x-4 justify-center mb-6 mt-40">
-          <button
-          onClick={handleRegistro} 
-            className="bg-blue-500 text-white px-6 py-2 rounded">
-            Registrar</button>
-          <button className="bg-yellow-600 text-white px-6 py-2 rounded">Actualizar</button>
-        </div>
-
+        
         
         <div className="flex space-x-4 justify-center mt-20">
           <button className="bg-red-400 text-black font-bold px-3 py-2 rounded flex items-center space-x-5"> 
@@ -117,8 +116,9 @@ export const Asistencia = () => {
       </main>
 
      
-      <footer className="w-full bg-black text-white text-center p-4">
-        Empresa Dedicada al Cuidado y Mantenimiento de tu Vehículo
+      {/* Footer */}
+      <footer className="w-full py-1 text-center text-white bg-black border-t border-white">
+      2024 Full Prestige. Todos los derechos reservados.
       </footer>
     </div>
   );

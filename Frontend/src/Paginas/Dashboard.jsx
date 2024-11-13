@@ -61,7 +61,7 @@ export const Dashboard = () => {
             >
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
                   
-                    <Link to="/control-asistencia" className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition">
+                    <Link to="/historial-asistencia" className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition">
                         <FaCalendarAlt className="text-red-600 mx-auto text-5xl mb-4" />
                         <p className="text-white font-semibold">Control de Asistencia</p>
                     </Link>
@@ -71,7 +71,7 @@ export const Dashboard = () => {
                         <p className="text-white font-semibold">Historial de Clientes y vehículos</p>
                     </Link>
                  
-                    <Link to="/control-pagos" className="bg-black border border-white-600 p-9 rounded-lg text-center hover:bg-gray-800 transition">
+                    <Link to="/historial-pagos" className="bg-black border border-white-600 p-9 rounded-lg text-center hover:bg-gray-800 transition">
                         <FaWallet className="text-red-600 mx-auto text-5xl mb-4" />
                         <p className="text-white font-semibold">Control de Pagos</p>
                     </Link>
