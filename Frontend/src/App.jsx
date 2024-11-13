@@ -33,6 +33,8 @@ function App() {
                 <Route path="/registrar-pagos" element={<RegistrarPagos />} />
                 <Route path="/historial-usuarios" element={<Usuarios />} />
                 <Route path="/registrar-usuarios" element={<RegistrarUsuarios />} />
+                <Route path="/actualizar-usuarios" element={<RegistrarUsuarios />} />
+                
             </Routes>
         </AuthProvider>
            

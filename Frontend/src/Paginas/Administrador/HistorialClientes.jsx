@@ -22,7 +22,7 @@ export const ClientesVehiculos = () => {
   const handleLogout=()=>{
     const confirmLogout = window.confirm ("¿Deseas abandonar la página?")
     if(confirmLogout===true){
-        navigate('/administrador');
+        navigate('/dashboard');
     }  
 };
 
@@ -144,27 +144,7 @@ const brandLogos = {
                   </button>
                 </td>
               </tr>
-              {/* Otra fila de ejemplo */}
-              <tr>
-                <td className="border border-black px-4 py-2">0987654321</td>
-                <td className="border border-black px-4 py-2">0981234567</td>
-                <td className="border border-black px-4 py-2">otrocliente@example.com</td>
-                <td className="border border-black px-4 py-2">Calle Falsa #456</td>
-                <td className="border border-black px-4 py-2">002</td>
-                <td className="border border-black px-4 py-2">Ford</td>
-                <td className="border border-black px-4 py-2">Fiesta</td>
-                <td className="border border-black px-4 py-2">DEF-5678</td>
-                <td className="border border-black px-4 py-2">10/11/2023</td>
-                <td className="border border-black px-4 py-2">12/11/2023</td>
-                <td className="border border-black px-4 py-2">Revisión de frenos</td>
-                <td className="border border-black px-4 py-2">Ana López</td>
-                <td className="border border-black px-4 py-2">Pendiente</td>
-                <td className="border border-black px-4 py-2">
-                  <button className="text-black hover:text-blue-700">
-                    ✏️
-                  </button>
-                </td>
-              </tr>
+              
             </tbody>
           </table>
         </div>

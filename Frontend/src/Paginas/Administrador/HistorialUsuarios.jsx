@@ -110,8 +110,8 @@ const brandLogos = {
             <thead className="bg-black text-white font-mono  ">
               <tr>
                 {[
-                  'Cédula', 'Email', 'Dirección', 
-                  'Cargo', 'Contraseña','Estado', 'Observaciones', 'Opciones'
+                  'Cédula','Nombre y Apellido','Telefono', 'Email', 'Dirección', 
+                  'Cargo', 'Contraseña','Estado', 'Opciones'
                 ].map((header) => (
                   <th key={header} className="border border-black px-4 py-2">{header}</th>
                 ))}
@@ -121,6 +121,7 @@ const brandLogos = {
               {/* Ejemplo de fila con datos quemados */}
               <tr>
                 <td className="border border-black px-4 py-2">1234567890</td>
+                <td className="border border-black px-4 py-2">sILVIA</td>
                 <td className="border border-black px-4 py-2">0998765432</td>
                 <td className="border border-black px-4 py-2">cliente@example.com</td>
                 <td className="border border-black px-4 py-2">Av. Principal #123</td>

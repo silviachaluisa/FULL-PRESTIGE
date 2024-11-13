@@ -16,9 +16,8 @@ export const Asistencia = () => {
     };
 
     const handleNuevo=()=> {
-       navigate('/registrar-asistencia');
-    };
-
+      window.open('/registrar-asistencia', '_blank');
+  };
     
   return (
     <div className="min-h-screen flex flex-col" 
