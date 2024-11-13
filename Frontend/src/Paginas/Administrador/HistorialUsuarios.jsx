@@ -157,9 +157,10 @@ const brandLogos = {
         
       </main>
 
+      
       {/* Footer */}
-      <footer className="w-full py-4 text-center text-white bg-black border-t border-white">
-        Empresa Dedicada al Cuidado y Mantenimiento de tu Vehículo
+      <footer className="w-full py-1 text-center text-white bg-black border-t border-white">
+      2024 Full Prestige. Todos los derechos reservados.
       </footer>
     </div>
   );
