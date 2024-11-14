@@ -45,13 +45,9 @@ Campos de Registro
 8. Campo de Estado (opcional en edición)
 9. El campo de Estado solo es visible cuando el formulario es utilizado en modo de edición de 
    usuario. En el modo de registro, este campo está oculto.
-> .[!NOTE]
-> ñlkñlk
-
-> knjdkgn
-
-Campo de Estado (opcional en edición)
-El campo de Estado solo es visible cuando el formulario es utilizado en modo de edición de usuario. En el modo de registro, este campo está oculto.
+> [!NOTE]
+> **Campo de Estado (opcional en edición)**<br>
+> El campo de Estado solo es visible cuando el formulario es utilizado en modo de edición de usuario. En el modo de registro, este campo está oculto.
 
 ## Componente EditarPerfil
 Este componente permite a los usuarios ver y editar su perfil en una página que incluye un formulario prellenado con la información actual del usuario. Los usuarios pueden actualizar campos como cédula, nombre, teléfono, correo, dirección, cargo y estado.
