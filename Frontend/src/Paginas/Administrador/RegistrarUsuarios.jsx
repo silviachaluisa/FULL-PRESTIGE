@@ -1,14 +1,17 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import logo from '../../assets/imagenes/logo.jpg';
 import usuario from '../../assets/imagenes/usuarios.png';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Mensaje from '../../components/Alertas';
+import { HistoryContext } from '../../context/historyProvider';
+
 
 export const RegistrarUsuarios = () => {
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const {usuarios}= useContext (HistoryContext)
+  const { pathname } = useLocation(); //Para la ruta actualizar
 
   const [registro, setRegistro] = useState({
     cedula: '',
@@ -28,22 +31,23 @@ export const RegistrarUsuarios = () => {
     try {
       // Construir la URL de la API para el registro
       const URLRegister = `${import.meta.env.VITE_BACKEND_URL}/register`;
-      
+      console.log(registro)
+
       // Realizar la petición POST
       const respuesta = await axios.post(URLRegister, registro);
+      console.log(respuesta)
       
       // Guardar el token en localStorage y establecer el contexto de autenticación
       localStorage.setItem('token', respuesta.data.token);
-      setAuth(respuesta.data.empleado);
       
       // Navegar al dashboard después del registro exitoso
-      navigate('/dashboard');
+      navigate('/historial-usuarios');
     } catch (error) {
       // Configurar el mensaje de error recibido desde la respuesta del servidor
       setMensaje({ respuesta: error.response.data.message, tipo: false });
-      
+      console.log(error)
       // Limpiar el formulario después del error
-      setRegistro({ correo: '', contrasena: '' });
+      //setRegistro({}); // Esto no se debio colocar porque no estaba limpiando, sino borrando la informacion de los campos
       
       // Limpiar el mensaje de error después de 3 segundos
       setTimeout(() => {
@@ -55,7 +59,7 @@ export const RegistrarUsuarios = () => {
   const handleLogout = () => {
     const confirmLogout = window.confirm("¿Deseas abandonar la página?");
     if (confirmLogout) {
-      navigate('/control-asistencia');
+      navigate('/historial-usuarios');
     }
   };
 
@@ -90,6 +94,8 @@ export const RegistrarUsuarios = () => {
       </div>
 
       <div className="w-full max-w-7xl px-10">
+      {mensaje && <Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} />}
+
         <form onSubmit={handleRegister} className="grid grid-cols-3 gap-6 border-2 border-red-600 p-6 rounded-lg bg-black mb-7">
           
           {/* Cédula */}
@@ -166,6 +172,7 @@ export const RegistrarUsuarios = () => {
           <div className="mb-4">
             <label className="block font-semibold mb-2">Cargo</label>
             <select
+            
               name="cargo"
               value={registro.cargo}
               onChange={handleChange}

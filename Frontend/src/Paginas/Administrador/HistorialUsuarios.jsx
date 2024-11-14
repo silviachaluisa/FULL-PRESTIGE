@@ -15,18 +15,21 @@ import peugeotLogo from '../../assets/LogosAutos/Peugeot.png'
 import renaultLogo from '../../assets/LogosAutos/Renault.png'
 import susukiLogo from '../../assets/LogosAutos/Susuki.png'
 import toyotaLogo from '../../assets/LogosAutos/Toyota.png'
+import { HistoryContext } from '../../context/historyProvider';
+import { useContext } from 'react';
 
 
 export const Usuarios = () => {
+
   const navigate= useNavigate();
+  const {usuarios}= useContext (HistoryContext);
   const handleLogout=()=>{
     const confirmLogout = window.confirm ("¿Deseas abandonar la página?")
     if(confirmLogout===true){
-        navigate('/administrador');
-    }
-
-    
+        navigate('/dashboard');
+    }  
 };
+
 const brandLogos = {
   bmw: BMWLogo,
   chevrolet: chevroletLogo,
@@ -41,6 +44,9 @@ const brandLogos = {
   susuki:susukiLogo,
   toyota:toyotaLogo
 };
+const handleNewClick =()=>{
+  navigate('/registrar-usuarios')
+}
 
 
   return (
@@ -82,7 +88,7 @@ const brandLogos = {
       
 
       <div>
-        <h2 className=" bg-black px-4 py-2  border-2 border-white text-red-600 text-center text-xl font-semibold mb-4">USUARIOS REGISTRADOS</h2>
+        <h2 className=" bg-black px-4 py-2  border-2 border-white text-red-600 text-center text-xl font-semibold mb-4">HISTORIAL USUARIOS REGISTRADOS</h2>
       </div>
 
       {/* Historial de Clientes/Vehículos */}
@@ -99,7 +105,9 @@ const brandLogos = {
           <button className="ml-2 px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-800">
             Buscar
           </button>
-          <button className="ml-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-800">
+          <button 
+          onClick={handleNewClick}
+          className="ml-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-800">
             Nuevo
           </button>
         </div>
@@ -111,33 +119,36 @@ const brandLogos = {
               <tr>
                 {[
                   'Cédula','Nombre y Apellido','Telefono', 'Email', 'Dirección', 
-                  'Cargo', 'Contraseña','Estado', 'Opciones'
+                  'Cargo','Estado', 'Opciones'
                 ].map((header) => (
                   <th key={header} className="border border-black px-4 py-2">{header}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {/* Ejemplo de fila con datos quemados */}
-              <tr>
-                <td className="border border-black px-4 py-2">1234567890</td>
-                <td className="border border-black px-4 py-2">sILVIA</td>
-                <td className="border border-black px-4 py-2">0998765432</td>
-                <td className="border border-black px-4 py-2">cliente@example.com</td>
-                <td className="border border-black px-4 py-2">Av. Principal #123</td>
-                <td className="border border-black px-4 py-2">001</td>
-                <td className="border border-black px-4 py-2">Toyota</td>
-                <td className="border border-black px-4 py-2">Ninguna</td>
-            
+              {usuarios.map((item, index) => (
+                 
+                  <tr key={index}>
+                    <td className="border border-black px-4 py-2">{item.cedula}</td>
+                    <td className="border border-black px-4 py-2">{item.nombre}</td>
+                    <td className="border border-black px-4 py-2">{item.telefono}</td>
+                    <td className="border border-black px-4 py-2">{item.correo}</td>
+                    <td className="border border-black px-4 py-2">{item.direccion}</td>
+                    <td className="border border-black px-4 py-2">{item.cargo}</td>
+                    <td className="border border-black px-4 py-2">{item.estado ?"activo":"inactivo"}</td>
+                    <td className="border border-black px-4 py-2">
+                    <button className="text-black hover:text-blue-700">
+                      ✏️
+                    </button>
+                    </td>
+                  </tr>
+          
+
+              ))}
                 
-                <td className="border border-black px-4 py-2">
-                  <button className="text-black hover:text-blue-700">
-                    ✏️
-                  </button>
-                </td>
-              </tr>
-              
+
             </tbody>
+            
           </table>
         </div>
         <div className="flex space-x-4 justify-center mt-20">

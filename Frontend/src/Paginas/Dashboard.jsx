@@ -61,6 +61,10 @@ export const Dashboard = () => {
             >
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
                   
+                    <Link to="/historial-usuarios" className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition">
+                        <FaCalendarAlt className="text-red-600 mx-auto text-5xl mb-4" />
+                        <p className="text-white font-semibold">Gestionar Usuarios</p>
+                    </Link>
                     <Link to="/historial-asistencia" className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition">
                         <FaCalendarAlt className="text-red-600 mx-auto text-5xl mb-4" />
                         <p className="text-white font-semibold">Control de Asistencia</p>

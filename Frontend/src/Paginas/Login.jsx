@@ -29,7 +29,7 @@ export const Login = () => {
       const respuesta = await axios.post(URLogin, loginForm);
 
       // Guardar token en localStorage y establecer contexto
-      localStorage.setItem('token', respuesta.data.token);
+      localStorage.setItem('token', respuesta.data.empleado.token);
       setAuth(respuesta.data.empleado);
       navigate('/dashboard');
     } catch (error) {

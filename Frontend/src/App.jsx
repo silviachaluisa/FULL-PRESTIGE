@@ -13,14 +13,17 @@ import Pagos from './Paginas/Administrador/HistorialPagos.jsx'
 import RegistrarPagos from './Paginas/Administrador/RegistrarPagos.jsx';
 import Usuarios from './Paginas/Administrador/HistorialUsuarios.jsx';
 import RegistrarUsuarios from './Paginas/Administrador/RegistrarUsuarios.jsx';
+import { HistoryProvider } from './context/historyProvider.jsx';
+
+
 
 
 
 function App() {
     return (
         <BrowserRouter>
-    
-        <AuthProvider> 
+        <AuthProvider>
+            <HistoryProvider>
         <Routes>
                 <Route path="/" element={<Bienvenida />} /> {/* Ruta principal */}
                 <Route path="/login" element={<Login />} />
@@ -36,7 +39,13 @@ function App() {
                 <Route path="/actualizar-usuarios" element={<RegistrarUsuarios />} />
                 
             </Routes>
+
+            </HistoryProvider>
         </AuthProvider>
+        
+    
+       
+      
            
         </BrowserRouter>
 
