@@ -5,39 +5,53 @@ El componente RegistrarUsuario permite al administrador registrar nuevos usuario
 con sus datos personales y la asignación de un cargo dentro de la empresa.<br>
 
 ***Características***<br>
-Registro de Usuarios: Permite al administrador crear cuentas de usuario en el sistema ingresando campos necesarios como cédula, nombre, teléfono, correo, dirección, cargo y contraseña.
-Asignación de Roles: Asigna un rol a cada usuario según sus responsabilidades en la empresa.
-Validación de Datos: Realiza validaciones básicas de los datos para asegurar que los campos sean completados correctamente.
-Almacenamiento de Token: Guarda el token de autenticación en localStorage después de registrar exitosamente al usuario.
+* **Registro de Usuarios:** Permite al administrador crear cuentas de usuario en el sistema 
+  ingresando campos necesarios como cédula, nombre, teléfono, correo, dirección, cargo y 
+  contraseña.
+* **Asignación de Roles:** Asigna un rol a cada usuario según sus responsabilidades en la empresa.
+* **Validación de Datos:** Realiza validaciones básicas de los datos para asegurar que los campos 
+  sean completados correctamente.
+* **Almacenamiento de Token:** Guarda el token de autenticación en localStorage después de 
+  registrar exitosamente al usuario.
 ### Estructura del Código <br>
 ***Dependencias***<br>
 
 El componente utiliza:
 
-React: Para la creación del estado y manejo de eventos.
-Axios: Para realizar la solicitud HTTP al backend y registrar al usuario en la base de datos.
-React Router: Para redirigir al usuario después de un registro exitoso y obtener la URL actual.
-TailwindCSS: Para el diseño y estilo del componente.
-Mensaje de Confirmación: Usa un componente personalizado Mensaje para mostrar mensajes de éxito o error.
+* **React:** Para la creación del estado y manejo de eventos.
+* **Axios:** Para realizar la solicitud HTTP al backend y registrar al usuario en la base de 
+   datos.
+* **React Router:** Para redirigir al usuario después de un registro exitoso y obtener la URL 
+  actual.
+* **TailwindCSS:** Para el diseño y estilo del componente.
+* **Mensaje de Confirmación:** Usa un componente personalizado Mensaje para mostrar mensajes de 
+  éxito o error.
 
 ***Hooks y Estados Principales***<br>
-useState: Almacena la información ingresada en el formulario.
-useContext: Obtiene el contexto de HistoryContext para añadir el historial del usuario.
-useLocation y useNavigate: Para redirigir al usuario tras completar el registro y definir la lógica condicional en el componente.
+* **useState:** Almacena la información ingresada en el formulario.
+* **useContext:** Obtiene el contexto de HistoryContext para añadir el historial del usuario.
+* **useLocation y useNavigate:** Para redirigir al usuario tras completar el registro y definir la lógica condicional en el componente.
 
 
 ***Estructura del Formulario***<br>
 Campos de Registro
-Cédula
-Nombre y Apellido
-Teléfono
-Correo Electrónico
-Dirección
-Cargo: Selección de roles predefinidos (Gerente, Administrador, Técnico).
-Contraseña
+1. Cédula
+2. Nombre y Apellido
+3. Teléfono
+4. Correo Electrónico
+5. Dirección
+6. Cargo: Selección de roles predefinidos (Gerente, Administrador, Técnico).
+7. Contraseña
+8. Campo de Estado (opcional en edición)
+9. El campo de Estado solo es visible cuando el formulario es utilizado en modo de edición de 
+   usuario. En el modo de registro, este campo está oculto.
+> .[!NOTE]
+> ñlkñlk
+
+> knjdkgn
+
 Campo de Estado (opcional en edición)
 El campo de Estado solo es visible cuando el formulario es utilizado en modo de edición de usuario. En el modo de registro, este campo está oculto.
-
 
 ## Componente EditarPerfil
 Este componente permite a los usuarios ver y editar su perfil en una página que incluye un formulario prellenado con la información actual del usuario. Los usuarios pueden actualizar campos como cédula, nombre, teléfono, correo, dirección, cargo y estado.
