@@ -155,18 +155,18 @@ export const RegistrarUsuarios = () => {
           </div>
 
           {/* Dirección */}
-          <div className="mb-4">
+          <div>
             <label className="block font-semibold mb-2">Dirección</label>
             <input
               type="text"
               name="direccion"
               value={registro.direccion}
               onChange={handleChange}
-              required
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
-              placeholder='Ingresa la dirección'
+              required
             />
           </div>
+          
 
           {/* Cargo */}
           <div className="mb-4">
