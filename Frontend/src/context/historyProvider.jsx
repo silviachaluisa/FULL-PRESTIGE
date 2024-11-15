@@ -10,11 +10,11 @@ export const HistoryProvider = ({ children }) => {
 
   // Función para obtener usuarios desde el backend
   const fetchUsuarios = async () => {
-    const token = localStorage.getItem ('token')
+    const token = localStorage.getItem('token')
     if (!token )return
     try {
       const options={
-        Headers:{
+        headers:{
           'Content-Type': 'application/json',
           Authorization:`Bearer ${token}`,
         }
@@ -27,18 +27,53 @@ export const HistoryProvider = ({ children }) => {
     }
   };
 
+  const upDateUser=async(cedula,registro)=>{
+    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/employee/${cedula}`;
+                const token=localStorage.getItem("token")
+                const options={
+                    headers:{
+                      'Content-Type': 'application/json',
+                      Authorization:`Bearer ${token}`,
+                    }
+                  }
+                // Realizar la petición POST
+                const respuesta = await axios.put(URLActualizar, registro, options);
+                console.log(respuesta)
+                fetchUsuarios()
+              
+                
+  }
+
+  
+  const fetchUsuariosByCedula= async(id)=>{
+    const token = localStorage.getItem('token')
+    if (!token )return
+    try {
+      const options={
+        headers:{
+          'Content-Type': 'application/json',
+          Authorization:`Bearer ${token}`,
+        }
+      }
+
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/employee/${id}`,options);
+      setUsuarios(response.data.empleado); // Suponiendo que la API retorna un array de usuarios
+    } catch (error) {
+      console.error("Error al obtener usuarios", error);
+    }
+
+  }
+
+
+
   // Función para agregar un usuario y actualizar el estado
   const addUsuario = (nuevoUsuario) => {
     setUsuarios([...usuarios, nuevoUsuario]);
   };
 
-  // Llamar a fetchUsuarios una vez cuando el componente carga
-  useEffect(() => {
-    fetchUsuarios();
-  }, []);
-
+ 
   return (
-    <HistoryContext.Provider value={{ usuarios, addUsuario }}>
+    <HistoryContext.Provider value={{ usuarios, addUsuario, fetchUsuariosByCedula,upDateUser,fetchUsuarios }}>
       {children}
     </HistoryContext.Provider>
   );

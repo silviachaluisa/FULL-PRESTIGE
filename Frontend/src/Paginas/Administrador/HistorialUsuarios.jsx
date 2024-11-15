@@ -17,18 +17,26 @@ import susukiLogo from '../../assets/LogosAutos/Susuki.png'
 import toyotaLogo from '../../assets/LogosAutos/Toyota.png'
 import { HistoryContext } from '../../context/historyProvider';
 import { useContext } from 'react';
+import { useEffect } from 'react';
+import { TablaUsuarios } from '../../components/TablaUsuarios';
+
 
 
 export const Usuarios = () => {
 
   const navigate= useNavigate();
-  const {usuarios}= useContext (HistoryContext);
+  const {usuarios,fetchUsuarios}= useContext (HistoryContext);
   const handleLogout=()=>{
     const confirmLogout = window.confirm ("¿Deseas abandonar la página?")
     if(confirmLogout===true){
         navigate('/dashboard');
     }  
 };
+ // Llamar a fetchUsuarios una vez cuando el componente carga
+ useEffect(() => {
+  fetchUsuarios();
+}, [usuarios]);
+
 
 const brandLogos = {
   bmw: BMWLogo,
@@ -112,45 +120,12 @@ const handleNewClick =()=>{
           </button>
         </div>
 
-        {/* Tabla de Historial */}
-        <div className="overflow-x-auto ">
-          <table className="w-full text-center border-collapse border border-black ">
-            <thead className="bg-black text-white font-mono  ">
-              <tr>
-                {[
-                  'Cédula','Nombre y Apellido','Telefono', 'Email', 'Dirección', 
-                  'Cargo','Estado', 'Opciones'
-                ].map((header) => (
-                  <th key={header} className="border border-black px-4 py-2">{header}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {usuarios.map((item, index) => (
-                 
-                  <tr key={index}>
-                    <td className="border border-black px-4 py-2">{item.cedula}</td>
-                    <td className="border border-black px-4 py-2">{item.nombre}</td>
-                    <td className="border border-black px-4 py-2">{item.telefono}</td>
-                    <td className="border border-black px-4 py-2">{item.correo}</td>
-                    <td className="border border-black px-4 py-2">{item.direccion}</td>
-                    <td className="border border-black px-4 py-2">{item.cargo}</td>
-                    <td className="border border-black px-4 py-2">{item.estado ?"activo":"inactivo"}</td>
-                    <td className="border border-black px-4 py-2">
-                    <button className="text-black hover:text-blue-700">
-                      ✏️
-                    </button>
-                    </td>
-                  </tr>
-          
+   {/* TABLA DEL HISTORIAL */}
+  
+   {Array.isArray(usuarios) &&usuarios.length!==0 ?( <TablaUsuarios usuarios={usuarios}/>):(<p>No hay registros</p>)}
 
-              ))}
-                
 
-            </tbody>
-            
-          </table>
-        </div>
+   {/* ------------------ */}
         <div className="flex space-x-4 justify-center mt-20">
           <button className="bg-red-400 text-black font-bold px-3 py-2 rounded flex items-center space-x-5"> 
             <img src={pdf} alt="pdf" className='h-6' />
