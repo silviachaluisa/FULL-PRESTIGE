@@ -1,21 +1,20 @@
-// src/App.jsx
-
 import {BrowserRouter,Routes,Route} from 'react-router-dom'
 import { AuthProvider } from './context/AuthProvider.jsx';
 import  Bienvenida  from './Paginas/Bienvenida'
 import  Login  from './Paginas/Login'
 import Dashboard from './Paginas/Dashboard.jsx'
-import Asistencia from './Paginas/Administrador/HistorialAsistencia.jsx'
-import RegistrarAsistencia from './Paginas/Administrador/RegistrarAsitencia.jsx'
-import ClientesVehiculos  from './Paginas/Administrador/HistorialClientes.jsx'
-import RegistrarClientes from './Paginas/Administrador/RegistrarClientes.jsx'
-import Pagos from './Paginas/Administrador/HistorialPagos.jsx'
-import RegistrarPagos from './Paginas/Administrador/RegistrarPagos.jsx';
-import Usuarios from './Paginas/Administrador/HistorialUsuarios.jsx';
-import RegistrarUsuarios from './Paginas/Administrador/RegistrarUsuarios.jsx';
+import Asistencia from './Paginas/Asistencias/HistorialAsistencia.jsx'
+import RegistrarAsistencia from './Paginas/Asistencias/RegistrarAsitencia.jsx'
+import ClientesVehiculos  from './Paginas/Clientes/HistorialClientes.jsx'
+import RegistrarClientes from './Paginas/Clientes/RegistrarClientes.jsx'
+import Pagos from './Paginas/Pagos/HistorialPagos.jsx'
+import RegistrarPagos from './Paginas/Pagos/RegistrarPagos.jsx';
+import Usuarios from './Paginas/Usuarios/HistorialUsuarios.jsx';
+import RegistrarUsuarios from './Paginas/Usuarios/RegistrarUsuarios.jsx';
 import VisualizarPerfil from './Paginas/Perfil.jsx';
-import ActualizarUsuarios from './Paginas/Administrador/ActualizarUsuarios.jsx';
+import ActualizarUsuarios from './Paginas/Usuarios/ActualizarUsuarios.jsx';
 import { HistoryProvider } from './context/historyProvider.jsx';
+import RecuperarContrasena from './Paginas/RecuperarContraseña.jsx';
 
 
 
@@ -42,6 +41,7 @@ function App() {
 
                 <Route path="/perfil" element={<VisualizarPerfil />} />
                 <Route path="/actualizar-usuarios/:id" element={<ActualizarUsuarios />} />
+                <Route path="/recuperar-contrasena" element={<RecuperarContrasena />} />
          
             </Routes>
 

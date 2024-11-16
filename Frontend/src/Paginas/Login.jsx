@@ -106,8 +106,14 @@ export const Login = () => {
               {showPassword ? <FaEyeSlash size={24} /> : <FaEye size={24} />} {/* Cambia el ícono */}
             </button>
           </div>
+          <a href="/recuperar-contrasena" className=' no-underline hover:underline flex text-blue-50 justify-center  mb-2'>
+            ¿Olvidaste tu contraseña?
 
-          <div className="flex justify-center">
+          </a>
+         
+        
+
+          <div className="flex justify-center ">
             <button
               type="submit"
               className="w-full py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-800 transition duration-300"

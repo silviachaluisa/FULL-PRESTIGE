@@ -18,8 +18,9 @@ import toyotaLogo from '../../assets/LogosAutos/Toyota.png'
 import { HistoryContext } from '../../context/historyProvider';
 import { useContext } from 'react';
 import { useEffect } from 'react';
-import { TablaUsuarios } from '../../components/TablaUsuarios';
-
+import { TablaUsuarios } from '../../components/Usuarios/TablaUsuarios';
+import {jsPDF} from 'jspdf';
+import *as XLSX from 'xlsx'
 
 
 export const Usuarios = () => {
@@ -122,7 +123,33 @@ const handleNewClick =()=>{
 
    {/* TABLA DEL HISTORIAL */}
   
-   {Array.isArray(usuarios) &&usuarios.length!==0 ?( <TablaUsuarios usuarios={usuarios}/>):(<p>No hay registros</p>)}
+   {/* {Array.isArray(usuarios) &&usuarios.length!==0 ?( <TablaUsuarios usuarios={usuarios}/>):(<p>No hay registros</p>)} */}
+   {Array.isArray(usuarios) && usuarios.length !== 0 ? (
+  <TablaUsuarios usuarios={usuarios} />
+) : (
+  <div className="overflow-x-auto">
+    <table className="w-full text-center border-collapse border border-black">
+      <thead className="bg-black text-white font-mono">
+        <tr>
+          {[
+            'Cédula', 'Nombre y Apellido', 'Teléfono', 'Email', 'Dirección', 
+            'Cargo', 'Estado', 'Opciones',
+          ].map((header) => (
+            <th key={header} className="border border-black px-4 py-2">{header}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colSpan="8" className="text-center py-4 text-red-700">
+            No existen registros disponibles.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+)}
+
 
 
    {/* ------------------ */}

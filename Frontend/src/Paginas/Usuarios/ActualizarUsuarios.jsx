@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 import { HistoryContext } from '../../context/historyProvider';
-import { FormularioUsuarios } from '../../components/FormularioUsuarios';
+import { FormularioUsuarios } from '../../components/Usuarios/FormularioUsuarios';
 
 
 export const ActualizarUsuarios = () => {

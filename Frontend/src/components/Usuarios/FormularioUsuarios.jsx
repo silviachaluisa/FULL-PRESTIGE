@@ -2,9 +2,10 @@
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useEffect} from 'react';
-import Mensaje from './Alertas';
+import Mensaje from '../Alertas';
 import { useContext } from 'react';
-import { HistoryContext } from '../context/historyProvider';
+
+import { HistoryContext } from '../../context/historyProvider';
 
 
 export const FormularioUsuarios = ({usuarios}) => {
