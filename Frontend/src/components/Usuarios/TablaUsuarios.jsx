@@ -1,7 +1,3 @@
-     
-    import React from 'react'
-
-    
     export const TablaUsuarios = ({usuarios}) => {
         return (
             <div className="overflow-x-auto ">
@@ -19,7 +15,6 @@
                 </thead>
                 <tbody>
                     {usuarios.map((item, index) => (
-                        
                         <tr key={index}>
                         <td className="border border-black px-4 py-2">{item.cedula}</td>
                         <td className="border border-black px-4 py-2">{item.nombre}</td>
@@ -33,13 +28,10 @@
                         className="text-black hover:text-blue-700"
                         onClick={()=> window.open(`/actualizar-usuarios/${item.cedula}`)}
                         >
-
-                        
                             ✏️
                         </button>
                         </td>
                         </tr>
-
                     ))}
                 </tbody>
                </table>

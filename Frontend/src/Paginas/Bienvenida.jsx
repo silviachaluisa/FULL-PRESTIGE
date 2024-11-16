@@ -21,9 +21,6 @@ export const Bienvenida = () => {
                             INGRESAR AL SISTEMA
                         </button>
                     </Link>
-
-                    
-
                    
                     <p className="text-lg text-white mt-6">
                         Empresa dedicada al cuidado y mantenimiento de tu vehículo
@@ -33,6 +30,5 @@ export const Bienvenida = () => {
         </div>
     );
 };
-
 export default Bienvenida;
 

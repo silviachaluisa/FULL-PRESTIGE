@@ -1,4 +1,4 @@
-import {BrowserRouter,Routes,Route} from 'react-router-dom'
+import {BrowserRouter,Routes,Route, Navigate} from 'react-router-dom'
 import { AuthProvider } from './context/AuthProvider.jsx';
 import  Bienvenida  from './Paginas/Bienvenida'
 import  Login  from './Paginas/Login'
@@ -17,17 +17,14 @@ import { HistoryProvider } from './context/historyProvider.jsx';
 import RecuperarContrasena from './Paginas/RecuperarContraseña.jsx';
 
 
-
-
-
 function App() {
     return (
         <BrowserRouter>
         <AuthProvider>
             <HistoryProvider>
-
         <Routes>
             {/* RUTAS PRIVADAS */}
+               <Route path="/" element={<Bienvenida />} /> {/* Ruta principal */}
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/historial-asistencia" element={<Asistencia />} />
                 <Route path="/registrar-asistencia" element={<RegistrarAsistencia />} />
@@ -39,15 +36,10 @@ function App() {
                 <Route path="/registrar-usuarios" element={<RegistrarUsuarios />} />
                 <Route path="/perfil" element={<VisualizarPerfil />} />
                 <Route path="/actualizar-usuarios/:id" element={<ActualizarUsuarios />} />
-
-
             {/* RUTAS PUBLICAS */}
-                <Route path="/bienvenido" element={<Bienvenida />} /> {/* Ruta principal */}
                 <Route path="/recuperar-contrasena" element={<RecuperarContrasena />} />
-                <Route path="/login" element={<Login />} />
-         
+                <Route path="/login" element={<Login />} />    
             </Routes>
-
             </HistoryProvider>
         </AuthProvider>
         

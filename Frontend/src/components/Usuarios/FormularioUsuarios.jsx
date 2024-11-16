@@ -8,11 +8,16 @@ import { HistoryContext } from '../../context/historyProvider';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 export const FormularioUsuarios = ({usuarios}) => {
-    console.log(usuarios)
-    const navigate = useNavigate();
-    const {upDateUser}=useContext(HistoryContext)
-    const [registro, setRegistro] = useState({
-
+  console.log(usuarios)
+  const navigate = useNavigate();
+  const [mensaje, setMensaje] = useState(null);
+  const [showPassword, setShowPassword] = useState(false); // Estado para alternar visibilidad
+  const {upDateUser}=useContext(HistoryContext)
+  
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+  const [registro, setRegistro] = useState({
         cedula: '',
         nombre: '',
         telefono: '',
@@ -49,12 +54,7 @@ export const FormularioUsuarios = ({usuarios}) => {
         }
       }, [usuarios]);
       
-      const [mensaje, setMensaje] = useState(null);
-      const [showPassword, setShowPassword] = useState(false); // Estado para alternar visibilidad
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
 
       const handleSubmit = async (event) => {
         event.preventDefault();
@@ -231,7 +231,17 @@ export const FormularioUsuarios = ({usuarios}) => {
 
           {/* Contraseña */}
           <div className="mb-4 relative">
-            <label className="block font-semibold mb-2">Contraseña
+            <label className="block font-semibold mb-2">Contraseña</label>
+              <input
+                id='contrasena'
+                type={showPassword ? 'text': 'password'}
+                name="contrasena"
+                value={registro.contrasena}
+                onChange={handleChange}
+                required
+                className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
+                placeholder='Ingresa la contraseña'
+              />
             <button
               type="button"
               onClick={togglePasswordVisibility}
@@ -239,18 +249,8 @@ export const FormularioUsuarios = ({usuarios}) => {
             >
               {showPassword ? <FaEyeSlash size={24} /> : <FaEye size={24} />} {/* Cambia el ícono */}
             </button>
-            </label>
             
-            <input
-              id='contrasena'
-              type={showPassword ? 'text': 'password'}
-              name="contrasena"
-              value={registro.contrasena}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
-              placeholder='Ingresa la contraseña'
-            />
+            
           </div>
 
           {/* Estado (solo visible en actualización) */}
