@@ -74,7 +74,7 @@ export const ActualizarUsuarios = () => {
      
 
       <footer className="mt-8 w-full text-center text-white">
-        <p className="py-4 border-t border-white text-sm">Empresa Dedicada al Cuidado y Mantenimiento de tu Vehículo</p>
+        <p className="py-4 border-t border-white text-sm">2024 Full Prestige. Todos los derechos reservados.</p>
       </footer>
     </div>
   );

@@ -55,11 +55,14 @@ export const HistoryProvider = ({ children }) => {
           Authorization:`Bearer ${token}`,
         }
       }
-
+    
+  
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/employee/${id}`,options);
+      console.log(response)
       setUsuarios(response.data.empleado); // Suponiendo que la API retorna un array de usuarios
     } catch (error) {
       console.error("Error al obtener usuarios", error);
+      
     }
 
   }

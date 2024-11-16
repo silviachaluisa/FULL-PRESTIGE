@@ -25,9 +25,9 @@ function App() {
         <BrowserRouter>
         <AuthProvider>
             <HistoryProvider>
+
         <Routes>
-                <Route path="/" element={<Bienvenida />} /> {/* Ruta principal */}
-                <Route path="/login" element={<Login />} />
+            {/* RUTAS PRIVADAS */}
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/historial-asistencia" element={<Asistencia />} />
                 <Route path="/registrar-asistencia" element={<RegistrarAsistencia />} />
@@ -37,11 +37,14 @@ function App() {
                 <Route path="/registrar-pagos" element={<RegistrarPagos />} />
                 <Route path="/historial-usuarios" element={<Usuarios />} />
                 <Route path="/registrar-usuarios" element={<RegistrarUsuarios />} />
-                
-
                 <Route path="/perfil" element={<VisualizarPerfil />} />
                 <Route path="/actualizar-usuarios/:id" element={<ActualizarUsuarios />} />
+
+
+            {/* RUTAS PUBLICAS */}
+                <Route path="/bienvenido" element={<Bienvenida />} /> {/* Ruta principal */}
                 <Route path="/recuperar-contrasena" element={<RecuperarContrasena />} />
+                <Route path="/login" element={<Login />} />
          
             </Routes>
 

@@ -4,9 +4,8 @@ import axios from 'axios';
 import { useState, useEffect} from 'react';
 import Mensaje from '../Alertas';
 import { useContext } from 'react';
-
 import { HistoryContext } from '../../context/historyProvider';
-
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 export const FormularioUsuarios = ({usuarios}) => {
     console.log(usuarios)
@@ -23,9 +22,9 @@ export const FormularioUsuarios = ({usuarios}) => {
         cargo: '',
       });
       // Sincronizar los valores cuando cambia `usuarios`
-    useEffect(() => {
+      useEffect(() => {
         if (usuarios) {
-        setRegistro({
+          setRegistro({
             cedula: usuarios.cedula ?? '',
             nombre: usuarios.nombre ?? '',
             telefono: usuarios.telefono ?? '',
@@ -34,11 +33,28 @@ export const FormularioUsuarios = ({usuarios}) => {
             direccion: usuarios.direccion ?? '',
             cargo: usuarios.cargo ?? '',
             estado: usuarios.estado ?? '',
-        });
-    
+          });
+        } else {
+          // Limpia los campos si no hay datos de usuario
+          setRegistro({
+            cedula: '',
+            nombre: '',
+            telefono: '',
+            correo: '',
+            contrasena: '',
+            direccion: '',
+            cargo: '',
+            estado: '',
+          });
         }
-  }, [usuarios]); // Ejecutar cuando `usuarios` cambie
+      }, [usuarios]);
+      
       const [mensaje, setMensaje] = useState(null);
+      const [showPassword, setShowPassword] = useState(false); // Estado para alternar visibilidad
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
       const handleSubmit = async (event) => {
         event.preventDefault();
@@ -70,13 +86,18 @@ export const FormularioUsuarios = ({usuarios}) => {
               // Construir la URL de la API para el registro
               const URLRegister = `${import.meta.env.VITE_BACKEND_URL}/register`;
               console.log(registro)
-        
+            // Se esta desctructurando del objeto registro y se esta quitando la propiedad estado que no es necesario para el regitro
+              const DatosRegitrar = {...registro}
+              delete DatosRegitrar.estado
+      
+
               // Realizar la petición POST
-              const respuesta = await axios.post(URLRegister, registro);
+              
+              const respuesta = await axios.post(URLRegister, DatosRegitrar);
               console.log(respuesta)
               
               // Guardar el token en localStorage y establecer el contexto de autenticación
-              localStorage.setItem('token', respuesta.data.token);
+              //localStorage.setItem('token', respuesta.data.token);
               
               // Navegar al dashboard después del registro exitoso
               navigate('/historial-usuarios');
@@ -131,6 +152,7 @@ export const FormularioUsuarios = ({usuarios}) => {
           <div className="mb-4">
             <label className="block font-semibold mb-2">Nombre y Apellido</label>
             <input
+              id='nombre'
               type="text"
               name="nombre"
               value={registro.nombre}
@@ -145,7 +167,8 @@ export const FormularioUsuarios = ({usuarios}) => {
           <div className="mb-4">
             <label className="block font-semibold mb-2">Teléfono</label>
             <input
-              type="number"
+              id='telefono'
+              type="text"
               name="telefono"
               value={registro.telefono}
               onChange={handleChange}
@@ -157,28 +180,33 @@ export const FormularioUsuarios = ({usuarios}) => {
 
           {/* Correo */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Correo</label>
+            <label className="block font-semibold mb-2">Direccion</label>
             <input
-              type="email"
-              name="correo"
-              value={registro.correo}
+              id='direccion'
+              type="texto"
+              name="direccion"
+              value={registro.direccion}
               onChange={handleChange}
               required
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
-              placeholder='Juan@hotmail.com'
+              placeholder='Direccion'
+              autoComplete="off" // Aquí se desactiva la auto-completación para este campo
             />
           </div>
 
           {/* Dirección */}
           <div>
-            <label className="block font-semibold mb-2">Dirección</label>
+            <label className="block font-semibold mb-2">Correo</label>
             <input
-              type="text"
-              name="direccion"
-              value={registro.direccion}
+            id='correo'
+              type="email"
+              name="correo"
+              value={registro.correo}
               onChange={handleChange}
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
+              placeholder='Correo'
               required
+              
             />
           </div>
           
@@ -187,7 +215,7 @@ export const FormularioUsuarios = ({usuarios}) => {
           <div className="mb-4">
             <label className="block font-semibold mb-2">Cargo</label>
             <select
-            
+            id='cargo'
               name="cargo"
               value={registro.cargo}
               onChange={handleChange}
@@ -197,15 +225,25 @@ export const FormularioUsuarios = ({usuarios}) => {
               <option value="">Selecciona una opción</option>
               <option value="Gerente">Gerente</option>
               <option value="Administrador">Administrador</option>
-              <option value="Tecnico">Técnico</option>
+              <option value="Técnico">Técnico</option>
             </select>
           </div>
 
           {/* Contraseña */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">Contraseña</label>
+          <div className="mb-4 relative">
+            <label className="block font-semibold mb-2">Contraseña
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 mt-4"
+            >
+              {showPassword ? <FaEyeSlash size={24} /> : <FaEye size={24} />} {/* Cambia el ícono */}
+            </button>
+            </label>
+            
             <input
-              type="password"
+              id='contrasena'
+              type={showPassword ? 'text': 'password'}
               name="contrasena"
               value={registro.contrasena}
               onChange={handleChange}
@@ -220,6 +258,7 @@ export const FormularioUsuarios = ({usuarios}) => {
             <div className="mb-4">
               <label className="block font-semibold mb-2">Estado</label>
               <select
+              id='estado'
                 name="estado"
                 onChange={handleChange}
                 className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
