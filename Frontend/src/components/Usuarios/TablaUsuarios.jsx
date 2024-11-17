@@ -22,7 +22,7 @@
                         <td className="border border-black px-4 py-2">{item.correo}</td>
                         <td className="border border-black px-4 py-2">{item.direccion}</td>
                         <td className="border border-black px-4 py-2">{item.cargo}</td>
-                        <td className="border border-black px-4 py-2">{item.estado ?"Activo":"Inactivo"}</td>
+                        <td className="border border-black px-4 py-2">{item.estado}</td>
                         <td className="border border-black px-4 py-2">
                         <button 
                         className="text-black hover:text-blue-700"

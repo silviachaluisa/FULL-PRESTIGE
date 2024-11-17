@@ -1,4 +1,4 @@
-const Mensaje = ({ children, tipo }) => {
+const Mensaje = ({ mensaje, tipo }) => {
     return (
         <div className={`p-6 border-l-4 ${tipo ? 'border-green-500' : 'border-red-500'} rounded-r-xl 
                     ${tipo ? 'bg-green-50' : 'bg-red-50'} flex mt-2`}>
@@ -9,7 +9,7 @@ const Mensaje = ({ children, tipo }) => {
             </div>
             <div className="ml-3">
                 <div className={`text-sm ${tipo ? 'text-green-500' : 'text-red-500'}`}>
-                    <p>{children}</p>
+                    <p>{mensaje}</p>
                 </div>
             </div>
         </div>  

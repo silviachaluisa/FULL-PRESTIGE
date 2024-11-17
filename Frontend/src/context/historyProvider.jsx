@@ -39,7 +39,7 @@ export const HistoryProvider = ({ children }) => {
                 // Realizar la petición POST
                 const respuesta = await axios.put(URLActualizar, registro, options);
                 console.log(respuesta)
-                fetchUsuarios()
+                
               
                 
   }
