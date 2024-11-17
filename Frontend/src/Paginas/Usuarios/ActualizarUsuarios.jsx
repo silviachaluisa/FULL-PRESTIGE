@@ -3,7 +3,7 @@ import logo from '../../assets/imagenes/logo.jpg';
 import usuario from '../../assets/imagenes/usuarios.png';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { HistoryContext } from '../../context/historyProvider';
+import { HistoryContext } from '../../context/HistoryProvider';
 import { FormularioUsuarios } from '../../components/Usuarios/FormularioUsuarios';
 
 export const ActualizarUsuarios = () => {

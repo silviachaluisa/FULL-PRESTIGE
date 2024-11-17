@@ -157,7 +157,7 @@ const handleDownloadExcel = () => {
         <h2 className=" bg-black px-4 py-2  border-2 border-white text-red-600 text-center text-xl font-semibold mb-4">HISTORIAL USUARIOS REGISTRADOS</h2>
       </div>
 
-      {/* Historial de Clientes/Vehículos */}
+      {/* Historial de Usuarios */}
       <main className="flex-grow  max-w-5lx  p-6 bg-white shadow mt-6 rounded-lg mx-auto border border-black">
       {/* max-w-5xl (Esto hace que el formulario se limite al ancho y no cubra toda la pantalla)*/} 
       {/* w-full  (Para ponerlo en toda la pantalla)*/}
@@ -198,13 +198,11 @@ const handleDownloadExcel = () => {
         </div>  */}
 
    {/* TABLA DEL HISTORIAL */}
-  
-   {/* {Array.isArray(usuarios) &&usuarios.length!==0 ?( <TablaUsuarios usuarios={usuarios}/>):(<p>No hay registros</p>)} */}
-
    {/* Significa que esta esperando una lista, de lo contrario solo muestra el encabezado, esto se modifica del lado del backend */}
    {Array.isArray(usuarios) && usuarios.length !== 0 ? (
   <TablaUsuarios usuarios={usuarios} />
 ) : (
+
   <div className="overflow-x-auto">
     <table className="w-full text-center border-collapse border border-black">
       <thead className="bg-black text-white font-mono">
@@ -230,8 +228,7 @@ const handleDownloadExcel = () => {
 
 
 
-   {/* ------------------ */}
-       
+   {/* BOTONES------------------------------------------------------------- */}
        
         <div className='flex space-x-4 justify-center mt-20'>
 
@@ -249,7 +246,7 @@ const handleDownloadExcel = () => {
       </main>
 
       
-      {/* Footer */}
+      {/* Footer------------------------------------------------------------------- */}
       <footer className="w-full py-1 text-center text-white bg-black border-t border-white">
       2024 Full Prestige. Todos los derechos reservados.
       </footer>

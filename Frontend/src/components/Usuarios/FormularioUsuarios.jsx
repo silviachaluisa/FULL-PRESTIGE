@@ -1,10 +1,9 @@
-
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useEffect} from 'react';
 import Mensaje from '../Alertas';
 import { useContext } from 'react';
-import { HistoryContext } from '../../context/historyProvider';
+import { HistoryContext } from '../../context/HistoryProvider';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 export const FormularioUsuarios = ({usuarios}) => {
@@ -165,7 +164,11 @@ export const FormularioUsuarios = ({usuarios}) => {
     return (
         
         <div className="w-full max-w-7xl px-10">
-      {mensaje && <Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} />}
+
+      {mensaje && (<Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} errores={!mensaje.tipo ? errores : {}} 
+    />
+)}
+
 
       <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-6 border-2 border-red-600 p-6 rounded-lg bg-black mb-7">
           
@@ -246,9 +249,7 @@ export const FormularioUsuarios = ({usuarios}) => {
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
               placeholder='Correo'
               required
-              required
               
-              required  
               
             />
             {errores.correo && <p className="text-red-500 text-sm">{errores.correo}</p>}
