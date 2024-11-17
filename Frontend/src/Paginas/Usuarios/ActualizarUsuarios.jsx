@@ -12,6 +12,7 @@ export const ActualizarUsuarios = () => {
   const {id}=useParams();
   const {usuarios,fetchUsuariosByCedula}= useContext (HistoryContext)
   console.log(usuarios)
+  const UsuarioSeleccionado=usuarios[0]
 
   useEffect(() => {
     const obtenerUsuario = async () => {
@@ -27,6 +28,7 @@ export const ActualizarUsuarios = () => {
       navigate('/historial-usuarios');
     }
   };
+
   return (
     <div className="bg-black text-white min-h-screen flex flex-col items-center">
       {/* Contenedor de la cabecera */}
@@ -51,7 +53,7 @@ export const ActualizarUsuarios = () => {
     {/* ------------------------------------------- */}
     {/* FORMULARIO */}
       
-       {Object.keys(usuarios).length!=0?( <FormularioUsuarios usuarios={usuarios}/>):(
+       {Object.keys(usuarios).length!=0?( <FormularioUsuarios usuarios={UsuarioSeleccionado}/>):(
            <p>No existen registros</p>
         
        )}

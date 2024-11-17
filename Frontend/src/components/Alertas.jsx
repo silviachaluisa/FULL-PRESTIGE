@@ -12,8 +12,8 @@ const Mensaje = ({ children, tipo }) => {
                     <p>{children}</p>
                 </div>
             </div>
-        </div>
+        </div>  
     )
 }
 
-export default Mensaje
+export default Mensaje;

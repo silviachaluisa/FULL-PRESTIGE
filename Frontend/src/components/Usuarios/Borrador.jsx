@@ -9,9 +9,9 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 export const FormularioUsuarios = ({usuarios}) => {
   console.log(usuarios)
-
   const navigate = useNavigate();
-  const [mensaje, setMensaje] = useState(null);
+  const [mensaje, setMensaje] = useState({});
+  const [errores, setErrores] = useState({});      
   const [showPassword, setShowPassword] = useState(false); // Estado para alternar visibilidad
   const {upDateUser}=useContext(HistoryContext)
   
@@ -59,64 +59,95 @@ export const FormularioUsuarios = ({usuarios}) => {
 
       const handleSubmit = async (event) => {
         event.preventDefault();
-        if (usuarios?.cedula){
 
+        //Iniciliza un objeto para los errores
+        const nuevosErrores = {};
+
+            // Validaciones de cada campo
+        if (!registro.cedula) nuevosErrores.cedula = "La cédula es obligatoria.";
+        if (!registro.nombre) nuevosErrores.nombre = "El nombre es obligatorio.";
+        if (!registro.telefono) nuevosErrores.telefono = "El teléfono es obligatorio.";
+        if (!registro.correo) nuevosErrores.correo = "El correo es obligatorio.";
+        if (!registro.contrasena && !usuarios) nuevosErrores.contrasena = "La contraseña es obligatoria.";
+        if (!registro.direccion) nuevosErrores.direccion = "La dirección es obligatoria.";
+        if (!registro.cargo) nuevosErrores.cargo = "El cargo es obligatorio.";
+
+            // Si hay errores, actualiza el estado de errores y detén el proceso
+        if (Object.keys(nuevosErrores).length > 0) {
+          setErrores(nuevosErrores);
+          return;
+      }
+
+        // Si no hay errores, limpia los errores anteriores y continúa
+        setErrores({});
+
+    
+        if (usuarios?.cedula) {
             try {
-                const updateinfo={...usuarios}
-                updateinfo.estado=usuarios?.estado=="Activo" ? true:false
-
-               await upDateUser(usuarios?.cedula, updateinfo)
-             
-                // Navegar al dashboard después del registro exitoso
-                navigate('/historial-usuarios');
-              } catch (error) {
+                const updateinfo = { ...usuarios };
+                updateinfo.estado = usuarios?.estado === "Activo" ? true : false;
+    
+                // Llamar a la función para actualizar el usuario
+                await upDateUser(usuarios?.cedula, updateinfo);
+    
+                // Configurar el mensaje de éxito
+                setMensaje({ respuesta: "Usuario actualizado con éxito", tipo: true });
+    
+                // Limpiar el mensaje después de 3 segundos
+                setTimeout(() => {
+                    setMensaje(null);
+                    // Navegar al historial de usuarios
+                    navigate('/historial-usuarios');
+                }, 3000);
+            } catch (error) {
                 // Configurar el mensaje de error recibido desde la respuesta del servidor
-                setMensaje({ respuesta: error.response.data.message, tipo: false });
-                console.log(error)
-                // Limpiar el formulario después del error
-                //setRegistro({}); // Esto no se debio colocar porque no estaba limpiando, sino borrando la informacion de los campos
-                
+                setMensaje({ respuesta: error.response?.data?.message || "Error al actualizar el usuario", tipo: false });
+    
                 // Limpiar el mensaje de error después de 3 segundos
                 setTimeout(() => {
-                  setMensaje(null);
+                    setMensaje(null);
                 }, 3000);
-              }
-        }else{
-
-            try {
-              // Construir la URL de la API para el registro
-              const URLRegister = `${import.meta.env.VITE_BACKEND_URL}/register`;
-              console.log(registro)
-            // Se esta desctructurando del objeto registro y se esta quitando la propiedad estado que no es necesario para el regitro
-              const DatosRegitrar = {...registro}
-              delete DatosRegitrar.estado
-      
-
-              // Realizar la petición POST
-              
-              const respuesta = await axios.post(URLRegister, DatosRegitrar);
-              console.log(respuesta)
-              
-              // Guardar el token en localStorage y establecer el contexto de autenticación
-              //localStorage.setItem('token', respuesta.data.token);
-              
-              // Navegar al dashboard después del registro exitoso
-              navigate('/historial-usuarios');
-            } catch (error) {
-              // Configurar el mensaje de error recibido desde la respuesta del servidor
-              setMensaje({ respuesta: error.response.data.message, tipo: false });
-              console.log(error)
-              // Limpiar el formulario después del error
-              //setRegistro({}); // Esto no se debio colocar porque no estaba limpiando, sino borrando la informacion de los campos
-              
-              // Limpiar el mensaje de error después de 3 segundos
-              setTimeout(() => {
-                setMensaje(null);
-              }, 3000);
+    
+                console.log(error);
             }
-        };
-        
-      };
+        } else {
+            try {
+                // Construir la URL de la API para el registro
+                const URLRegister = `${import.meta.env.VITE_BACKEND_URL}/register`;
+                console.log(registro);
+    
+                // Preparar los datos para el registro, excluyendo la propiedad 'estado'
+                const DatosRegistrar = { ...registro };
+                delete DatosRegistrar.estado;
+    
+                // Realizar la petición POST
+                const respuesta = await axios.post(URLRegister, DatosRegistrar);
+                console.log(respuesta);
+    
+                // Configurar el mensaje de éxito
+                setMensaje({ respuesta: "Usuario registrado con éxito", tipo: true });
+                console.log(respuesta)
+    
+                // Limpiar el mensaje después de 3 segundos
+                setTimeout(() => {
+                    setMensaje(null);
+                    // Navegar al historial de usuarios
+                    navigate('/historial-usuarios');
+                }, 3000);
+            } catch (error) {
+                // Configurar el mensaje de error recibido desde la respuesta del servidor
+                setMensaje({ respuesta: error.response?.data?.message || "Error al registrar el usuario", tipo: false });
+    
+                // Limpiar el mensaje de error después de 3 segundos
+                setTimeout(() => {
+                    setMensaje(null);
+                }, 3000);
+    
+                console.log(error);
+            }
+        }
+    };
+    
      // Manejador de cambio de valores del formulario
   const handleChange = (e) => {
     setRegistro({
@@ -128,7 +159,7 @@ export const FormularioUsuarios = ({usuarios}) => {
     return (
         
         <div className="w-full max-w-7xl px-10">
-      {mensaje && <Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} />}
+       {/* {mensaje && <Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} />}  */}
 
 
 
@@ -147,6 +178,7 @@ export const FormularioUsuarios = ({usuarios}) => {
               value={registro.cedula}
               onChange={handleChange}
             />
+            {errores.cedula && <p className="text-red-500 text-sm">{errores.cedula}</p>}
           </div>
           
           {/* Nombre y Apellido */}
@@ -162,6 +194,7 @@ export const FormularioUsuarios = ({usuarios}) => {
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
               placeholder='Juan Perez'
             />
+            {errores.cedula && <p className="text-red-500 text-sm">{errores.nombre}</p>}
           </div>
           
           {/* Teléfono */}
@@ -177,6 +210,7 @@ export const FormularioUsuarios = ({usuarios}) => {
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
               placeholder='099999999 o 0222222'
             />
+            {errores.cedula && <p className="text-red-500 text-sm">{errores.telefono}</p>}
           </div>
 
           {/* Correo */}
@@ -191,24 +225,24 @@ export const FormularioUsuarios = ({usuarios}) => {
               required
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
               placeholder='Direccion'
-              autoComplete="off" // Aquí se desactiva la auto-completación para este campo
             />
+            {errores.cedula && <p className="text-red-500 text-sm">{errores.direccion}</p>}
           </div>
 
           {/* Dirección */}
           <div>
             <label className="block font-semibold mb-2">Correo</label>
             <input
-            id='correo'
+              id='correo'
               type="email"
               name="correo"
               value={registro.correo}
               onChange={handleChange}
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
               placeholder='Correo'
-              required
-              
+              required          
             />
+            {errores.cedula && <p className="text-red-500 text-sm">{errores.correo}</p>}
           </div>
           
 
@@ -216,7 +250,7 @@ export const FormularioUsuarios = ({usuarios}) => {
           <div className="mb-4">
             <label className="block font-semibold mb-2">Cargo</label>
             <select
-            id='cargo'
+              id='cargo'
               name="cargo"
               value={registro.cargo}
               onChange={handleChange}
@@ -228,6 +262,7 @@ export const FormularioUsuarios = ({usuarios}) => {
               <option value="Administrador">Administrador</option>
               <option value="Técnico">Técnico</option>
             </select>
+            {errores.cedula && <p className="text-red-500 text-sm">{errores.cargo}</p>}
           </div>
 
           {/* Contraseña */}
@@ -243,6 +278,7 @@ export const FormularioUsuarios = ({usuarios}) => {
                 className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
                 placeholder='Ingresa la contraseña'
               />
+              {errores.cedula && <p className="text-red-500 text-sm">{errores.contrasena}</p>}
             <button
               type="button"
               onClick={togglePasswordVisibility}
