@@ -15,6 +15,7 @@ import VisualizarPerfil from './Paginas/Perfil.jsx';
 import ActualizarUsuarios from './Paginas/Usuarios/ActualizarUsuarios.jsx';
 import { HistoryProvider } from './context/historyProvider.jsx';
 import RecuperarContrasena from './Paginas/RecuperarContraseña.jsx';
+import ActualizarClientes from './Paginas/Clientes/ActualizarClientes.jsx';
 
 
 function App() {
@@ -38,7 +39,8 @@ function App() {
                 <Route path="/actualizar-usuarios/:id" element={<ActualizarUsuarios />} />
             {/* RUTAS PUBLICAS */}
                 <Route path="/recuperar-contrasena" element={<RecuperarContrasena />} />
-                <Route path="/login" element={<Login />} />    
+                <Route path="/login" element={<Login />} />  
+                <Route path="/actualizar-clientes/:id" element={<ActualizarClientes />} />
             </Routes>
             </HistoryProvider>
         </AuthProvider>

@@ -1,4 +1,12 @@
 export const TablaClientes = ({clientes}) => {
+  // Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
+  const formatDate = (isoDate) => {
+    const date = new Date(isoDate);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Meses van de 0 a 11
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
     return (
       <div className="overflow-x-auto">
         {/* Tabla de Historial */}
@@ -17,19 +25,19 @@ export const TablaClientes = ({clientes}) => {
           <tbody>
             {clientes.map ((item, index)=> (
                 <tr key={index}>
-                <td className="border border-black px-4 py-2">{item.cedula} </td>
-                <td className="border border-black px-4 py-2">{item.nombre} </td>
-                <td className="border border-black px-4 py-2">{item.telefono} </td>
-                <td className="border border-black px-4 py-2">{item.correo} </td>
-                <td className="border border-black px-4 py-2">{item.direccion} </td>
-                <td className="border border-black px-4 py-2">{item.orden} </td>
+                <td className="border border-black px-4 py-2">{item.propietario.cedula} </td>
+                <td className="border border-black px-4 py-2">{item.propietario.nombre} </td>
+                <td className="border border-black px-4 py-2">{item.propietario.telefono} </td>
+                <td className="border border-black px-4 py-2">{item.propietario.correo} </td>
+                <td className="border border-black px-4 py-2">{item.propietario.direccion} </td>
+                <td className="border border-black px-4 py-2">{item.n_orden} </td>
                 <td className="border border-black px-4 py-2">{item.marca} </td>
                 <td className="border border-black px-4 py-2">{item.modelo} </td>
                 <td className="border border-black px-4 py-2">{item.placa} </td>
-                <td className="border border-black px-4 py-2">{item.fechaIngreso} </td>
-                <td className="border border-black px-4 py-2">{item.fechaSalida} </td>
-                <td className="border border-black px-4 py-2">{item.descripcion} </td>
-                <td className="border border-black px-4 py-2">{item.tecnico} </td>
+                <td className="border border-black px-4 py-2">{formatDate(item.fecha_ingreso) } </td>
+                <td className="border border-black px-4 py-2">{formatDate(item.fecha_salida)} </td>
+                <td className="border border-black px-4 py-2">{item.detalles} </td>
+                <td className="border border-black px-4 py-2">{item.encargado.nombre} </td>
                 <td className="border border-black px-4 py-2">{item.estado} </td>
                 <td className="border border-black px-4 py-2">
                     <button 

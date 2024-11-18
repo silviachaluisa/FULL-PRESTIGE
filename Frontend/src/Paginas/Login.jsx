@@ -27,6 +27,7 @@ export const Login = () => {
     try {
       const URLogin = `${import.meta.env.VITE_BACKEND_URL}/login`;
       const respuesta = await axios.post(URLogin, loginForm);
+      console.log(respuesta)
 
       // Guardar token en localStorage y establecer contexto
       localStorage.setItem('token', respuesta.data.empleado.token);

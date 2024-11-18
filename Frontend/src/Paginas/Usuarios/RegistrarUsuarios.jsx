@@ -3,7 +3,7 @@ import logo from '../../assets/imagenes/logo.jpg';
 import usuario from '../../assets/imagenes/usuarios.png';
 import { useNavigate } from 'react-router-dom';
 //import { useLocation } from 'react-router-dom';
-import { HistoryContext } from '../../context/historyProvider';
+import { HistoryContext } from '../../context/HistoryContext';
 import { FormularioUsuarios } from '../../components/Usuarios/FormularioUsuarios';
 
 export const RegistrarUsuarios = () => {

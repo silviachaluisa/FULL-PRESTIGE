@@ -15,7 +15,7 @@ import peugeotLogo from '../../assets/LogosAutos/Peugeot.png'
 import renaultLogo from '../../assets/LogosAutos/Renault.png'
 import susukiLogo from '../../assets/LogosAutos/Susuki.png'
 import toyotaLogo from '../../assets/LogosAutos/Toyota.png'
-import { HistoryContext } from '../../context/historyProvider';
+import { HistoryContext } from '../../context/HistoryContext';
 import { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import { TablaUsuarios } from '../../components/Usuarios/TablaUsuarios';
@@ -94,7 +94,7 @@ const handleDownloadPDF = () => {
       usuario.correo,
       usuario.direccion,
       usuario.cargo,
-      usuario.estado ? "Activo": "Inactivo" ,
+      usuario.estado,
     ]),
   });
   doc.save('HistorialUsuarios.pdf');
@@ -107,7 +107,7 @@ const handleDownloadExcel = () => {
     Email: usuario.correo,
     Dirección: usuario.direccion,
     Cargo: usuario.cargo,
-    Estado: usuario.estado ?  "Activo": "Inactivo",
+    Estado: usuario.estado,
   }));
   const worksheet = XLSX.utils.json_to_sheet(data);
   const workbook = XLSX.utils.book_new();

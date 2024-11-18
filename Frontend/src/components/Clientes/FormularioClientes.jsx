@@ -1,15 +1,16 @@
-
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useEffect} from 'react';
 import Mensaje from '../Alertas';
 import { useContext } from 'react';
+import { HistoryContext } from '../../context/HistoryContext.jsx';
+
 
 export const FormularioClientes = ({clientes}) => {
 
   const navigate = useNavigate();
   const [mensaje, setMensaje] = useState("");
-  const [errores, setErrores] = useState({});  
+  const [errores, setErrores] = useState({}); 
   const {upDateClient,fetchClientes}=useContext(HistoryContext)
  
 
@@ -107,14 +108,14 @@ export const FormularioClientes = ({clientes}) => {
                 console.log(updateinfo)
     
                 // Llamar a la función para actualizar el usuario
-                await upDateUser(regisclientes?.cedula, updateinfo);
+                await upDateClient(regisclientes?.cedula, updateinfo);
     
                 // Configurar el mensaje de éxito
                 setMensaje({ respuesta: "Usuario actualizado con éxito", tipo: true });
     
                 // Limpiar el mensaje después de 3 segundos
                 setTimeout(() => {
-                  fetchUsuarios()
+                  fetchClientes()
                     setMensaje(null);
                     // Navegar al historial de usuarios
                     navigate('/historial-usuarios');
@@ -404,10 +405,6 @@ export const FormularioClientes = ({clientes}) => {
             {errores.tecnico && <p className="text-red-500 text-sm">{errores.tecnico}</p>}
           </div>
 
-
-          
-
-        
 
           {/* Estado (solo visible en actualización) */}
           {clientes && (

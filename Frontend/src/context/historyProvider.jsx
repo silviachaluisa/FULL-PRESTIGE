@@ -1,8 +1,7 @@
-import React, { createContext, useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
+import { HistoryContext } from './HistoryContext';
 
-// Crear el contexto
-export const HistoryContext = createContext();
 
 // Crear el proveedor de contexto
 export const HistoryProvider = ({ children }) => {
@@ -82,6 +81,7 @@ export const HistoryProvider = ({ children }) => {
     setUsuarios([...usuarios, nuevoUsuario]);
   };
 
+
   // -----------------------------------FUNCIONES PARA CLIENTES--------------------------------------------
   const fetchClientes = async () => {
     const token = localStorage.getItem('token');
@@ -94,14 +94,14 @@ export const HistoryProvider = ({ children }) => {
         },
       };
 
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/clients`, options);
-      setClientes(response.data.clientes); // Suponiendo que la API retorna un array de clientes
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/vehicles`, options);
+      setClientes(response.data); // Suponiendo que la API retorna un array de clientes
     } catch (error) {
       console.error("Error al obtener clientes", error);
     }
   };
 
-  const upDateClient = async (cedula, registro) => {
+  const upDateClient = async (cedula, regisclientes) => {
     const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/client/${cedula}`;
     const token = localStorage.getItem("token");
     const options = {
@@ -111,7 +111,7 @@ export const HistoryProvider = ({ children }) => {
       },
     };
     try {
-      const respuesta = await axios.put(URLActualizar, registro, options);
+      const respuesta = await axios.put(URLActualizar, regisclientes, options);
       console.log(respuesta);
     } catch (error) {
       console.error("Error al actualizar cliente", error);

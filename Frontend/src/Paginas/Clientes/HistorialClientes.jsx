@@ -13,7 +13,7 @@ import mercedesLogo from '../../assets/LogosAutos/Mercedes.png'
 import peugeotLogo from '../../assets/LogosAutos/Peugeot.png'
 import renaultLogo from '../../assets/LogosAutos/Renault.png'
 import susukiLogo from '../../assets/LogosAutos/Susuki.png'
-import { HistoryContext } from '../../context/historyProvider';
+import { HistoryContext } from '../../context/HistoryContext';
 import { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import toyotaLogo from '../../assets/LogosAutos/Toyota.png'
@@ -25,6 +25,9 @@ import * as XLSX from 'xlsx';
 
 
 export const ClientesVehiculos = () => {
+
+
+
   const navigate= useNavigate();
   const {clientes,fetchClientes, fetchClientesByCedula}= useContext (HistoryContext);
   const [cedula, setCedula] = useState("");
@@ -82,54 +85,69 @@ useEffect(() => {
    }
  }, [startDate, endDate, clientes]);
 
-const handleDownloadPDF = () => {
-  const doc = new jsPDF();
+ const handleDownloadPDF = () => {
+  const doc = new jsPDF({ orientation: 'landscape' }); // Configuración para orientación horizontal
   doc.text('Historial de Clientes Registrados', 10, 10);
+  
   doc.autoTable({
     head: [['Cédula','Nombre y Apellido', 'Contacto', 'Email', 'Dirección', 'N° Orden',
-                'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida',
-                'Descripción del trabajo', 'Técnico Responsable', 'Estado']],
+            'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida',
+            'Descripción del trabajo', 'Técnico Responsable', 'Estado']],
     body: filteredData.map((cliente) => [
-      cliente.cedula,
-      cliente.nombre,
-      cliente.telefono,
-      cliente.correo,
-      cliente.direccion,
-      cliente.orden,
+      cliente.propietario.cedula,
+      cliente.propietario.nombre,
+      cliente.propietario.telefono,
+      cliente.propietario.correo,
+      cliente.propietario.direccion,
+      cliente.n_orden,
       cliente.marca,
       cliente.modelo,
       cliente.placa,
-      cliente.fechaIngreso,
-      cliente.fechaSalida,
-      cliente.descripcion,
-      cliente.tecnico,
-      cliente.estado ?  "Activo": "Inactivo",
+      formatDate(cliente.fecha_ingreso),
+      formatDate(cliente.fecha_salida),
+      cliente.detalles,
+      cliente.encargado.nombre,
+      cliente.estado,
     ]),
+    startY: 20, // Opcional: deja un espacio debajo del título
   });
-  doc.save('HistorialUsuarios.pdf');
+  
+  doc.save('HistorialClientes.pdf');
 };
+
 const handleDownloadExcel = () => {
   const data = filteredData.map((cliente) => ({
-    Cédula: cliente.cedula,
-    Nombre: cliente.nombre,
-    Teléfono: cliente.telefono,
-    Email: cliente.correo,
-    Dirección: cliente.direccion,
-    Orden: cliente.orden,
+    Cédula: cliente.propietario.cedula,
+    Nombre: cliente.propietario.nombre,
+    Teléfono: cliente.propietario.telefono,
+    Email: cliente.propietario.correo,
+    Dirección: cliente.propietario.direccion,
+    Orden: cliente.n_orden,
     Marca: cliente.marca,
     Modelo: cliente.modelo,
     Placa: cliente.placa,
-    FechaIngreso: cliente.fechaIngreso,
-    FechaSalida: cliente.fechaSalida,
-    Descripción: cliente.descripcion,
-    Técnico: cliente.tecnico,
-    Estado: cliente.estado ?  "Activo": "Inactivo",
+    FechaIngreso: formatDate(cliente.fecha_ingreso),
+    FechaSalida: formatDate(cliente.fecha_salida),
+    Descripción:cliente.detalles,
+    Técnico: cliente.encargado.nombre,
+    Estado: cliente.estado,
   }));
   const worksheet = XLSX.utils.json_to_sheet(data);
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, 'HistorialClientes');
   XLSX.writeFile(workbook, 'HistorialClientes.xlsx');
 };
+
+// Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
+const formatDate = (isoDate) => {
+  const date = new Date(isoDate);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Meses van de 0 a 11
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+
 
 
   return (
@@ -199,7 +217,7 @@ const handleDownloadExcel = () => {
             Nuevo
           </button>
         </div>
-        {/* <div className="flex items-center justify-between bg-gray-300 p-4 rounded-lg mb-6">
+         <div className="flex items-center justify-between bg-gray-300 p-4 rounded-lg mb-6">
           <input
             type="date"
             value={startDate}
@@ -212,7 +230,7 @@ const handleDownloadExcel = () => {
             onChange={(e) => setEndDate(e.target.value)}
             className="bg-gray-200 border border-black py-2 px-4 rounded-lg"
           />
-        </div>  */}
+        </div>  
 
         {/* TABLA DEL HISTORIAL DE CLIENTES------------------------------------------ */}
         {Array.isArray(clientes) && clientes.length !== 0 ? (

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useState, useEffect} from 'react';
 import Mensaje from '../Alertas';
 import { useContext } from 'react';
-import { HistoryContext } from '../../context/HistoryProvider';
+import { HistoryContext } from '../../context/HistoryContext.jsx';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 export const FormularioUsuarios = ({usuarios}) => {

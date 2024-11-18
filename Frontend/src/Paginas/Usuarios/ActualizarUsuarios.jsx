@@ -3,8 +3,9 @@ import logo from '../../assets/imagenes/logo.jpg';
 import usuario from '../../assets/imagenes/usuarios.png';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { HistoryContext } from '../../context/HistoryProvider';
+import { HistoryContext } from '../../context/HistoryContext.jsx';
 import { FormularioUsuarios } from '../../components/Usuarios/FormularioUsuarios';
+
 
 export const ActualizarUsuarios = () => {
     const navigate =useNavigate();
@@ -41,6 +42,7 @@ export const ActualizarUsuarios = () => {
           VOLVER
         </button>
       </div>
+
       {/* //Para dirigir a la pagina de actualizar usuario */}
       <h2 className="text-red-600 text-3xl font-bold text-center mb-5 border-t-2 border-b-2 border-red-700 w-full py-2">
         {/* {pathname.split("-")[0].slice(1).toUpperCase()} USUARIOS  */} ACTUALIZAR USUARIOS
