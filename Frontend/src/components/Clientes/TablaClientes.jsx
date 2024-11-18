@@ -1,4 +1,8 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
 export const TablaClientes = ({clientes}) => {
+  const navigate = useNavigate();
   // Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
   const formatDate = (isoDate) => {
     const date = new Date(isoDate);
@@ -42,7 +46,7 @@ export const TablaClientes = ({clientes}) => {
                 <td className="border border-black px-4 py-2">
                     <button 
                     className="text-black hover:text-blue-700"
-                    onClick={()=> window.open(`/actualizar-clientes/${item.cedula}`)}
+                    onClick={() => navigate(`/actualizar-clientes/${item.id}`)}
                     >
                     ✏️
                     </button>

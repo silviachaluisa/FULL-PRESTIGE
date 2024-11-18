@@ -1,4 +1,8 @@
-    export const TablaUsuarios = ({usuarios}) => {
+import React from "react"
+import { useNavigate } from "react-router-dom"
+
+export const TablaUsuarios = ({usuarios}) => {
+    const navigate = useNavigate()
         return (
             <div className="overflow-x-auto ">
                 {/* Tabla de Historial */}
@@ -26,7 +30,7 @@
                         <td className="border border-black px-4 py-2">
                         <button 
                         className="text-black hover:text-blue-700"
-                        onClick={()=> window.open(`/actualizar-usuarios/${item.cedula}`)}
+                        onClick={() => navigate(`/actualizar-usuarios/${item.id}`)}
                         >
                             ✏️
                         </button>

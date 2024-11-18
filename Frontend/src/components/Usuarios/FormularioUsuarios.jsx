@@ -84,6 +84,7 @@ export const FormularioUsuarios = ({usuarios}) => {
             try {
                 const updateinfo = { ...registro };
                 delete updateinfo.estado
+                delete updateinfo.contrasena
                 updateinfo.estado = registro?.estado === "Activo" ? true : false;
                 console.log(updateinfo)
     
@@ -179,6 +180,8 @@ export const FormularioUsuarios = ({usuarios}) => {
               id='cedula'
               type="texto"
               required
+             
+
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
               placeholder='1234567890'
               name="cedula"
@@ -276,6 +279,7 @@ export const FormularioUsuarios = ({usuarios}) => {
           </div>
 
           {/* Contraseña */}
+          {!usuarios && (
           <div className="mb-4 relative">
             <label className="block font-semibold mb-2">Contraseña</label>
               <input
@@ -296,9 +300,10 @@ export const FormularioUsuarios = ({usuarios}) => {
             >
               {showPassword ? <FaEyeSlash size={24} /> : <FaEye size={24} />} {/* Cambia el ícono */}
             </button>
-            
-            
           </div>
+          )}
+            
+            
 
           {/* Estado (solo visible en actualización) */}
           {usuarios && (

@@ -34,20 +34,21 @@ export const FormularioClientes = ({clientes}) => {
       useEffect(() => {
         if (clientes) {
           setRegisclientes({
-            cedula: clientes.cedula ?? '',
-            nombre: clientes.nombre ?? '',
-            telefono: clientes.telefono ?? '',
-            correo: clientes.correo ?? '',
-            direccion: clientes.direccion ??'',
-            orden: clientes.orden ??'',
+            cedula: clientes.propietario.cedula ?? '',
+            nombre: clientes.propietario.nombre ?? '',
+            telefono: clientes.propietario.telefono ?? '',
+            correo: clientes.propietario.correo ?? '',
+            direccion: clientes.propietario.direccion ??'',
+            orden: clientes.n_orden ??'',
             marca:clientes.marca ?? '',
             modelo: clientes.modelo ?? '',
             placa: clientes.placa ?? '',
             fechaIngreso: clientes.fechaIngreso ?? '',
             fechaSalida: clientes.fechaSalida ?? '',
-            descripcion: clientes.descripcion ?? '',
-            tecnico: clientes.tecnico ?? '',
-            estado: clientes.estado ?? '',
+            descripcion: clientes.detalles ?? '',
+            tecnico: clientes.encargado.nombre ?? '',
+            //estado: clientes.estado ?? '',
+            estado: (clientes.estado ? "Entregado": "Pendiente") ?? '',
           });
         } else {
           // Limpia los campos si no hay datos de usuario

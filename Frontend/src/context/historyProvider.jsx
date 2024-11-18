@@ -2,7 +2,6 @@ import { useState } from 'react';
 import axios from 'axios';
 import { HistoryContext } from './HistoryContext';
 
-
 // Crear el proveedor de contexto
 export const HistoryProvider = ({ children }) => {
   const [usuarios, setUsuarios] = useState([]);
@@ -129,13 +128,9 @@ export const HistoryProvider = ({ children }) => {
         },
       };
 
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/client/${id}`, options);
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/vehicles/client/${id}`, options);
       console.log(response);
-      setClientes((prevClientes) =>
-        prevClientes.map((cliente) =>
-          cliente.cedula === id ? response.data.cliente : cliente
-        )
-      );
+      setClientes(response.data)
     } catch (error) {
       console.error("Error al obtener cliente", error);
     }

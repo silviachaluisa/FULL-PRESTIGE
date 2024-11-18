@@ -1,6 +1,6 @@
 import {useContext, useEffect } from 'react';
 import logo from '../../assets/imagenes/logo.jpg';
-import usuario from '../../assets/imagenes/usuarios.png';
+//import usuario from '../../assets/imagenes/usuarios.png';
 import { useNavigate, useParams } from 'react-router-dom';
 //import { useLocation } from 'react-router-dom';
 import { HistoryContext } from '../../context/HistoryContext';
@@ -10,7 +10,7 @@ export const ActualizarClientes = () => {
   const navigate = useNavigate();
 
   const {id}=useParams();
-  const {clientes,fetchClientesByCedula}= useContext (HistoryContext)
+  const {clientes,fetchClienteByCedula}= useContext (HistoryContext)
   console.log(clientes)
   const ClienteSeleccionado=clientes[0];
 
@@ -18,7 +18,7 @@ export const ActualizarClientes = () => {
 
   useEffect(() => {
     const obtenerCliente = async () => {
-        await fetchClientesByCedula(id);
+        await fetchClienteByCedula(id);
     };
     obtenerCliente();
 },[id]);
@@ -48,12 +48,12 @@ export const ActualizarClientes = () => {
       <h2 className="text-red-600 text-3xl font-bold text-center mb-5 border-t-2 border-b-2 border-red-700 w-full py-2">
        ACTUALIZAR CLIENTES {/* {pathname.split("-")[0].slice(1).toUpperCase()} USUARIOS  */}
       </h2>
-      <div>
+      {/* <div>
         <img src={cliente} alt="Cliente" style={{ width: '120px', height: '120px' }} className='mx-auto' />
-      </div>
+      </div> */}
       
         {/* FORMULARIO .................................................................................................................*/}
-        {Object.keys(clientes).length!=0?( <FormularioClientes clientes={ClienteSeleccionado}/>):(
+        {Array.isArray(clientes) && clientes.length!=0?( <FormularioClientes clientes={ClienteSeleccionado}/>):(
            <p>No existen registros</p>
         
        )}
