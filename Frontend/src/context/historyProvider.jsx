@@ -50,7 +50,6 @@ export const HistoryProvider = ({ children }) => {
           
   };
 
-  
   const fetchUsuariosByCedula= async(id)=>{
     const token = localStorage.getItem('token')
     if (!token )return
@@ -72,7 +71,6 @@ export const HistoryProvider = ({ children }) => {
     }
 
   };
-
 
 
   // Función para agregar un usuario y actualizar el estado
@@ -117,6 +115,7 @@ export const HistoryProvider = ({ children }) => {
     }
   };
 
+  // -----------------------------------------------------------------
   const fetchClienteByCedula = async (id) => {
     const token = localStorage.getItem('token');
     if (!token) return null; // Asegurarse de que si no hay token, no haga la búsqueda
@@ -143,7 +142,8 @@ export const HistoryProvider = ({ children }) => {
       return null; // En caso de error, retornar null
     }
   };
-  
+
+  // -------------------------------------------------------------------------------
   
 
   const addCliente = (nuevoCliente) => {

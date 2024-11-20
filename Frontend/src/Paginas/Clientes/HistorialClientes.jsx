@@ -33,7 +33,7 @@ export const ClientesVehiculos = () => {
   const [endDate, setEndDate] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
-const [successMessage, setSuccessMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
 
   const handleChange=(e)=>{
@@ -81,7 +81,6 @@ const handleSearch = async () => {
 
   if (!cedulaRegex.test(cedula)) {
     setErrorMessage("La cédula debe contener solo 10 dígitos numéricos.");
-    setFilteredData([]); // Limpiar resultados previos
     return;
   }
 
@@ -99,20 +98,20 @@ const handleSearch = async () => {
   console.log("Cliente encontrado:", cliente);
 
   if (!cliente) {
-    setErrorMessage("Cliente no encontrado");
+    setErrorMessage("Cliente no se encuentra registrado");
   } else {
     setErrorMessage(""); // Limpiar mensaje de error
     setSuccessMessage("Cliente encontrado con éxito");
     setFilteredData([cliente]); // Mostrar el cliente encontrado
   }
-  // Limpiar la cédula y los mensajes después de 3 segundos
+  
   setCedula(""); // Limpia la cédula del campo de búsqueda
 
-  // Limpiar los mensajes después de 3 segundos
+  // Limpiar los mensajes después de 6 segundos
   setTimeout(() => {
     setErrorMessage(""); // Limpiar mensaje de error
     setSuccessMessage(""); // Limpiar mensaje de éxito
-  }, 6000);
+  }, 4000);
 };
 // ----------------------------------------------------------------------
 
@@ -240,9 +239,12 @@ const formatDate = (isoDate) => {
       {/* max-w-5xl (Esto hace que el formulario se limite al ancho y no cubra toda la pantalla)*/} 
         
         {/* ---------------------FORMULARIO DE BUSQUEDA----------------------- */}
+
           {/* Mostrar mensaje de error si no se encuentra cliente o si la cédula es inválida */}
           {errorMessage && <div className="text-red-500">{errorMessage}</div>}
           {successMessage && <div className="text-green-500">{successMessage}</div>}
+          {/* --------------------------------------------------------------------------------- */}
+          
         <div className="flex items-center justify-between bg-gray-300 p-4 rounded-lg mb-6">
           <input
               type="text"
