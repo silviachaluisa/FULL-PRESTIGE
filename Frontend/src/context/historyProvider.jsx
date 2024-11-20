@@ -119,7 +119,8 @@ export const HistoryProvider = ({ children }) => {
 
   const fetchClienteByCedula = async (id) => {
     const token = localStorage.getItem('token');
-    if (!token) return;
+    if (!token) return null; // Asegurarse de que si no hay token, no haga la búsqueda
+  
     try {
       const options = {
         headers: {
@@ -127,14 +128,24 @@ export const HistoryProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       };
-
+  
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/vehicles/client/${id}`, options);
-      console.log(response);
-      setClientes(response.data)
+      
+      if (response.data && response.data.length > 0) {
+        // Retorna el primer cliente encontrado
+        return response.data[0];
+      } else {
+        // Si no se encuentra el cliente, retornar null
+        return null;
+      }
     } catch (error) {
       console.error("Error al obtener cliente", error);
+      return null; // En caso de error, retornar null
     }
   };
+  
+  
+
   const addCliente = (nuevoCliente) => {
     setClientes([...clientes, nuevoCliente]);
   };

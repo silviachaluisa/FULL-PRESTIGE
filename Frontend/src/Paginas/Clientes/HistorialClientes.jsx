@@ -26,17 +26,24 @@ import * as XLSX from 'xlsx';
 
 export const ClientesVehiculos = () => {
 
-
-
   const navigate= useNavigate();
-  const {clientes,fetchClientes, fetchClientesByCedula}= useContext (HistoryContext);
+  const {clientes,fetchClientes, fetchClienteByCedula}= useContext (HistoryContext);
   const [cedula, setCedula] = useState("");
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [filteredData, setFilteredData] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+const [successMessage, setSuccessMessage] = useState("");
+
+
   const handleChange=(e)=>{
-    setCedula(e.target.value)
-};
+    const value = e.target.value
+
+    //Validación para que solo ingresen números y que no sobrepase los 10 dígitos
+    if (/^\d{0,10}$/.test(value)){
+      setCedula(value); // si es valido, actualiza el estado
+    }
+  };
   
   const brandLogos = {
     bmw: BMWLogo,
@@ -55,23 +62,61 @@ export const ClientesVehiculos = () => {
   
   const handleLogout=()=>{
     const confirmLogout = window.confirm ("¿Deseas abandonar la página?")
-    if(confirmLogout===true){
+    if(confirmLogout === true){
       navigate('/dashboard');
     }  
   };
   const handleNewClick =()=>{
     navigate('/registrar-clientes')
   }
- // Llamar a fetchUsuarios una vez cuando el componente carga
+ // Llamar a fetchUsuarios una vez cuando el componente carga, muestra a todos los clientes en la base de datos
  useEffect(() => {
   fetchClientes();
 }, []);
 
 
-const handleSearch = async()=>{
- if(cedula === "") {await fetchClientes();return}
- await fetchClientesByCedula(cedula);
+const handleSearch = async () => {
+  // Validación de la cédula
+  const cedulaRegex = /^[0-9]{10}$/;
+
+  if (!cedulaRegex.test(cedula)) {
+    setErrorMessage("La cédula debe contener solo 10 dígitos numéricos.");
+    setFilteredData([]); // Limpiar resultados previos
+    return;
+  }
+
+  if (cedula === "") {
+    await fetchClientes(); // Cargar todos los clientes si la cédula está vacía
+    return;
+  }
+
+  // Verificar que la cédula se está pasando correctamente
+  console.log("Buscando cliente con cédula:", cedula);
+
+  const cliente = await fetchClienteByCedula(cedula);
+
+  // Verificar que el cliente se encontró
+  console.log("Cliente encontrado:", cliente);
+
+  if (!cliente) {
+    setErrorMessage("Cliente no encontrado");
+    setFilteredData([]); // Limpiar lista de resultados
+  } else {
+    setErrorMessage(""); // Limpiar mensaje de error
+    setSuccessMessage("Cliente encontrado con éxito");
+    setFilteredData([cliente]); // Mostrar el cliente encontrado
+  }
+
+  // Limpiar los mensajes después de 3 segundos
+  setTimeout(() => {
+    setErrorMessage(""); // Limpiar mensaje de error
+    setSuccessMessage(""); // Limpiar mensaje de éxito
+  }, 3000);
 };
+
+
+
+
 
 useEffect(() => {
   if (startDate && endDate) {
@@ -197,12 +242,15 @@ const formatDate = (isoDate) => {
       {/* max-w-5xl (Esto hace que el formulario se limite al ancho y no cubra toda la pantalla)*/} 
         
         {/* ---------------------FORMULARIO DE BUSQUEDA----------------------- */}
+          {/* Mostrar mensaje de error si no se encuentra cliente o si la cédula es inválida */}
+          {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+          {successMessage && <div className="text-green-500">{successMessage}</div>}
         <div className="flex items-center justify-between bg-gray-300 p-4 rounded-lg mb-6">
           <input
               type="text"
               onChange={handleChange}
               value={cedula}
-              placeholder="Cedula"
+              placeholder="Ingresa la cédula"
               className="bg-gray-200 border border-black py-2 px-4 w-full rounded-lg focus:outline-none"
             />
             {/* ---------------------------------BOTONES------------------ */}
