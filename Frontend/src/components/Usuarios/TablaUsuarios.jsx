@@ -13,7 +13,7 @@ export const TablaUsuarios = ({usuarios}) => {
                         'Cédula','Nombre y Apellido','Telefono', 'Email', 'Dirección', 
                         'Cargo','Estado', 'Opciones'
                     ].map((header) => (
-                        <th key={header} className="border border-black px-4 py-2">{header}</th>
+                        <th key={header} className="border border-white px-4 py-2">{header}</th>
                     ))}
                     </tr>
                 </thead>

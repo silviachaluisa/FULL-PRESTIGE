@@ -196,27 +196,29 @@ const formatDate = (isoDate) => {
       <main className="flex-grow w-full  p-6 bg-white shadow mt-6 rounded-lg mx-auto border border-black">
       {/* max-w-5xl (Esto hace que el formulario se limite al ancho y no cubra toda la pantalla)*/} 
         
-        {/* Formulario de Búsqueda */}
+        {/* ---------------------FORMULARIO DE BUSQUEDA----------------------- */}
         <div className="flex items-center justify-between bg-gray-300 p-4 rounded-lg mb-6">
-        <input
-            type="text"
-            onChange={handleChange}
-            value={cedula}
-            placeholder="Cedula"
-            className="bg-gray-200 border border-black py-2 px-4 w-full rounded-lg focus:outline-none"
-          />
+          <input
+              type="text"
+              onChange={handleChange}
+              value={cedula}
+              placeholder="Cedula"
+              className="bg-gray-200 border border-black py-2 px-4 w-full rounded-lg focus:outline-none"
+            />
+            {/* ---------------------------------BOTONES------------------ */}
 
-          <button 
-          onClick={handleSearch}
-          className="ml-2 px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-800">
-            Buscar
-          </button>
-          <button 
-          onClick={handleNewClick}
-          className="ml-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-800">
-            Nuevo
-          </button>
+            <button 
+            onClick={handleSearch}
+            className="ml-2 px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-800">
+              Buscar
+            </button>
+            <button 
+            onClick={handleNewClick}
+            className="ml-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-800">
+              Nuevo
+            </button>
         </div>
+        {/* ------------------------------FILTRADO DE FECHAS-------------------- */}
          <div className="flex items-center justify-between bg-gray-300 p-4 rounded-lg mb-6">
           <input
             type="date"
@@ -231,16 +233,20 @@ const formatDate = (isoDate) => {
             className="bg-gray-200 border border-black py-2 px-4 rounded-lg"
           />
         </div>  
+        {/* --------------------------------------------------------------------- */}
 
         {/* TABLA DEL HISTORIAL DE CLIENTES------------------------------------------ */}
-        {Array.isArray(clientes) && clientes.length !== 0 ? (
-          <TablaClientes clientes={clientes} />
+        {Array.isArray(filteredData) && filteredData.length !== 0 ? (
+        <TablaClientes clientes={filteredData} />
         ) : (
+        // {Array.isArray(clientes) && clientes.length !== 0 ? (
+        //   <TablaClientes clientes={clientes} />
+        // ) : (
        
         <div className="overflow-x-auto">
         {/* Tabla de Historial */}
         <table className="w-full text-center border-collapse border border-black">
-          <thead className="bg-black text-white font-mono">
+          <thead className="bg-black text-white ">
             <tr>
               {[
                 'Cédula', 'Contacto', 'Email', 'Dirección', 'N° Orden',
@@ -254,7 +260,7 @@ const formatDate = (isoDate) => {
           <tbody>
            
             <tr>
-            <td colSpan="8" className="text-center py-4 text-red-700">
+            <td colSpan="13" className="text-center py-4 text-red-700">
             No existen registros disponibles.
           </td>
               

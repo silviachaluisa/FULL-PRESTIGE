@@ -14,15 +14,15 @@ export const TablaClientes = ({clientes}) => {
     return (
       <div className="overflow-x-auto">
         {/* Tabla de Historial */}
-        <table className="w-full text-center border-collapse border border-black">
-          <thead className="bg-black text-white font-mono">
+        <table className="w-full text-center border-collapse borde">
+          <thead className="bg-black text-white">
             <tr>
               {[
-                'Cédula','Nombre y Apellido', 'Contacto', 'Email', 'Dirección', 'N° Orden',
+                'Cédula','Nombre/Apellido', 'Contacto', 'Email', 'Dirección', 'N° Orden',
                 'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida',
                 'Descripción del trabajo', 'Técnico Responsable', 'Estado', 'Opciones'
               ].map((header) => (
-                <th key={header} className="border border-black px-4 py-2">{header}</th>
+                <th key={header} className="border border-white px-4 py-2">{header}</th>
               ))}
             </tr>
           </thead>
