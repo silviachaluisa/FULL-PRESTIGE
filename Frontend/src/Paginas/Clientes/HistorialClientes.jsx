@@ -74,7 +74,7 @@ const [successMessage, setSuccessMessage] = useState("");
   fetchClientes();
 }, []);
 
-
+// -----------------------------------------------------------
 const handleSearch = async () => {
   // Validación de la cédula
   const cedulaRegex = /^[0-9]{10}$/;
@@ -100,23 +100,21 @@ const handleSearch = async () => {
 
   if (!cliente) {
     setErrorMessage("Cliente no encontrado");
-    setFilteredData([]); // Limpiar lista de resultados
   } else {
     setErrorMessage(""); // Limpiar mensaje de error
     setSuccessMessage("Cliente encontrado con éxito");
     setFilteredData([cliente]); // Mostrar el cliente encontrado
   }
+  // Limpiar la cédula y los mensajes después de 3 segundos
+  setCedula(""); // Limpia la cédula del campo de búsqueda
 
   // Limpiar los mensajes después de 3 segundos
   setTimeout(() => {
     setErrorMessage(""); // Limpiar mensaje de error
     setSuccessMessage(""); // Limpiar mensaje de éxito
-  }, 3000);
+  }, 6000);
 };
-
-
-
-
+// ----------------------------------------------------------------------
 
 useEffect(() => {
   if (startDate && endDate) {
@@ -135,7 +133,7 @@ useEffect(() => {
   doc.text('Historial de Clientes Registrados', 10, 10);
   
   doc.autoTable({
-    head: [['Cédula','Nombre y Apellido', 'Contacto', 'Email', 'Dirección', 'N° Orden',
+    head: [['Cédula','Nombre/Apellido', 'Contacto', 'Email', 'Dirección', 'N° Orden',
             'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida',
             'Descripción del trabajo', 'Técnico Responsable', 'Estado']],
     body: filteredData.map((cliente) => [
