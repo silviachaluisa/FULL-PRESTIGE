@@ -6,20 +6,20 @@ export const RegistrarAsistencia = () => {
   const navigate = useNavigate();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
-  const handleSave = (event) => {
-    event.preventDefault();
-    const confirmSave = window.confirm("¿Deseas guardar la información?");
-    
-    if (confirmSave) {
-      console.log("Datos guardados");
-      setShowSuccessMessage(true);
+  const handleSearch = (e) => {
+    setBusqueda(e.target.value);
+    const empleadosFiltrados = empleados.filter(empleado =>
+        empleado.nombre.toLowerCase().includes(e.target.value.toLowerCase())
+    );
+    setResultados(empleadosFiltrados);
+};
 
-      setTimeout(() => {
-        setShowSuccessMessage(false);
-        navigate('/historial-asistencia');
-      }, 3000);
-    }
-  };
+const handleRegistrar = (empleadoId) => {
+  const fechaHora = new Date().toISOString(); // Obtiene la fecha y hora actual
+  registrarAsistencia(empleadoId, fechaHora);
+  alert(`Asistencia registrada para el empleado con ID ${empleadoId}`);
+};
+
 
   const handleLogout = () => {
     const confirmLogout = window.confirm("¿Deseas abandonar la página?");

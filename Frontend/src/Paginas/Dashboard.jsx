@@ -60,7 +60,9 @@ export const Dashboard = () => {
                 background: '-webkit-linear-gradient(to right, #2c3e50, #bdc3c7)',  /* Chrome 10-25, Safari 5.1-6 */
                 background: 'linear-gradient(to right, #2c3e50, #bdc3c7)'  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
             }}
-            >
+            >   <div>
+                <h1 className="text-3xl font-bold text-gray-900"> MENU PRINCIPAL</h1> 
+               </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
                   
                     <Link to="/historial-usuarios" className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition">

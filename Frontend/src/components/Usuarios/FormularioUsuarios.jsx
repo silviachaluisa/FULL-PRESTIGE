@@ -101,10 +101,16 @@ export const FormularioUsuarios = ({ usuarios }) => {
               nuevosErrores.contrasena =
               "La contraseña debe tener al menos una mayúscula, una minúscula, un carácter especial y 8 caracteres.";
           }
+          //Validacion para la direción
+          if (!registro.direccion) {
+            nuevosErrores.direccion = "La dirección es obligatoria";
+          } else if (registro.direccion.length < 5 || registro.direccion.length > 20) {
+            nuevosErrores.direccion = "La dirección debe tener entre 5 y 20 caracteres";
+          }
 
           //Validación para los demas campos
           if(!registro.nombre) nuevosErrores.nombre = "El nombre es obligatorio";
-          if(!registro.direccion) nuevosErrores.direccion = "La dirección es obligatoria";
+          
           if(!registro.cargo) nuevosErrores.cargo = "El cargo es obligatorio";
       
             // Si hay errores, actualiza el estado de errores y detén el proceso

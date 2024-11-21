@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import { HistoryContext } from './HistoryContext';
 
@@ -25,7 +26,11 @@ export const HistoryProvider = ({ children }) => {
       setUsuarios(response.data.empleados); // Suponiendo que la API retorna un array de usuarios
     } catch (error) {
       console.error("Error al obtener usuarios", error);
-    }
+  };
+  
+  HistoryProvider.propTypes = {
+    children: PropTypes.node.isRequired,
+  };
   };
 
   const upDateUser=async(cedula,registro)=>{
@@ -175,6 +180,8 @@ export const HistoryProvider = ({ children }) => {
   const addCliente = (nuevoCliente) => {
     setClientes([...clientes, nuevoCliente]);
   };
+
+   // -----------------------------------FUNCIONES PARA SISTENCIAS--------------------------------------------
  
   return (
     <HistoryContext.Provider 

@@ -132,11 +132,12 @@ export const FormularioClientes = ({clientes}) => {
         nuevosErrores.correo = "El correo ya está registrado.";
       }
 
-      // Validaciones de dirección
+      //Validacion para la direción
       if (!regisclientes.direccion) {
-        nuevosErrores.direccion = "La dirección es obligatoria.";
+        nuevosErrores.direccion = "La dirección es obligatoria";
+      } else if (regisclientes.direccion.length < 5 || regisclientes.direccion.length > 20) {
+        nuevosErrores.direccion = "La dirección debe tener entre 5 y 20 caracteres";
       }
-
       // Validaciones de orden
       if (!regisclientes.orden) {
         nuevosErrores.orden = "El N° de orden es obligatorio.";
