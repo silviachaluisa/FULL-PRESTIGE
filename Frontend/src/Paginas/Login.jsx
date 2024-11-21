@@ -6,6 +6,7 @@ import axios from 'axios';
 import AuthContext from '../context/AuthProvider';
 import Mensaje from '../components/Alertas';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import fondo2 from '../assets/imagenes/bg2.png'
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -53,7 +54,9 @@ export const Login = () => {
   };
 
   return (
-    <div className="bg-black flex justify-center items-center h-screen">
+    <div  className="bg-black flex flex-col items-center justify-center h-screen px-5 bg-cover bg-center bg-no-repeat"
+    style={{ backgroundImage: `url(${fondo2})` }}
+    >
       <div className="flex flex-col items-center">
         <img src={logo} alt="Full Prestige" className="logo mb-5" style={{ width: '300px', height: 'auto' }} />
         {Object.keys(mensaje).length > 0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
