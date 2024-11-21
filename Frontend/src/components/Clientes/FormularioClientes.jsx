@@ -203,15 +203,10 @@ export const FormularioClientes = ({clientes}) => {
     const URLRegister = `${import.meta.env.VITE_BACKEND_URL}/client`;
     console.log(regisclientes);
     // Preparar los datos para el registro, excluyendo la propiedad 'estado'
-    const DatosRegistrar = { 
-      ...regisclientes,
-      fechaIngreso: new Date(regisclientes.fechaIngreso).toISOString().split('T')[0],
-      fechaSalida: new Date(regisclientes.fechaSalida).toISOString().split('T')[0],
-    };
-    delete DatosRegistrar.estado;
+   
     
-    // const DatosRegistrar = { ...regisclientes};
-    // delete DatosRegistrar.estado;
+    const DatosRegistrar = { ...regisclientes};
+    delete DatosRegistrar.estado;
          
     // Realizar la petición POST
     const respuesta = await axios.post(URLRegister, DatosRegistrar);
@@ -426,14 +421,14 @@ export const FormularioClientes = ({clientes}) => {
               id='fingreso'
               type="date"
               name="fingreso"
-              value={regisclientes.fechaIngreso}
+              value={regisclientes.fecha_ingreso}
               onChange={handleChange}
               required
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
               placeholder='Fecha de Ingreso'
             
             />
-            {errores.fechaIngreso && <p className="text-red-500 text-sm">{errores.fechaIngreso}</p>}
+            {errores.fecha_salida && <p className="text-red-500 text-sm">{errores.fecha_salida}</p>}
           </div>
 
           {/* Fecha de Salida */}
@@ -443,13 +438,13 @@ export const FormularioClientes = ({clientes}) => {
               id='fsalida'
               type="date"
               name="fsalida"
-              value={regisclientes.fechaSalida}
+              value={regisclientes.fecha_salida}
               onChange={handleChange}
               required
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
               placeholder='Fecha de Salida'
             />
-            {errores.fechaSalida && <p className="text-red-500 text-sm">{errores.fechaSalida}</p>}
+            {errores.fecha_salida && <p className="text-red-500 text-sm">{errores.fecha_salida}</p>}
           </div>
 
           {/* Descripcion */}
