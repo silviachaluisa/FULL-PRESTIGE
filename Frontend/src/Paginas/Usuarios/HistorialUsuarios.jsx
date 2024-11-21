@@ -109,6 +109,7 @@ const handleSearch = async () => {
 
   if (!usuario) {
     setErrorMessage("❌ Usuario no se encuentra registrado");
+    
   } else {
     setErrorMessage(""); // Limpiar mensaje de error
     setSuccessMessage(" ✅ Usuario encontrado con éxito");
@@ -123,7 +124,6 @@ const handleSearch = async () => {
     setSuccessMessage(""); // Limpiar mensaje de éxito
   }, 4000);
 };
-
 // ---------------------------------------------------------------------------------------------------
 
 useEffect(() => {
@@ -243,26 +243,12 @@ const handleDownloadExcel = () => {
             Nuevo
           </button>
         </div>
-        {/* <div className="flex items-center justify-between bg-gray-300 p-4 rounded-lg mb-6">
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="bg-gray-200 border border-black py-2 px-4 rounded-lg"
-          />
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="bg-gray-200 border border-black py-2 px-4 rounded-lg"
-          />
-        </div>  */}
-
+       
    {/* TABLA DEL HISTORIAL */}
    {/* Significa que esta esperando una lista, de lo contrario solo muestra el encabezado, esto se modifica del lado del backend */}
    {Array.isArray(usuarios) && usuarios.length !== 0 ? (
-  <TablaUsuarios usuarios={usuarios} />
-) : (
+   <TablaUsuarios usuarios={usuarios} />
+   ) : (
 
   <div className="overflow-x-auto">
     <table className="w-full text-center border-collapse border border-black">

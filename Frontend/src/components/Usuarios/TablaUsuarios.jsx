@@ -30,7 +30,7 @@ export const TablaUsuarios = ({usuarios}) => {
                         <td className="border border-black px-4 py-2">
                         <button 
                         className="text-black hover:text-blue-700"
-                        onClick={() => navigate(`/actualizar-usuarios/${item.id}`)}
+                        onClick={() => navigate(`/actualizar-usuarios/${item.cedula}`)}
                         >
                             ✏️
                         </button>
@@ -52,7 +52,7 @@ export const TablaUsuarios = ({usuarios}) => {
             direccion: PropTypes.string.isRequired,
             cargo: PropTypes.string.isRequired,
             estado: PropTypes.string.isRequired,
-            id: PropTypes.string.isRequired,
+            
         })).isRequired,
     }
     

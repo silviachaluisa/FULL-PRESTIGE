@@ -67,16 +67,21 @@ export const HistoryProvider = ({ children }) => {
       };
   
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/employee/${id}`,options);
-      
+      console.log(response.data)
       if (response.data && response.data.length > 0) {
         // Retorna el primer cliente encontrado
-        return response.data[0];
+
+        setUsuarios(response.data) // 
+
+        return true
       } else {
-        // Si no se encuentra el cliente, retornar null
-        return null;
+        return null
       }
     } catch (error) {
       console.error("Error al obtener cliente", error);
+      // Si no se encuentra el cliente, retornar null
+      setUsuarios([])
+      setTimeout(async ()=>{await fetchUsuarios()} ,3000)
       return null; // En caso de error, retornar null
     }
   };
@@ -149,6 +154,7 @@ export const HistoryProvider = ({ children }) => {
   // -----------------------------------------------------------------
   const fetchClienteByCedula = async (id) => {
     const token = localStorage.getItem('token');
+
     if (!token) return null; // Asegurarse de que si no hay token, no haga la búsqueda
   
     try {
@@ -160,7 +166,7 @@ export const HistoryProvider = ({ children }) => {
       };
   
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/vehicles/client/${id}`, options);
-      
+      console.log(response.data)
       if (response.data && response.data.length > 0) {
         // Retorna el primer cliente encontrado
         return response.data[0];
