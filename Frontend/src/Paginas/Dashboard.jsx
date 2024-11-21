@@ -103,7 +103,7 @@ export const Dashboard = () => {
         
             <footer className="bg-black py-4">
                 <p className="text-center text-white text-sm">
-                    Empresa dedicada al cuidado y mantenimiento de tu vehículo
+                2024 Full Prestige. Todos los derechos reservados.
                 </p>
             </footer>
         </div>
