@@ -72,7 +72,7 @@ export const ClientesVehiculos = () => {
  // Llamar a fetchUsuarios una vez cuando el componente carga, muestra a todos los clientes en la base de datos
  useEffect(() => {
   fetchClientes();
-}, []);
+}, [fetchClientes]);
 
 // -----------------------------------------------------------
 const handleSearch = async () => {
@@ -204,7 +204,7 @@ const formatDate = (isoDate) => {
       <header className="w-full bg-black shadow p-4 flex justify-between items-center">
         <div className='flex items-center'>
             <img src={logo} alt="Full Prestige" className='h-14' />
-            <p className='ml-4 text-white italic font-semibold text-sm' >"Que tu auto refleje lo mejor de ti"</p>
+            <p className='ml-4 text-white italic font-semibold text-sm' >&quot;Que tu auto refleje lo mejor de ti&quot;</p>
 
         </div>
         <button 

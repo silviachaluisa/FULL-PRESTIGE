@@ -11,6 +11,7 @@ export const RegistrarUsuarios = () => {
   const {usuarios}= useContext (HistoryContext)
   console.log(usuarios)
   //const { pathname } = useLocation(); //Para la ruta actualizar
+  
   const handleLogout = () => {
     const confirmLogout = window.confirm("¿Deseas abandonar la página?");
     if (confirmLogout) {

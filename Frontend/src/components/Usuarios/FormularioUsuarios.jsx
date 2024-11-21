@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useEffect} from 'react';
+import PropTypes from 'prop-types';
 import Mensaje from '../Alertas';
 import { useContext } from 'react';
 import { HistoryContext } from '../../context/HistoryContext.jsx';
@@ -54,6 +55,10 @@ export const FormularioUsuarios = ({ usuarios }) => {
           });
         }
       }, [usuarios]);
+
+      FormularioUsuarios.propTypes = {
+        usuarios: PropTypes.object
+      };
       const handleSubmit = async (event) => {
         event.preventDefault();
         
@@ -61,7 +66,6 @@ export const FormularioUsuarios = ({ usuarios }) => {
         const nuevosErrores = {};
 
             
-             // Validaciones de la cédula
             // Validaciones de cédula
             if (!registro.cedula) {
               nuevosErrores.cedula = "La cédula es obligatoria.";
@@ -131,7 +135,7 @@ export const FormularioUsuarios = ({ usuarios }) => {
                     navigate('/historial-usuarios');
                   }, 4000);
           }else{
-            //Registro
+           
             // Construir la URL de la API para el registro
             const URLRegister = `${import.meta.env.VITE_BACKEND_URL}/register`;
             console.log(registro);
@@ -165,8 +169,6 @@ export const FormularioUsuarios = ({ usuarios }) => {
   
           console.log(error);
         }
-
-  
       };
       
 
@@ -271,7 +273,7 @@ export const FormularioUsuarios = ({ usuarios }) => {
             {errores.direccion && <p className="text-red-500 text-sm">{errores.direccion}</p>}
           </div>
 
-          {/* Dirección */}
+          {/* Correo*/}
           <div>
             <label className="block font-semibold mb-2">Correo</label>
             <input

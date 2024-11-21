@@ -1,5 +1,5 @@
-import React from "react"
 import { useNavigate } from "react-router-dom"
+import PropTypes from 'prop-types'
 
 export const TablaUsuarios = ({usuarios}) => {
     const navigate = useNavigate()
@@ -41,5 +41,18 @@ export const TablaUsuarios = ({usuarios}) => {
                </table>
             </div>
         )
+    }
+    
+    TablaUsuarios.propTypes = {
+        usuarios: PropTypes.arrayOf(PropTypes.shape({
+            cedula: PropTypes.string.isRequired,
+            nombre: PropTypes.string.isRequired,
+            telefono: PropTypes.string.isRequired,
+            correo: PropTypes.string.isRequired,
+            direccion: PropTypes.string.isRequired,
+            cargo: PropTypes.string.isRequired,
+            estado: PropTypes.string.isRequired,
+            id: PropTypes.string.isRequired,
+        })).isRequired,
     }
     

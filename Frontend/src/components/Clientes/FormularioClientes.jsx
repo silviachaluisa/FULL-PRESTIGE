@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import { useState, useEffect} from 'react';
 import Mensaje from '../Alertas';
@@ -6,14 +7,14 @@ import { useContext } from 'react';
 import { HistoryContext } from '../../context/HistoryContext.jsx';
 
 
-export const FormularioClientes = ({clientes}) => {
 
+export const FormularioClientes = ({clientes}) => {
   const navigate = useNavigate();
   const [mensaje, setMensaje] = useState("");
   const [errores, setErrores] = useState({}); 
   const {upDateClient,fetchClientes}=useContext(HistoryContext)
  
-
+  
   const [regisclientes, setRegisclientes] = useState({
         cedula: '',
         nombre: '',
@@ -52,7 +53,7 @@ export const FormularioClientes = ({clientes}) => {
           });
         } else {
           // Limpia los campos si no hay datos de usuario
-          setRegisclientes({
+            setRegisclientes({
             cedula: '',
             nombre: '',
             telefono: '',
@@ -67,129 +68,208 @@ export const FormularioClientes = ({clientes}) => {
             descripcion: '',
             tecnico: '',
             estado: '',
-          });
-        }
-      }, [clientes]);
+            });
+          }
+          }, [clientes]);
+
+          FormularioClientes.propTypes = {
+          clientes: PropTypes.shape({
+            propietario: PropTypes.shape({
+            cedula: PropTypes.string,
+            nombre: PropTypes.string,
+            telefono: PropTypes.string,
+            correo: PropTypes.string,
+            direccion: PropTypes.string,
+            }),
+            cedula: PropTypes.string,
+            n_orden: PropTypes.string,
+            marca: PropTypes.string,
+            modelo: PropTypes.string,
+            placa: PropTypes.string,
+            fechaIngreso: PropTypes.string,
+            fechaSalida: PropTypes.string,
+            detalles: PropTypes.string,
+            encargado: PropTypes.shape({
+            nombre: PropTypes.string,
+            }),
+            estado: PropTypes.bool,
+            some: PropTypes.func,
+          }),
+          };
       const handleSubmit = async (event) => {
         event.preventDefault();
+        
 
         //Iniciliza un objeto para los errores
         const nuevosErrores = {};
+        
 
-            // Validaciones de cada campo
-        if (!regisclientes.cedula) nuevosErrores.cedula = "La cédula es obligatoria.";
-        if (!regisclientes.nombre) nuevosErrores.nombre = "El nombre es obligatorio.";
-        if (!regisclientes.telefono) nuevosErrores.telefono = "El nombre es obligatorio.";
-        if (!regisclientes.correo) nuevosErrores.correo = "El correo es obligatorio.";
-        if (!regisclientes.direccion) nuevosErrores.direccion = "El correo es obligatorio.";
-        if (!regisclientes.orden) nuevosErrores.orden = "El N° de orden es obligatoria.";
-        if (!regisclientes.marca) nuevosErrores.marca = "La marca es obligatoria.";
-        if (!regisclientes.modelo) nuevosErrores.modelo = "El modelo es obligatorio.";
-        if (!regisclientes.placa) nuevosErrores.placa= "La placa es obligatorio.";
-        if (!regisclientes.fechaIngreso) nuevosErrores.fechaIngreso= "La fecha de ingreso es obligatorio.";
-        if (!regisclientes.fechaSalida) nuevosErrores.fechaSalida = "La fecha de salida es obligatorio.";
-        if (!regisclientes.descripcion) nuevosErrores.descripcion = "La descripcion del mantenimiento es obligatoria.";
-        if (!regisclientes.tecnico) nuevosErrores.tecnico = "El tecnico responsable es obligatorio.";
-       
-
-            // Si hay errores, actualiza el estado de errores y detén el proceso
-        if (Object.keys(nuevosErrores).length > 0) {
-          setErrores(nuevosErrores);
-          return;
+      // Validaciones de cédula
+      if (!regisclientes.cedula) {
+        nuevosErrores.cedula = "La cédula es obligatoria.";
+      } else if (regisclientes.cedula.length !== 10) {
+        nuevosErrores.cedula = "La cédula debe tener 10 dígitos.";
+      } else if (clientes && clientes.some((user) => user.cedula === regisclientes.cedula)) {
+        nuevosErrores.cedula = "La cédula ya está registrada.";
       }
 
-        // Si no hay errores, limpia los errores anteriores y continúa
-        setErrores({});
+      // Validaciones de nombre
+      if (!regisclientes.nombre) {
+        nuevosErrores.nombre = "El nombre es obligatorio.";
+      }
 
-        if (clientes?.cedula) {
-            try {
-                const updateinfo = { ...regisclientes };
-                delete updateinfo.estado
-                updateinfo.estado = regisclientes?.estado === "Activo" ? true : false;
-                console.log(updateinfo)
-    
-                // Llamar a la función para actualizar el usuario
-                await upDateClient(regisclientes?.cedula, updateinfo);
-    
-                // Configurar el mensaje de éxito
-                setMensaje({ respuesta: "Usuario actualizado con éxito", tipo: true });
-    
-                // Limpiar el mensaje después de 3 segundos
-                setTimeout(() => {
-                  fetchClientes()
-                    setMensaje(null);
-                    // Navegar al historial de usuarios
-                    navigate('/historial-usuarios');
-                }, 4000);
-                
-            } catch (error) {
-                // Configurar el mensaje de error recibido desde la respuesta del servidor
-                setMensaje({ respuesta: error.response?.data?.message || "Error al actualizar el usuario", tipo: false });
-    
-                // Limpiar el mensaje de error después de 3 segundos
-                setTimeout(() => {
-                    setMensaje(null);
-                }, 4000);
-    
-                console.log(error);
-            }
-        } else {
-            try {
-                // Construir la URL de la API para el registro
-                const URLRegister = `${import.meta.env.VITE_BACKEND_URL}/client`;
-                console.log(regisclientes);
-    
-                // Preparar los datos para el registro, excluyendo la propiedad 'estado'
-                const DatosRegistrar = { ...regisclientes};
-                delete DatosRegistrar.estado;
-    
-                // Realizar la petición POST
-                const respuesta = await axios.post(URLRegister, DatosRegistrar);
-                console.log(respuesta);
-    
-                // Configurar el mensaje de éxito
-                setMensaje({ respuesta: "Cliente registrado con éxito", tipo: true });
-                console.log(respuesta)
-    
-                // Limpiar el mensaje después de 3 segundos
-                setTimeout(() => {
-                    setMensaje(null);
-                    // Navegar al historial de usuarios
-                    navigate('/historial-clientes');
-                }, 3000);
-            } catch (error) {
-                // Configurar el mensaje de error recibido desde la respuesta del servidor
-                setMensaje({ respuesta: error.response?.data?.message || "Error al registrar el cliente", tipo: false });
-    
-                // Limpiar el mensaje de error después de 3 segundos
-                setTimeout(() => {
-                    setMensaje(null);
-                }, 3000);
-    
-                console.log(error);
-            }
-        }
-    };
-      
+      // Validaciones de teléfono
+      if (!regisclientes.telefono) {
+        nuevosErrores.telefono = "El teléfono es obligatorio.";
+      }
 
+      // Validaciones de correo
+      if (!regisclientes.correo) {
+        nuevosErrores.correo = "El correo electrónico es obligatorio.";
+      } else if (!/\S+@\S+\.\S+/.test(regisclientes.correo)) {
+        nuevosErrores.correo = "El correo electrónico debe tener un @.";
+      } else if (clientes && clientes.some((user) => user.correo === regisclientes.correo)) {
+        nuevosErrores.correo = "El correo ya está registrado.";
+      }
 
-      
-     // Manejador de cambio de valores del formulario
-  const handleChange = (e) => {
-    setRegisclientes({
+      // Validaciones de dirección
+      if (!regisclientes.direccion) {
+        nuevosErrores.direccion = "La dirección es obligatoria.";
+      }
+
+      // Validaciones de orden
+      if (!regisclientes.orden) {
+        nuevosErrores.orden = "El N° de orden es obligatorio.";
+      }
+
+      // Validaciones de marca
+      if (!regisclientes.marca) {
+        nuevosErrores.marca = "La marca es obligatoria.";
+      }
+
+      // Validaciones de modelo
+      if (!regisclientes.modelo) {
+        nuevosErrores.modelo = "El modelo es obligatorio.";
+      }
+
+      // Validaciones de placa
+      if (!regisclientes.placa) {
+        nuevosErrores.placa = "La placa es obligatoria.";
+      }
+
+   
+    // Validaciones de fecha de salida
+    if (new Date(regisclientes.fechaIngreso) > new Date(regisclientes.fechaSalida)) {
+      nuevosErrores.fechaSalida = "La fecha de salida debe ser posterior a la fecha de ingreso.";
+    }
+    // Validaciones de descripción
+    if (!regisclientes.descripcion) {
+      nuevosErrores.descripcion = "La descripción del mantenimiento es obligatoria.";
+    }
+
+    // Validaciones de técnico
+    if (!regisclientes.tecnico) {
+      nuevosErrores.tecnico = "El técnico responsable es obligatorio.";
+    }
+    if (Object.keys(nuevosErrores).length > 0) {
+      setErrores(nuevosErrores);
+      return;
+  }
+
+   // Si no hay errores, limpia los errores anteriores y continúa
+   setErrores({});
+
+   try {
+     if (clientes?.cedula) {
+       const updateinfo = { ...regisclientes };
+       delete updateinfo.estado
+       updateinfo.estado = regisclientes?.estado === "Activo" ? true : false;
+       console.log(updateinfo)
+       // Llamar a la función para actualizar el usuario
+       await upDateClient(regisclientes?.cedula, updateinfo);
+       // Configurar el mensaje de éxito
+       setMensaje({ respuesta: "Usuario actualizado con éxito", tipo: true });
+       
+      // Limpiar el mensaje después de 3 segundos
+      setTimeout(() => {
+        fetchClientes()
+        setMensaje(null);
+        // Navegar al historial de usuarios
+        navigate('/historial-usuarios');
+      }, 4000);
+   
+    }else {
+    // Construir la URL de la API para el registro
+    const URLRegister = `${import.meta.env.VITE_BACKEND_URL}/client`;
+    console.log(regisclientes);
+    // Preparar los datos para el registro, excluyendo la propiedad 'estado'
+    const DatosRegistrar = { 
       ...regisclientes,
-      [e.target.name]: e.target.value,
-    });
+      fechaIngreso: new Date(regisclientes.fechaIngreso).toISOString().split('T')[0],
+      fechaSalida: new Date(regisclientes.fechaSalida).toISOString().split('T')[0],
+    };
+    delete DatosRegistrar.estado;
+    
+    // const DatosRegistrar = { ...regisclientes};
+    // delete DatosRegistrar.estado;
+         
+    // Realizar la petición POST
+    const respuesta = await axios.post(URLRegister, DatosRegistrar);
+    console.log(respuesta);
+         
+    // Configurar el mensaje de éxito
+    setMensaje({ respuesta: "Cliente registrado con éxito", tipo: true });
+    console.log(respuesta)
+         
+    // Limpiar el mensaje después de 3 segundos
+    setTimeout(() => {
+    setMensaje(null);
+    // Navegar al historial de usuarios
+    navigate('/historial-clientes');
+    }, 3000);
+  }  
+     
+  } catch (error) {
+     // Configurar el mensaje de error recibido desde la respuesta del servidor
+     setMensaje({ respuesta: error.response?.data?.message || "Error al actualizar el usuario", tipo: false });
+  
+     // Limpiar el mensaje de error después de 3 segundos
+     setTimeout(() => {
+         setMensaje(null);
+     }, 4000);
+  
+     console.log(error);
+        
+   }
   };
+
+     // Manejador de cambio de valores del formulario
+     const handleChange = (e) => {
+      const {name, value} = e.target;
+
+      //Validar entrada solo para los campos "cedula" y "teléfono"
+      if(name=== "cedula" || name === "telefono"){
+        const soloNumeros = /^[0-9]*$/; //Expresión regular para permitir solo números
+        if(!soloNumeros.test(value)){
+          return;//Ignora si se ingresan letras u otros caracteres
+        }
+
+      }
+      //Actualiza el estado
+      setRegisclientes({
+        ...regisclientes,
+        [name]: value
+      })
+      
+      };
 
     return (
         
-        <div className="w-full max-w-7xl px-10">
+      <div className="w-full max-w-7xl px-10">
       {/* {mensaje && <Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} />} */}
       {mensaje && (<Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} errores={!mensaje.tipo ? errores : {}} 
-    />
-)}
-
+      />
+      )}
 
       <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-6 border-2 border-red-600 p-6 rounded-lg bg-black mb-7">
           
@@ -341,7 +421,7 @@ export const FormularioClientes = ({clientes}) => {
           </div>
           {/* Fecha de Ingreso*/}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha ingreso</label>
+            <label className="block font-semibold mb-2">Fecha de Ingreso</label>
             <input
               id='fingreso'
               type="date"
@@ -430,7 +510,6 @@ export const FormularioClientes = ({clientes}) => {
         
         <div className="flex justify-end mt-4">
           <button
-           
             onClick={handleSubmit}
             className="py-2 px-6 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-800"
           >
