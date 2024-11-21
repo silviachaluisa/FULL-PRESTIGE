@@ -49,28 +49,54 @@ export const HistoryProvider = ({ children }) => {
                 }
           
   };
-
-  const fetchUsuariosByCedula= async(id)=>{
-    const token = localStorage.getItem('token')
-    if (!token )return
+  const fetchUsuarioByCedula = async (id) => {
+    const token = localStorage.getItem('token');
+    if (!token) return null; // Asegurarse de que si no hay token, no haga la búsqueda
+  
     try {
-      const options={
-        headers:{
+      const options = {
+        headers: {
           'Content-Type': 'application/json',
-          Authorization:`Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       };
-    
   
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/employee/${id}`,options);
-      console.log(response)
-      setUsuarios(response.data.empleado); // Suponiendo que la API retorna un array de usuarios
-    } catch (error) {
-      console.error("Error al obtener usuarios", error);
       
+      if (response.data && response.data.length > 0) {
+        // Retorna el primer cliente encontrado
+        return response.data[0];
+      } else {
+        // Si no se encuentra el cliente, retornar null
+        return null;
+      }
+    } catch (error) {
+      console.error("Error al obtener cliente", error);
+      return null; // En caso de error, retornar null
     }
-
   };
+
+  // const fetchUsuariosByCedula= async(id)=>{
+  //   const token = localStorage.getItem('token')
+  //   if (!token )return
+  //   try {
+  //     const options={
+  //       headers:{
+  //         'Content-Type': 'application/json',
+  //         Authorization:`Bearer ${token}`,
+  //       },
+  //     };
+    
+  
+  //     const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/employee/${id}`,options);
+  //     console.log(response)
+  //     setUsuarios(response.data.empleado); // Suponiendo que la API retorna un array de usuarios
+  //   } catch (error) {
+  //     console.error("Error al obtener usuarios", error);
+      
+  //   }
+
+  // };
 
 
   // Función para agregar un usuario y actualizar el estado
@@ -155,7 +181,7 @@ export const HistoryProvider = ({ children }) => {
     value={{ 
       usuarios, 
       addUsuario, 
-      fetchUsuariosByCedula,
+      fetchUsuarioByCedula,
       upDateUser,
       fetchUsuarios,
       clientes,

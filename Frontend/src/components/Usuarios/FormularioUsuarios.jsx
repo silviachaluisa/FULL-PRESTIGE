@@ -6,9 +6,7 @@ import { useContext } from 'react';
 import { HistoryContext } from '../../context/HistoryContext.jsx';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
-export const FormularioUsuarios = ({usuarios}) => {
-  
-
+export const FormularioUsuarios = ({ usuarios }) => {
   const navigate = useNavigate();
   const [mensaje, setMensaje] = useState("");
   const [errores, setErrores] = useState({});  
@@ -58,19 +56,53 @@ export const FormularioUsuarios = ({usuarios}) => {
       }, [usuarios]);
       const handleSubmit = async (event) => {
         event.preventDefault();
-
+        
         //Iniciliza un objeto para los errores
         const nuevosErrores = {};
 
-            // Validaciones de cada campo
-        if (!registro.cedula) nuevosErrores.cedula = "La cédula es obligatoria.";
-        if (!registro.nombre) nuevosErrores.nombre = "El nombre es obligatorio.";
-        if (!registro.telefono) nuevosErrores.telefono = "El teléfono es obligatorio.";
-        if (!registro.correo) nuevosErrores.correo = "El correo es obligatorio.";
-        if (!registro.contrasena && !usuarios) nuevosErrores.contrasena = "La contraseña es obligatoria.";
-        if (!registro.direccion) nuevosErrores.direccion = "La dirección es obligatoria.";
-        if (!registro.cargo) nuevosErrores.cargo = "El cargo es obligatorio.";
+            
+             // Validaciones de la cédula
+            // Validaciones de cédula
+            if (!registro.cedula) {
+              nuevosErrores.cedula = "La cédula es obligatoria.";
+            } else if (registro.cedula.length !== 10) {
+              nuevosErrores.cedula = "La cédula debe tener 10 dígitos.";
+            } else if (usuarios && usuarios.some((user) => user.cedula === registro.cedula)) {
+              nuevosErrores.cedula = "La cédula ya está registrada.";
+            }
 
+            //Validación del correo
+            if (!registro.correo) {
+              nuevosErrores.correo = 'El correo electrónico es obligatorio';
+            }else if(!/\S+@\S+\.\S+/.test(registro.correo)){
+              nuevosErrores.correo = 'El correo electrónico debe tener un @';
+            } else if (usuarios && usuarios.some((user) => user.correo === registro.correo)) {
+              nuevosErrores.correo = "El correo ya está registrado.";
+            }
+
+            //Validación del teléfono
+            if(!registro.telefono){
+              nuevosErrores.telefono = 'El teléfono es obligatorio';
+            }else if(!/^\d+$/.test(registro.telefono)){
+              nuevosErrores.telefono = 'El teléfono debe contener números';
+            }
+
+            //Validación de contraseña
+            if(!registro.contrasena){
+              nuevosErrores.contrasena = 'La contraseña es obligatoria';
+            }else if(
+              registro.contrasena &&
+              !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/.test(registro.contrasena)
+            ){
+              nuevosErrores.contrasena =
+              "La contraseña debe tener al menos una mayúscula, una minúscula, un carácter especial y 8 caracteres.";
+          }
+
+          //Validación para los demas campos
+          if(!registro.nombre) nuevosErrores.nombre = "El nombre es obligatorio";
+          if(!registro.direccion) nuevosErrores.direccion = "La dirección es obligatoria";
+          if(!registro.cargo) nuevosErrores.cargo = "El cargo es obligatorio";
+      
             // Si hay errores, actualiza el estado de errores y detén el proceso
         if (Object.keys(nuevosErrores).length > 0) {
           setErrores(nuevosErrores);
@@ -79,98 +111,96 @@ export const FormularioUsuarios = ({usuarios}) => {
 
         // Si no hay errores, limpia los errores anteriores y continúa
         setErrores({});
+        try {
+          if (usuarios?.cedula) {
+              
+                  const updateinfo = { ...registro };
+                  delete updateinfo.estado
+                  delete updateinfo.contrasena
+                  updateinfo.estado = registro?.estado === "Activo" ? true : false;
+                  console.log(updateinfo)
+                  // Llamar a la función para actualizar el usuario
+                  await upDateUser(usuarios?.cedula, updateinfo);
+                  // Configurar el mensaje de éxito
+                  setMensaje({ respuesta: "Usuario actualizado con éxito", tipo: true });
+                  // Limpiar el mensaje después de 4 segundos
+                  setTimeout(() => {
+                    fetchUsuarios()
+                    setMensaje(null);
+                    // Navegar al historial de usuarios
+                    navigate('/historial-usuarios');
+                  }, 4000);
+          }else{
+            //Registro
+            // Construir la URL de la API para el registro
+            const URLRegister = `${import.meta.env.VITE_BACKEND_URL}/register`;
+            console.log(registro);
+            // Preparar los datos para el registro, excluyendo la propiedad 'estado'
+            const DatosRegistrar = { ...registro };
+            delete DatosRegistrar.estado;
 
-        if (usuarios?.cedula) {
-            try {
-                const updateinfo = { ...registro };
-                delete updateinfo.estado
-                delete updateinfo.contrasena
-                updateinfo.estado = registro?.estado === "Activo" ? true : false;
-                console.log(updateinfo)
-    
-                // Llamar a la función para actualizar el usuario
-                await upDateUser(usuarios?.cedula, updateinfo);
-    
-                // Configurar el mensaje de éxito
-                setMensaje({ respuesta: "Usuario actualizado con éxito", tipo: true });
-    
-                // Limpiar el mensaje después de 3 segundos
-                setTimeout(() => {
-                  fetchUsuarios()
-                    setMensaje(null);
-                    // Navegar al historial de usuarios
-                    navigate('/historial-usuarios');
-                }, 4000);
-                
-            } catch (error) {
-                // Configurar el mensaje de error recibido desde la respuesta del servidor
-                setMensaje({ respuesta: error.response?.data?.message || "Error al actualizar el usuario", tipo: false });
-    
-                // Limpiar el mensaje de error después de 3 segundos
-                setTimeout(() => {
-                    setMensaje(null);
-                }, 4000);
-    
-                console.log(error);
-            }
-        } else {
-            try {
-                // Construir la URL de la API para el registro
-                const URLRegister = `${import.meta.env.VITE_BACKEND_URL}/register`;
-                console.log(registro);
-    
-                // Preparar los datos para el registro, excluyendo la propiedad 'estado'
-                const DatosRegistrar = { ...registro };
-                delete DatosRegistrar.estado;
-    
-                // Realizar la petición POST
-                const respuesta = await axios.post(URLRegister, DatosRegistrar);
-                console.log(respuesta);
-    
-                // Configurar el mensaje de éxito
-                setMensaje({ respuesta: "Usuario registrado con éxito", tipo: true });
-                console.log(respuesta)
-    
-                // Limpiar el mensaje después de 3 segundos
-                setTimeout(() => {
-                    setMensaje(null);
-                    // Navegar al historial de usuarios
-                    navigate('/historial-usuarios');
-                }, 3000);
-            } catch (error) {
-                // Configurar el mensaje de error recibido desde la respuesta del servidor
-                setMensaje({ respuesta: error.response?.data?.message || "Error al registrar el usuario", tipo: false });
-    
-                // Limpiar el mensaje de error después de 3 segundos
-                setTimeout(() => {
-                    setMensaje(null);
-                }, 3000);
-    
-                console.log(error);
-            }
+            const respuesta = await axios.post(URLRegister, DatosRegistrar);
+            console.log(respuesta);
+            // Configurar el mensaje de éxito
+            setMensaje({ respuesta: "Usuario registrado con éxito", tipo: true });
+            console.log(respuesta)
+            // Limpiar el mensaje después de 3 segundos
+            setTimeout(() => {
+              setMensaje(null);
+              // Navegar al historial de usuarios
+              navigate('/historial-usuarios');
+            }, 3000);
+          }        
+      
+          
+        } catch (error) {
+          
+          // Configurar el mensaje de error recibido desde la respuesta del servidor
+          setMensaje({ respuesta: error.response?.data?.message || "Error al registrar el usuario", tipo: false });
+  
+          // Limpiar el mensaje de error después de 3 segundos
+          setTimeout(() => {
+              setMensaje(null);
+          }, 3000);
+  
+          console.log(error);
         }
-    };
+
+  
+      };
       
 
 
       
      // Manejador de cambio de valores del formulario
-  const handleChange = (e) => {
-    setRegistro({
-      ...registro,
-      [e.target.name]: e.target.value,
-    });
-  };
+     const handleChange = (e) => {
+      const {name, value} = e.target;
+
+      //Validar entrada solo para los campos "cedula" y "teléfono"
+      if(name=== "cedula" || name === "telefono"){
+        const soloNumeros = /^[0-9]*$/; //Expresión regular para permitir solo números
+        if(!soloNumeros.test(value)){
+          return;//Ignora si se ingresan letras u otros caracteres
+        }
+
+      }
+      //Actualiza el estado
+      setRegistro({
+        ...registro,
+        [name]: value
+      })
+      
+      };
 
     return (
         
-        <div className="w-full max-w-7xl px-10">
-
-      {mensaje && (<Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} errores={!mensaje.tipo ? errores : {}} 
-    />
-)}
-
-
+      <div className="w-full max-w-7xl px-10">
+        <div className='mb-7'>
+        {mensaje && (<Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} errores={!mensaje.tipo ? errores : {}} 
+        />
+        )}
+        </div>
+          
       <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-6 border-2 border-red-600 p-6 rounded-lg bg-black mb-7">
           
           {/* Cédula */}
@@ -179,14 +209,14 @@ export const FormularioUsuarios = ({usuarios}) => {
             <input
               id='cedula'
               type="texto"
+              name="cedula"
+              maxLength="10"
               required
-             
-
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
               placeholder='1234567890'
-              name="cedula"
               value={registro.cedula}
               onChange={handleChange}
+              
             />
             {errores.cedula && <p className="text-red-500 text-sm">{errores.cedula}</p>}
           </div>
@@ -209,7 +239,7 @@ export const FormularioUsuarios = ({usuarios}) => {
           
           {/* Teléfono */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Teléfono</label>
+            <label className="block font-semibold mb-2">Celular</label>
             <input
               id='telefono'
               type="text"
@@ -219,6 +249,7 @@ export const FormularioUsuarios = ({usuarios}) => {
               required
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
               placeholder='099999999 o 0222222'
+             
             />
             {errores.telefono && <p className="text-red-500 text-sm">{errores.telefono}</p>}
           </div>

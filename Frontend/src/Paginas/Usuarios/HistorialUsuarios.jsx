@@ -26,13 +26,26 @@ import * as XLSX from 'xlsx';
 export const Usuarios = () => {
 
   const navigate= useNavigate();
-  const {usuarios,fetchUsuarios, fetchUsuariosByCedula}= useContext (HistoryContext);
+  const {usuarios,fetchUsuarios, fetchUsuarioByCedula}= useContext (HistoryContext);
   const [cedula, setCedula] = useState("");
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [startDate] = useState('');
+  const [endDate] = useState('');
   const [filteredData, setFilteredData] = useState([]);
-  const handleChange=(e)=>{
-    setCedula(e.target.value)
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
+  
+//   const handleChange=(e)=>{
+//     setCedula(e.target.value)
+// };
+
+const handleChange=(e)=>{
+  const value = e.target.value
+
+  //Validación para que solo ingresen números y que no sobrepase los 10 dígitos
+  if (/^\d{0,10}$/.test(value)){
+    setCedula(value); // si es valido, actualiza el estado
+  }
 };
 
   const handleLogout=()=>{
@@ -65,10 +78,53 @@ const brandLogos = {
 const handleNewClick =()=>{
   navigate('/registrar-usuarios')
 }
-const handleSearch = async()=>{
- if(cedula === "") {await fetchUsuarios();return}
- await fetchUsuariosByCedula(cedula);
+// const handleSearch = async()=>{
+//  if(cedula === "") {await fetchUsuarios();return}
+//  await fetchUsuariosByCedula(cedula);
+// };
+
+// ------------------------------------------------------------------------------------------------------------
+const handleSearch = async () => {
+  // Validación de la cédula
+  const cedulaRegex = /^[0-9]{10}$/;
+
+  if (!cedulaRegex.test(cedula)) {
+    setErrorMessage("⚠️La cédula debe contener solo 10 dígitos numéricos.");
+    return;
+  }
+
+  if (cedula === "") {
+    await fetchUsuarios(); // Cargar todos los usuarios si la cédula está vacía
+    return;
+  }
+
+  // Verificar que la cédula se está pasando correctamente
+  console.log("Buscando usuarios con cédula:", cedula);
+
+  const usuario = await fetchUsuarioByCedula(cedula);
+
+  // Verificar que el usuario se encontró
+  console.log("Usuario encontrado:", usuario);
+  
+
+  if (!usuario) {
+    setErrorMessage("❌ Usuario no se encuentra registrado");
+  } else {
+    setErrorMessage(""); // Limpiar mensaje de error
+    setSuccessMessage(" ✅ Usuario encontrado con éxito");
+    setFilteredData([usuario]); // Mostrar el usuario encontrado
+  }
+  
+  setCedula(""); // Limpia la cédula del campo de búsqueda
+
+  // Limpiar los mensajes después de 6 segundos
+  setTimeout(() => {
+    setErrorMessage(""); // Limpiar mensaje de error
+    setSuccessMessage(""); // Limpiar mensaje de éxito
+  }, 4000);
 };
+
+// ---------------------------------------------------------------------------------------------------
 
 useEffect(() => {
   if (startDate && endDate) {
@@ -162,6 +218,11 @@ const handleDownloadExcel = () => {
       {/* max-w-5xl (Esto hace que el formulario se limite al ancho y no cubra toda la pantalla)*/} 
       {/* w-full  (Para ponerlo en toda la pantalla)*/}
         {/* Formulario de Búsqueda */}
+
+         {/* Mostrar mensaje de error si no se encuentra cliente o si la cédula es inválida */}
+         {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+          {successMessage && <div className="text-green-500">{successMessage}</div>}
+          {/* --------------------------------------------------------------------------------- */}
         <div className="flex items-center justify-between bg-gray-300 p-4 rounded-lg mb-6">
           <input
             type="text"

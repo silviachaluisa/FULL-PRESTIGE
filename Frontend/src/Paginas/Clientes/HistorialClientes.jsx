@@ -80,7 +80,7 @@ const handleSearch = async () => {
   const cedulaRegex = /^[0-9]{10}$/;
 
   if (!cedulaRegex.test(cedula)) {
-    setErrorMessage("La cédula debe contener solo 10 dígitos numéricos.");
+    setErrorMessage("⚠️ La cédula debe contener solo 10 dígitos numéricos.");
     return;
   }
 
@@ -98,10 +98,10 @@ const handleSearch = async () => {
   console.log("Cliente encontrado:", cliente);
 
   if (!cliente) {
-    setErrorMessage("Cliente no se encuentra registrado");
+    setErrorMessage("❌ Cliente no se encuentra registrado");
   } else {
     setErrorMessage(""); // Limpiar mensaje de error
-    setSuccessMessage("Cliente encontrado con éxito");
+    setSuccessMessage("✅ Cliente encontrado con éxito");
     setFilteredData([cliente]); // Mostrar el cliente encontrado
   }
   
