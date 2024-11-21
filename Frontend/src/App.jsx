@@ -4,7 +4,7 @@ import  Bienvenida  from './Paginas/Bienvenida'
 import  Login  from './Paginas/Login'
 import Dashboard from './Paginas/Dashboard.jsx'
 import Asistencia from './Paginas/Asistencias/HistorialAsistencia.jsx'
-import RegistrarAsistencia from './Paginas/Asistencias/RegistrarAsitencia.jsx'
+
 import ClientesVehiculos  from './Paginas/Clientes/HistorialClientes.jsx'
 import RegistrarClientes from './Paginas/Clientes/RegistrarClientes.jsx'
 import Pagos from './Paginas/Pagos/HistorialPagos.jsx'
@@ -18,6 +18,7 @@ import RecuperarContrasena from './Paginas/RecuperarContraseña.jsx';
 import ActualizarClientes from './Paginas/Clientes/ActualizarClientes.jsx';
 
 
+
 function App() {
     return (
         <BrowserRouter>
@@ -28,7 +29,7 @@ function App() {
                <Route path="/" element={<Bienvenida />} /> {/* Ruta principal */}
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/historial-asistencia" element={<Asistencia />} />
-                <Route path="/registrar-asistencia" element={<RegistrarAsistencia />} />
+             
                 <Route path="/historial-clientes" element={<ClientesVehiculos />} />
                 <Route path="/registrar-clientes" element={<RegistrarClientes />} />
                 <Route path="/historial-pagos" element={<Pagos />} />
@@ -41,6 +42,7 @@ function App() {
                 <Route path="/recuperar-contrasena" element={<RecuperarContrasena />} />
                 <Route path="/login" element={<Login />} />  
                 <Route path="/actualizar-clientes/:id" element={<ActualizarClientes />} />
+         
             </Routes>
             </HistoryProvider>
         </AuthProvider>

@@ -1,4 +1,3 @@
-import React from 'react';
 import logo from '../../assets/imagenes/logo.jpg';
 import pdf from '../../assets/imagenes/pdf.png'
 import excel from '../../assets/imagenes/excel.png'
@@ -22,6 +21,7 @@ import { TablaUsuarios } from '../../components/Usuarios/TablaUsuarios';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
+import { FaUserAlt} from 'react-icons/fa';
 
 export const Usuarios = () => {
 
@@ -183,7 +183,7 @@ const handleDownloadExcel = () => {
       <header className="w-full bg-black shadow p-4 flex justify-between items-center">
         <div className='flex items-center'>
             <img src={logo} alt="Full Prestige" className='h-14' />
-            <p className='ml-4 text-white italic font-semibold text-sm' >"Que tu auto refleje lo mejor de ti"</p>
+            <p className='ml-4 text-white italic font-semibold text-sm' >&quot;Que tu auto refleje lo mejor de ti&quot;</p>
 
         </div>
         <button 
@@ -210,7 +210,7 @@ const handleDownloadExcel = () => {
       
 
       <div>
-        <h2 className=" bg-black px-4 py-2  border-2 border-white text-red-600 text-center text-xl font-semibold mb-4">HISTORIAL USUARIOS REGISTRADOS</h2>
+        <h2 className=" bg-black px-4 py-2  border-2 border-white text-red-600 text-center text-xl font-semibold mb-4">HISTORIAL USUARIOS REGISTRADOS<FaUserAlt className="text-red-600 mx-auto text-5xl mb-4" /></h2>
       </div>
 
       {/* Historial de Usuarios */}
@@ -289,8 +289,7 @@ const handleDownloadExcel = () => {
 
 
 
-   {/* BOTONES------------------------------------------------------------- */}
-       
+       {/* BOTONES------------------------------------------------------------- */}
         <div className='flex space-x-4 justify-center mt-20'>
 
           <button  onClick={handleDownloadPDF} className="bg-red-400 text-black font-bold px-3 py-2 rounded flex items-center space-x-5"> 

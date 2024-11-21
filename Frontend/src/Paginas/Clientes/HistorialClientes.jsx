@@ -21,6 +21,7 @@ import { TablaClientes } from '../../components/Clientes/TablaClientes';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
+import { FaCar} from 'react-icons/fa';
 
 
 
@@ -231,7 +232,7 @@ const formatDate = (isoDate) => {
       
 
       <div>
-        <h2 className=" bg-black px-4 py-2  border-2 border-white text-red-600 text-center text-xl font-semibold mb-4">HISTORIAL DE CLIENTES / VEHÍCULOS</h2>
+        <h2 className=" bg-black px-4 py-2  border-2 border-white text-red-600 text-center text-xl font-semibold mb-4">HISTORIAL DE CLIENTES / VEHÍCULOS <FaCar className="text-red-600 mx-auto text-5xl mb-4" /></h2>
       </div>
 
       {/* Historial de Clientes/Vehículos */}
