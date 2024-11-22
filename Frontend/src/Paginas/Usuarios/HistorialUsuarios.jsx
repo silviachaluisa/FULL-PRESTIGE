@@ -99,7 +99,7 @@ const handleSearch = async () => {
   }
 
   // Verificar que la cédula se está pasando correctamente
-  console.log("Buscando usuarios con cédula:", cedula);
+  console.log("Buscando usuario con cédula:", cedula);
 
   const usuario = await fetchUsuarioByCedula(cedula);
 
@@ -108,8 +108,7 @@ const handleSearch = async () => {
   
 
   if (!usuario) {
-    setErrorMessage("❌ Usuario no se encuentra registrado");
-    
+    setErrorMessage("❌ Usuario no se encuentra registrado"); 
   } else {
     setErrorMessage(""); // Limpiar mensaje de error
     setSuccessMessage(" ✅ Usuario encontrado con éxito");
@@ -118,7 +117,7 @@ const handleSearch = async () => {
   
   setCedula(""); // Limpia la cédula del campo de búsqueda
 
-  // Limpiar los mensajes después de 6 segundos
+  // Limpiar los mensajes después de 4 segundos
   setTimeout(() => {
     setErrorMessage(""); // Limpiar mensaje de error
     setSuccessMessage(""); // Limpiar mensaje de éxito

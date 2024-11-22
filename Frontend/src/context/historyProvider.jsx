@@ -72,7 +72,6 @@ export const HistoryProvider = ({ children }) => {
         // Retorna el primer cliente encontrado
 
         setUsuarios(response.data) // 
-
         return true
       } else {
         return null
@@ -81,33 +80,10 @@ export const HistoryProvider = ({ children }) => {
       console.error("Error al obtener cliente", error);
       // Si no se encuentra el cliente, retornar null
       setUsuarios([])
-      setTimeout(async ()=>{await fetchUsuarios()} ,3000)
+      setTimeout(async ()=>{await fetchUsuarios()} ,3000) //Para eliminar la vista de tabla cuando el usuario no es encontrado
       return null; // En caso de error, retornar null
     }
   };
-
-  // const fetchUsuariosByCedula= async(id)=>{
-  //   const token = localStorage.getItem('token')
-  //   if (!token )return
-  //   try {
-  //     const options={
-  //       headers:{
-  //         'Content-Type': 'application/json',
-  //         Authorization:`Bearer ${token}`,
-  //       },
-  //     };
-    
-  
-  //     const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/employee/${id}`,options);
-  //     console.log(response)
-  //     setUsuarios(response.data.empleado); // Suponiendo que la API retorna un array de usuarios
-  //   } catch (error) {
-  //     console.error("Error al obtener usuarios", error);
-      
-  //   }
-
-  // };
-
 
   // Función para agregar un usuario y actualizar el estado
   const addUsuario = (nuevoUsuario) => {
@@ -133,7 +109,7 @@ export const HistoryProvider = ({ children }) => {
       console.error("Error al obtener clientes", error);
     }
   };
-
+  // -------------------------------------------------------------------------------------
   const upDateClient = async (cedula, regisclientes) => {
     const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/client/${cedula}`;
     const token = localStorage.getItem("token");
@@ -150,7 +126,6 @@ export const HistoryProvider = ({ children }) => {
       console.error("Error al actualizar cliente", error);
     }
   };
-
   // -----------------------------------------------------------------
   const fetchClienteByCedula = async (id) => {
     const token = localStorage.getItem('token');
@@ -169,13 +144,17 @@ export const HistoryProvider = ({ children }) => {
       console.log(response.data)
       if (response.data && response.data.length > 0) {
         // Retorna el primer cliente encontrado
-        return response.data[0];
+        setClientes(response.data)//Filtrando todos los usuarios
+        return true
       } else {
         // Si no se encuentra el cliente, retornar null
         return null;
       }
     } catch (error) {
       console.error("Error al obtener cliente", error);
+
+      setClientes([])
+      setTimeout(async ()=>{await fetchClientes()} ,3000)
       return null; // En caso de error, retornar null
     }
   };

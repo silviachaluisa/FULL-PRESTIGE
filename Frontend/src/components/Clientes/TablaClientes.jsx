@@ -1,4 +1,4 @@
-import React from "react";
+import PropTypes from 'prop-types';
 import { useNavigate } from "react-router-dom";
 
 export const TablaClientes = ({clientes}) => {
@@ -46,7 +46,7 @@ export const TablaClientes = ({clientes}) => {
                 <td className="border border-black px-4 py-2">
                     <button 
                     className="text-black hover:text-blue-700"
-                    onClick={() => navigate(`/actualizar-clientes/${item.id}`)}
+                    onClick={() => navigate(`/actualizar-clientes/${item.propietario.cedula}`)}
                     >
                     ✏️
                     </button>
@@ -56,6 +56,30 @@ export const TablaClientes = ({clientes}) => {
           </tbody>
         </table>
       </div>
-    )
-  }
+    );
+  };
+  
+  TablaClientes.propTypes = {
+    clientes: PropTypes.arrayOf(PropTypes.shape({
+      propietario: PropTypes.shape({
+        cedula: PropTypes.string.isRequired,
+        nombre: PropTypes.string.isRequired,
+        telefono: PropTypes.string.isRequired,
+        correo: PropTypes.string.isRequired,
+        direccion: PropTypes.string.isRequired,
+      }).isRequired,
+      n_orden: PropTypes.string.isRequired,
+      marca: PropTypes.string.isRequired,
+      modelo: PropTypes.string.isRequired,
+      placa: PropTypes.string.isRequired,
+      fecha_ingreso: PropTypes.string.isRequired,
+      fecha_salida: PropTypes.string.isRequired,
+      detalles: PropTypes.string.isRequired,
+      encargado: PropTypes.shape({
+        nombre: PropTypes.string.isRequired,
+      }).isRequired,
+      estado: PropTypes.bool.isRequired,
+    
+    })).isRequired,
+  };
   

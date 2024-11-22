@@ -109,9 +109,7 @@ export const FormularioClientes = ({clientes}) => {
         nuevosErrores.cedula = "La cédula es obligatoria.";
       } else if (regisclientes.cedula.length !== 10) {
         nuevosErrores.cedula = "La cédula debe tener 10 dígitos.";
-      } else if (clientes && clientes.some((user) => user.cedula === regisclientes.cedula)) {
-        nuevosErrores.cedula = "La cédula ya está registrada.";
-      }
+      } 
 
       // Validaciones de nombre
       if (!regisclientes.nombre) {
@@ -128,9 +126,7 @@ export const FormularioClientes = ({clientes}) => {
         nuevosErrores.correo = "El correo electrónico es obligatorio.";
       } else if (!/\S+@\S+\.\S+/.test(regisclientes.correo)) {
         nuevosErrores.correo = "El correo electrónico debe tener un @.";
-      } else if (clientes && clientes.some((user) => user.correo === regisclientes.correo)) {
-        nuevosErrores.correo = "El correo ya está registrado.";
-      }
+      } 
 
       //Validacion para la direción
       if (!regisclientes.direccion) {
@@ -187,35 +183,27 @@ export const FormularioClientes = ({clientes}) => {
        updateinfo.estado = regisclientes?.estado === "Activo" ? true : false;
        console.log(updateinfo)
        // Llamar a la función para actualizar el usuario
-       await upDateClient(regisclientes?.cedula, updateinfo);
+       await upDateClient(clientes.cedula, updateinfo);
        // Configurar el mensaje de éxito
-       setMensaje({ respuesta: "Usuario actualizado con éxito", tipo: true });
+       setMensaje({ respuesta: "Cliente actualizado con éxito", tipo: true });
        
       // Limpiar el mensaje después de 3 segundos
       setTimeout(() => {
         fetchClientes()
         setMensaje(null);
         // Navegar al historial de usuarios
-        navigate('/historial-usuarios');
+        navigate('/historial-clientes');
       }, 4000);
    
     }else {
-    // Construir la URL de la API para el registro
-    const URLRegister = `${import.meta.env.VITE_BACKEND_URL}/client`;
-    console.log(regisclientes);
+
+
+
     // Preparar los datos para el registro, excluyendo la propiedad 'estado'
-   
-    
     const DatosRegistrar = { ...regisclientes};
     delete DatosRegistrar.estado;
          
-    // Realizar la petición POST
-    const respuesta = await axios.post(URLRegister, DatosRegistrar);
-    console.log(respuesta);
-         
-    // Configurar el mensaje de éxito
-    setMensaje({ respuesta: "Cliente registrado con éxito", tipo: true });
-    console.log(respuesta)
+    upDateClient.proietario.cedula,regisclientes 
          
     // Limpiar el mensaje después de 3 segundos
     setTimeout(() => {

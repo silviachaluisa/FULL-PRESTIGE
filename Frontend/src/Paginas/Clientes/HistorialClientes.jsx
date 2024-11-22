@@ -75,7 +75,7 @@ export const ClientesVehiculos = () => {
   fetchClientes();
 }, [fetchClientes]);
 
-// -----------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 const handleSearch = async () => {
   // Validación de la cédula
   const cedulaRegex = /^[0-9]{10}$/;
@@ -108,13 +108,13 @@ const handleSearch = async () => {
   
   setCedula(""); // Limpia la cédula del campo de búsqueda
 
-  // Limpiar los mensajes después de 6 segundos
+  // Limpiar los mensajes después de 4 segundos
   setTimeout(() => {
     setErrorMessage(""); // Limpiar mensaje de error
     setSuccessMessage(""); // Limpiar mensaje de éxito
   }, 4000);
 };
-// ----------------------------------------------------------------------
+// ----------------------------------------------------------------------------------
 
 useEffect(() => {
   if (startDate && endDate) {
