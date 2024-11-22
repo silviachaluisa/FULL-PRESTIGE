@@ -183,10 +183,10 @@ export const FormularioClientes = ({clientes}) => {
         
        const updateinfo = { ...regisclientes };
        delete updateinfo.estado
-       updateinfo.estado = regisclientes?.estado === "Activo" ? true : false;
+       updateinfo.estado = regisclientes?.estado === "Pendiente" ? true : false;
        console.log(updateinfo)
        // Llamar a la función para actualizar el usuario
-       await upDateClient(clientes.cedula, updateinfo);
+       await upDateClient(clientes?.cedula, updateinfo);
        // Configurar el mensaje de éxito
        setMensaje({ respuesta: "Cliente actualizado con éxito", tipo: true });
        
@@ -200,13 +200,14 @@ export const FormularioClientes = ({clientes}) => {
    
     }else {
 
-
-
     // Preparar los datos para el registro, excluyendo la propiedad 'estado'
     const DatosRegistrar = { ...regisclientes};
     delete DatosRegistrar.estado;
          
     upDateClient(clientes.cedula, DatosRegistrar);
+    const respuesta = await axios.post(DatosRegistrar);
+    console.log(respuesta);
+
          
     // Limpiar el mensaje después de 3 segundos
     setTimeout(() => {
@@ -262,7 +263,7 @@ export const FormularioClientes = ({clientes}) => {
           
           {/* Cédula */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Cédula</label>
+            <label className="block font-semibold mb-2">Cédula 🪪</label>
             <input
               id='cedula'
               type="texto"
@@ -278,7 +279,7 @@ export const FormularioClientes = ({clientes}) => {
           
           {/* Nombre y Apellido */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Nombre y Apellido</label>
+            <label className="block font-semibold mb-2">Nombre y Apellido🦸</label>
             <input
               id='nombre'
               type="text"
@@ -294,7 +295,7 @@ export const FormularioClientes = ({clientes}) => {
           
           {/* Teléfono */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Teléfono</label>
+            <label className="block font-semibold mb-2">Teléfono📲</label>
             <input
               id='telefono'
               type="text"
@@ -310,7 +311,7 @@ export const FormularioClientes = ({clientes}) => {
 
           {/* Correo*/}
           <div>
-            <label className="block font-semibold mb-2">Correo</label>
+            <label className="block font-semibold mb-2">Correo 📧</label>
             <input
             id='correo'
               type="email"
@@ -326,7 +327,7 @@ export const FormularioClientes = ({clientes}) => {
           
           {/* Direccion */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Dirección</label>
+            <label className="block font-semibold mb-2">Dirección🏠</label>
             <input
               id='direccion'
               type="texto"
@@ -343,7 +344,7 @@ export const FormularioClientes = ({clientes}) => {
 
           {/* N Orden*/}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">N° Orden</label>
+            <label className="block font-semibold mb-2">N° Orden 🅾️</label>
             <input
               id='orden'
               type="number"
@@ -408,7 +409,7 @@ export const FormularioClientes = ({clientes}) => {
           </div>
           {/* Fecha de Ingreso*/}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha de Ingreso</label>
+            <label className="block font-semibold mb-2">Fecha de Ingreso🗓️</label>
             <input
               id='fingreso'
               type="date"
@@ -425,7 +426,7 @@ export const FormularioClientes = ({clientes}) => {
 
           {/* Fecha de Salida */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Fecha Salida</label>
+            <label className="block font-semibold mb-2">Fecha Salida📅</label>
             <input
               id='fsalida'
               type="date"
@@ -441,7 +442,7 @@ export const FormularioClientes = ({clientes}) => {
 
           {/* Descripcion */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Descripción de Mantenimiento</label>
+            <label className="block font-semibold mb-2">Descripción de Mantenimiento ⚙️</label>
             <input
               id='descripcion'
               type="texto"
@@ -458,7 +459,7 @@ export const FormularioClientes = ({clientes}) => {
 
           {/* Tecnico Responsable */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Técnico Responsable</label>
+            <label className="block font-semibold mb-2">Técnico Responsable 👤</label>
             <input
               id='tecnico'
               type="texto"
@@ -477,7 +478,7 @@ export const FormularioClientes = ({clientes}) => {
           {/* Estado (solo visible en actualización) */}
           {clientes && (
             <div className="mb-4">
-              <label className="block font-semibold mb-2">Estado</label>
+              <label className="block font-semibold mb-2">Estado del vehículo</label>
               <select
               id='estado'
               name="estado"
@@ -486,8 +487,10 @@ export const FormularioClientes = ({clientes}) => {
                 className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
               >
                 <option value="">Selecciona una opción</option>
-                <option value="Activo">Activo</option>
-                <option value="Inactivo">Inactivo</option>
+                <option value="Pendiente">🟠Pendiente</option>
+                <option value="En Proceso">🔵En Proceso</option>
+                <option value="Finalizado">🟡Finalizado</option>
+                <option value="Entregado">🟢 Entregado</option>
               </select>
               {errores.estado && <p className="text-red-500 text-sm">{errores.estado}</p>}
             </div>
