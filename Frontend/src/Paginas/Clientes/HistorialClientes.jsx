@@ -73,7 +73,7 @@ export const ClientesVehiculos = () => {
  // Llamar a fetchUsuarios una vez cuando el componente carga, muestra a todos los clientes en la base de datos
  useEffect(() => {
   fetchClientes();
-}, [fetchClientes]);
+}, []); // Se quito la dependencia ya que se busca cargarla unicamente cuando el componente de monta
 
 // ------------------------------------------------------------------------------------------
 const handleSearch = async () => {
@@ -285,8 +285,8 @@ const formatDate = (isoDate) => {
         {/* --------------------------------------------------------------------- */}
 
         {/* TABLA DEL HISTORIAL DE CLIENTES------------------------------------------ */}
-        {Array.isArray(filteredData) && filteredData.length !== 0 ? (
-        <TablaClientes clientes={filteredData} />
+        {Array.isArray(clientes) && clientes.length !== 0 ? (
+        <TablaClientes clientes={clientes} />
         ) : (
         // {Array.isArray(clientes) && clientes.length !== 0 ? (
         //   <TablaClientes clientes={clientes} />
