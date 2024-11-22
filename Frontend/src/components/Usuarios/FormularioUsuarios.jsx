@@ -59,39 +59,35 @@ export const FormularioUsuarios = ({ usuarios }) => {
       FormularioUsuarios.propTypes = {
         usuarios: PropTypes.object
       };
+      // --------------------------------------------------------------
       const handleSubmit = async (event) => {
         event.preventDefault();
         
         //Iniciliza un objeto para los errores
         const nuevosErrores = {};
-
-            
+            console.log(usuarios)
             // Validaciones de cédula
             if (!registro.cedula) {
               nuevosErrores.cedula = "La cédula es obligatoria.";
             } else if (registro.cedula.length !== 10) {
               nuevosErrores.cedula = "La cédula debe tener 10 dígitos.";
-            } else if (usuarios && usuarios.some((user) => user.cedula === registro.cedula)) {
-              nuevosErrores.cedula = "La cédula ya está registrada.";
-            }
+            } 
 
             //Validación del correo
             if (!registro.correo) {
               nuevosErrores.correo = 'El correo electrónico es obligatorio';
             }else if(!/\S+@\S+\.\S+/.test(registro.correo)){
               nuevosErrores.correo = 'El correo electrónico debe tener un @';
-            } else if (usuarios && usuarios.some((user) => user.correo === registro.correo)) {
-              nuevosErrores.correo = "El correo ya está registrado.";
-            }
-
+            } 
             //Validación del teléfono
             if(!registro.telefono){
               nuevosErrores.telefono = 'El teléfono es obligatorio';
             }else if(!/^\d+$/.test(registro.telefono)){
               nuevosErrores.telefono = 'El teléfono debe contener números';
             }
-
-            //Validación de contraseña
+            // En este bloque se expresa que si la contraseña de un usuario no existe debe registrarse, caso contrario desea actualizar la informacion  
+            if(!usuarios?.contrasena){
+              //Validación de contraseña
             if(!registro.contrasena){
               nuevosErrores.contrasena = 'La contraseña es obligatoria';
             }else if(
@@ -100,22 +96,26 @@ export const FormularioUsuarios = ({ usuarios }) => {
             ){
               nuevosErrores.contrasena =
               "La contraseña debe tener al menos una mayúscula, una minúscula, un carácter especial y 8 caracteres.";
-          }
+            }
+            }
+            
+            // ----------------------------------------------------------------------
           //Validacion para la direción
           if (!registro.direccion) {
             nuevosErrores.direccion = "La dirección es obligatoria";
           } else if (registro.direccion.length < 5 || registro.direccion.length > 20) {
             nuevosErrores.direccion = "La dirección debe tener entre 5 y 20 caracteres";
           }
-
+          
           //Validación para los demas campos
           if(!registro.nombre) nuevosErrores.nombre = "El nombre es obligatorio";
           
           if(!registro.cargo) nuevosErrores.cargo = "El cargo es obligatorio";
-      
+          
             // Si hay errores, actualiza el estado de errores y detén el proceso
         if (Object.keys(nuevosErrores).length > 0) {
           setErrores(nuevosErrores);
+          console.log(nuevosErrores)
           return;
       }
 

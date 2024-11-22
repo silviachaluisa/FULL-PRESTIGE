@@ -11,13 +11,13 @@ export const ActualizarUsuarios = () => {
     const navigate =useNavigate();
  
   const {id}=useParams();
-  const {usuarios,fetchUsuariosByCedula}= useContext (HistoryContext)
+  const {usuarios,fetchUsuarioByCedula}= useContext (HistoryContext)
   console.log(usuarios)
   const UsuarioSeleccionado=usuarios[0]
 
   useEffect(() => {
     const obtenerUsuario = async () => {
-        await fetchUsuariosByCedula(id);
+        await fetchUsuarioByCedula(id);
     };
     obtenerUsuario();
 },[id]);
