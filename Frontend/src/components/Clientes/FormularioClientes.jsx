@@ -178,6 +178,9 @@ export const FormularioClientes = ({clientes}) => {
 
    try {
      if (clientes?.cedula) {
+        console.log("Actualizando cliente...");
+        console.log(clientes);
+        
        const updateinfo = { ...regisclientes };
        delete updateinfo.estado
        updateinfo.estado = regisclientes?.estado === "Activo" ? true : false;
@@ -203,7 +206,7 @@ export const FormularioClientes = ({clientes}) => {
     const DatosRegistrar = { ...regisclientes};
     delete DatosRegistrar.estado;
          
-    upDateClient.proietario.cedula,regisclientes 
+    upDateClient(clientes.cedula, DatosRegistrar);
          
     // Limpiar el mensaje después de 3 segundos
     setTimeout(() => {
