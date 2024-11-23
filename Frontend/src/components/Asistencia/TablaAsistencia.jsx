@@ -23,11 +23,12 @@ export const TablaAsistencia = ({usuarios}) => {
                         <td className="border border-black px-4 py-2">{item.cedula}</td>
                         <td className="border border-black px-4 py-2">{item.nombre}</td>
                         <td className="border border-black px-4 py-2">{item.telefono}</td>
-                        <td className="border border-black px-4 py-2">{item.correo}</td>
-                        <td className="border border-black px-4 py-2">{item.direccion}</td>
                         <td className="border border-black px-4 py-2">{item.cargo}</td>
-                        <td className="border border-black px-4 py-2">{item.cargo}</td>
+                        <td className="border border-black px-4 py-2">{item.fecha || 'N/A'}</td>
+                        <td className="border border-black px-4 py-2">{item.horaIngreso || 'N/A'}</td>
+                        <td className="border border-black px-4 py-2">{item.horaSalida || 'N/A'}</td>
                         <td className="border border-black px-4 py-2">{item.estado}</td>
+                       
                         
                         </tr>
                     ))}

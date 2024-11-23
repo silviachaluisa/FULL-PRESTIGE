@@ -158,13 +158,12 @@ const handleDownloadPDF = () => {
   const doc = new jsPDF();
   doc.text('Historial de Usuarios Registrados', 10, 10);
   doc.autoTable({
-    head: [['Cédula', 'Nombre y Apellido', 'Teléfono', 'Correo', 'Dirección', 'Cargo', 'Estado']],
+    head: [['Cédula', 'Nombre y Apellido', 'Teléfono', 'Cargo', 'Estado']],
     body: filteredData.map((usuario) => [
       usuario.cedula,
       usuario.nombre,
       usuario.telefono,
-      usuario.correo,
-      usuario.direccion,
+    
       usuario.cargo,
       usuario.estado,
     ]),
@@ -176,8 +175,6 @@ const handleDownloadExcel = () => {
     Cédula: usuario.cedula,
     Nombre: usuario.nombre,
     Teléfono: usuario.telefono,
-    Email: usuario.correo,
-    Dirección: usuario.direccion,
     Cargo: usuario.cargo,
     Estado: usuario.estado,
   }));
@@ -300,8 +297,7 @@ const handleDownloadExcel = () => {
       <thead className="bg-black text-white font-mono">
         <tr>
           {[
-            'Cédula', 'Nombre y Apellido', 'Teléfono', 'Email', 'Dirección', 
-            'Cargo', 'Estado'
+            'Cédula', 'Nombre y Apellido', 'Teléfono','Cargo', 'Estado'
           ].map((header) => (
             <th key={header} className="border border-black px-4 py-2">{header}</th>
           ))}
