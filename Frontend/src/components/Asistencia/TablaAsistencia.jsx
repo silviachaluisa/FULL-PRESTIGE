@@ -13,7 +13,7 @@ export const TablaAsistencia = ({ usuarios }) => {
     return `${year}-${month}-${day}`;
   };
 
-  const { fetchAsistencias } = useContext(HistoryContext);
+  const { fetchAsistencias, setSeleccionado } = useContext(HistoryContext);
   const [asistencias, setAsistencias] = useState([]);
   const [selectedUsuario, setSelectedUsuario] = useState(null); // Mantener el usuario seleccionado
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar la visibilidad del modal
@@ -21,11 +21,15 @@ export const TablaAsistencia = ({ usuarios }) => {
   // Función para manejar el clic en una fila
   const handleRowClick = (usuario) => {
     // Al seleccionar el usuario, se completan los campos automáticamente
+    console.log("Usuario seleccionado:", usuario);
+
+    setSeleccionado(usuario); // Actualizar el usuario seleccionado en el contexto
+
     setSelectedUsuario({
-      ...usuario,
-      fecha: formatDate(new Date()), // Fecha actual por defecto
-      hora_ingreso: '', // Puedes poner valor por defecto
-      hora_salida: '' // Puedes poner valor por defecto
+      ...usuario
+      // fecha: formatDate(new Date()), // Fecha actual por defecto
+      // hora_ingreso: '', // Puedes poner valor por defecto
+      // hora_salida: '' // Puedes poner valor por defecto
     });
    
   };
@@ -83,10 +87,10 @@ export const TablaAsistencia = ({ usuarios }) => {
               <td className="border border-black px-4 py-2">{item.nombre}</td>
               <td className="border border-black px-4 py-2">{item.telefono}</td>
               <td className="border border-black px-4 py-2">{item.cargo}</td>
-              <td className="border border-black px-4 py-2">{formatDate(item.asistencia?.fecha)}</td>
+              <td className="border border-black px-4 py-2">{formatDate(item.asistencia?.fecha) || "N/A"}</td>
               <td className="border border-black px-4 py-2">{item.asistencia?.hora_ingreso || 'N/A'}</td>
               <td className="border border-black px-4 py-2">{item.asistencia?.hora_salida || 'N/A'}</td>
-              <td className="border border-black px-4 py-2">{item.asistencia?.estado}</td>
+              <td className="border border-black px-4 py-2">{item.asistencia?.estado || "N/A"}</td>
             </tr>
           ))}
         </tbody>

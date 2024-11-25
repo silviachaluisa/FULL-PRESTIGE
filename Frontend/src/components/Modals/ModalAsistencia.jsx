@@ -1,4 +1,4 @@
-import { useState,useContext } from "react";
+import { useState,useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { HistoryContext } from "../../context/HistoryContext";
 
@@ -10,13 +10,36 @@ export const ModalAsistencia = ({ isOpen, onClose, onSubmit, title, usuario }) =
   const [successMessage, setSuccessMessage] = useState("");
   
 
-  const {upDateAssistance}=useContext(HistoryContext)
+  const {upDateAssistance, seleccionado, fetchAsistencias}=useContext(HistoryContext);
   
   const handleInputChange = (e) => {
     setErrorMessage("");
     setSuccessMessage("");
     
   }
+
+  useEffect(() => {
+    const obtenerAsistencia = async () => {
+      console.log("Usuario =",usuario);
+      const response = await fetchAsistencias(usuario.cedula);
+      console.log("Respuesta =",response);
+      if (response) {
+        const fecha = response.fecha.split("T")[0];
+        console.log(fecha);
+
+
+        setFecha(response.fecha.split("T")[0].replace("-","/"));
+        setHoraIngreso(response.hora_ingreso);
+        setHoraSalida(response.hora_ialida);
+      }
+    }
+    console.log("Cargando info del modal")
+    if (usuario) {
+      obtenerAsistencia();
+    }
+  }, []);
+
+
   const validarAsistencia = () => {
     const now = new Date();
     const fechaActual = now.toISOString().split("T")[0]; // Fecha actual en formato 'YYYY-MM-DD'
@@ -42,11 +65,14 @@ export const ModalAsistencia = ({ isOpen, onClose, onSubmit, title, usuario }) =
 
   const handleSubmit = () => {
     const error = validarAsistencia();
-    upDateAssistance(usuario.cedula,{fecha,hora_ingreso:horaIngreso ,hora_salida:horaSalida})
+    console.log(usuario, { fecha, horaIngreso, horaSalida });
+    
     if (error) {
       setErrorMessage(error);
       return;
     }
+    return
+    upDateAssistance(usuario.cedula,{fecha,hora_ingreso:horaIngreso ,hora_salida:horaSalida})
     // Determinar el estado de la asistencia
     const estado = !horaIngreso && !horaSalida ? "Ausente" : "Presente";
 

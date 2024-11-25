@@ -287,6 +287,7 @@ const handleDownloadExcel = () => {
         onClose={() => setIsActualizarOpen(false)}
         onSubmit={handleActualizarSubmit}
         title="Actualizar Asistencia"
+        usuario={usuarios}
       />
         
 

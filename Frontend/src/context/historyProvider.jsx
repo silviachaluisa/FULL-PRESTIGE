@@ -8,6 +8,7 @@ export const HistoryProvider = ({ children }) => {
   const [usuarios, setUsuarios] = useState([]);
   const [clientes, setClientes] = useState ([]);
   const [asistencias, setAsistencias] = useState([]);
+  const [seleccionado, setSeleccionado] = useState(null);
 
     // -----------------------------------FUNCIONES PARA USUARIOS--------------------------------------------
 
@@ -245,7 +246,9 @@ export const HistoryProvider = ({ children }) => {
       fetchAsistencias,
       setAsistencias,
       fetchAsistenciasbycedula,
-      upDateAssistance
+      upDateAssistance,
+      seleccionado,
+      setSeleccionado,
        }}>
       {children}
     </HistoryContext.Provider>
