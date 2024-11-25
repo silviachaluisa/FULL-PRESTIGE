@@ -97,10 +97,6 @@ const handleActualizarSubmit = (data) => {
   console.log("Datos de Actualizar Asistencia:", data);
 };
 
-// const handleSearch = async()=>{
-//  if(cedula === "") {await fetchUsuarios();return}
-//  await fetchUsuariosByCedula(cedula);
-// };
 
 // ------------------------------------------------------------------------------------------------------------
 const handleSearch = async () => {

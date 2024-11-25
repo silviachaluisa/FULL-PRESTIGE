@@ -1,25 +1,53 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-export const ModalAsistencia = ({ isOpen, onClose, onSubmit, title }) => {
+export const ModalAsistencia = ({ isOpen, onClose, onSubmit, title, usuario }) => {
   const [fecha, setFecha] = useState("");
   const [horaIngreso, setHoraIngreso] = useState("");
   const [horaSalida, setHoraSalida] = useState("");
-  const [successMessage, setSuccessMessage] = useState(""); // Estado para el mensaje de éxito
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
+  const validarAsistencia = () => {
+    const now = new Date();
+    const fechaActual = now.toISOString().split("T")[0]; // Fecha actual en formato 'YYYY-MM-DD'
+    const horaActual = now.toTimeString().slice(0, 5); // Hora actual en formato 'HH:MM:SS'
+
+    // Validar que la fecha no sea menor a la actual
+    if (fecha < fechaActual) {
+      return "La fecha no puede ser menor a la fecha actual.";
+    }
+
+    // Validar la hora de ingreso si la fecha es hoy
+    if (fecha === fechaActual && horaIngreso && horaIngreso < horaActual) {
+      return "La hora de ingreso no puede ser menor a la hora actual.";
+    }
+
+    // Validar que la hora de salida sea mayor a la hora de ingreso
+    if (horaSalida && horaIngreso && horaSalida <= horaIngreso) {
+      return "La hora de salida debe ser mayor a la hora de ingreso.";
+    }
+
+    return null; // Si todo es válido, no hay errores
+  };
 
   const handleSubmit = () => {
-    // Validar que todos los campos estén completos
-    if (!fecha || !horaIngreso || !horaSalida) {
-      alert("Por favor, completa todos los campos.");
+    const error = validarAsistencia();
+    if (error) {
+      setErrorMessage(error);
       return;
     }
 
-    // Enviar los datos
-    onSubmit({ fecha, horaIngreso, horaSalida });
+    // Determinar el estado de la asistencia
+    const estado = !horaIngreso && !horaSalida ? "Ausente" : "Presente";
+
+    // Enviar los datos con el estado calculado
+    onSubmit({ usuario, fecha, horaIngreso, horaSalida, estado });
 
     // Mostrar mensaje de éxito
+    setErrorMessage("");
     setSuccessMessage("Asistencia registrada/actualizada con éxito.");
-    
+
     // Limpiar el formulario
     setFecha("");
     setHoraIngreso("");
@@ -39,6 +67,11 @@ export const ModalAsistencia = ({ isOpen, onClose, onSubmit, title }) => {
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
         <h2 className="text-xl font-bold mb-4">{title}</h2>
 
+        {/* Mensaje de error */}
+        {errorMessage && (
+          <div className="text-red-600 font-semibold mb-4">{errorMessage}</div>
+        )}
+
         {/* Campo de Fecha */}
         <label className="block text-gray-700 font-semibold mb-2">Fecha:</label>
         <input
@@ -46,6 +79,7 @@ export const ModalAsistencia = ({ isOpen, onClose, onSubmit, title }) => {
           value={fecha}
           onChange={(e) => setFecha(e.target.value)}
           className="w-full border rounded-lg p-2 mb-4"
+          required
         />
 
         {/* Campos de Hora */}
@@ -109,4 +143,5 @@ ModalAsistencia.propTypes = {
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
+  usuario: PropTypes.object, // Se asegura que el objeto usuario esté pasado como prop
 };

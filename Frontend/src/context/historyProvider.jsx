@@ -168,7 +168,7 @@ export const HistoryProvider = ({ children }) => {
     setClientes([...clientes, nuevoCliente]);
   };
 
-   // -----------------------------------FUNCIONES PARA SISTENCIAS--------------------------------------------
+   // -----------------------------------FUNCIONES PARA ASISTENCIAS--------------------------------------------
 
    const fetchAsistencias = async (id) => {
     const token = localStorage.getItem('token');
@@ -182,7 +182,7 @@ export const HistoryProvider = ({ children }) => {
       };
 
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/employee/${id}/assistance`, options);
-      setAsistencias(response.data); // Suponiendo que la API retorna un array de asistencias
+      //setAsistencias(response.data); // Suponiendo que la API retorna un array de asistencias
       return response.data;
     } catch (error) {
       
