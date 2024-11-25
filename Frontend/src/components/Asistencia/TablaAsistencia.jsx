@@ -1,9 +1,26 @@
-import { useNavigate } from "react-router-dom"
 import PropTypes from 'prop-types'
+import { HistoryContext } from '../../context/HistoryContext';
+import { useContext, useEffect,useState } from "react"
+
 
 export const TablaAsistencia = ({usuarios}) => {
-    const navigate = useNavigate()
-        return (
+    const {fetchAsistencias}= useContext (HistoryContext);
+    const [asistencias, setAsistencias] = useState([]);
+
+    useEffect(() => {
+        usuarios.map((usuario) => {
+            fetchAsistencias(usuario.cedula)
+            .then(response => response.json())
+            .then(data => {
+                setAsistencias(data.asistencias)
+            })
+            .catch(error => console.error(error))
+            })
+        
+    }, [usuarios])
+
+
+return (
             <div className="overflow-x-auto ">
                 {/* Tabla de Historial */}
                 <table className="w-full text-center border-collapse border border-black ">
@@ -43,8 +60,9 @@ export const TablaAsistencia = ({usuarios}) => {
             cedula: PropTypes.string.isRequired,
             nombre: PropTypes.string.isRequired,
             telefono: PropTypes.string.isRequired,
-            correo: PropTypes.string.isRequired,
-            direccion: PropTypes.string.isRequired,
+            fecha: PropTypes.string.isRequired,
+            horaIngreso: PropTypes.string.isRequired,
+            horaSalida: PropTypes.string.isRequired,
             cargo: PropTypes.string.isRequired,
             estado: PropTypes.string.isRequired,
             id: PropTypes.string.isRequired,

@@ -31,6 +31,7 @@ export const Asistencia = () => {
 
   const navigate= useNavigate();
   const {usuarios,fetchUsuarios, fetchUsuarioByCedula}= useContext (HistoryContext);
+  
   const [cedula, setCedula] = useState("");
   const [startDate] = useState('');
   const [endDate] = useState('');
@@ -62,6 +63,8 @@ const handleChange=(e)=>{
  // Llamar a fetchUsuarios una vez cuando el componente carga
  useEffect(() => {
   fetchUsuarios();
+ 
+  
 }, []);
 
 
@@ -163,9 +166,11 @@ const handleDownloadPDF = () => {
       usuario.cedula,
       usuario.nombre,
       usuario.telefono,
-    
       usuario.cargo,
-      usuario.estado,
+      usuario.fechaRegistro,
+      usuario.horaIngreso,
+      usuario.horaSalida,
+      usuario.estado,    
     ]),
   });
   doc.save('HistorialAsistencia.pdf');
@@ -176,6 +181,9 @@ const handleDownloadExcel = () => {
     Nombre: usuario.nombre,
     Teléfono: usuario.telefono,
     Cargo: usuario.cargo,
+    Fecha: usuario.fechaRegistro,
+    HoraIngreso: usuario.horaIngreso,
+    HoraSalida: usuario.horaSalida,
     Estado: usuario.estado,
   }));
   const worksheet = XLSX.utils.json_to_sheet(data);

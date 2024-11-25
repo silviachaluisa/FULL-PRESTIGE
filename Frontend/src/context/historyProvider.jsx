@@ -7,6 +7,7 @@ import { HistoryContext } from './HistoryContext';
 export const HistoryProvider = ({ children }) => {
   const [usuarios, setUsuarios] = useState([]);
   const [clientes, setClientes] = useState ([]);
+  const [asistencias, setAsistencias] = useState([]);
 
     // -----------------------------------FUNCIONES PARA USUARIOS--------------------------------------------
 
@@ -160,6 +161,7 @@ export const HistoryProvider = ({ children }) => {
   };
 
   // -------------------------------------------------------------------------------
+
   
 
   const addCliente = (nuevoCliente) => {
@@ -167,6 +169,47 @@ export const HistoryProvider = ({ children }) => {
   };
 
    // -----------------------------------FUNCIONES PARA SISTENCIAS--------------------------------------------
+
+   const fetchAsistencias = async (id) => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/employee/${id}/assistance`, options);
+      setAsistencias(response.data); // Suponiendo que la API retorna un array de asistencias
+      return response.data;
+    } catch (error) {
+      
+      console.error("Error al obtener asistencias", error);
+    }
+  };
+
+  const fetchAsistenciasbycedula = async (id) => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        };
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/employee/${id}/
+          asistencia`, options);
+          setAsistencias(response.data); // Suponiendo que la API retorna un array de asistencias
+          } catch (error) {
+            console.error("Error al obtener asistencias", error);
+          }
+  }
+
+
+
  
   return (
     <HistoryContext.Provider 
@@ -181,6 +224,10 @@ export const HistoryProvider = ({ children }) => {
       fetchClienteByCedula,
       upDateClient,
       fetchClientes,
+      asistencias,
+      fetchAsistencias,
+      setAsistencias,
+      fetchAsistenciasbycedula,
        }}>
       {children}
     </HistoryContext.Provider>
