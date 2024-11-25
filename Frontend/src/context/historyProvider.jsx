@@ -208,6 +208,23 @@ export const HistoryProvider = ({ children }) => {
           }
   }
 
+  const upDateAssistance = async (asistencia, cedula) => {
+    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/employee/${cedula}/assistance`;
+    const token = localStorage.getItem("token");
+    const options = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    try {
+      const respuesta = await axios.put(URLActualizar, asistencia, options);
+      console.log(respuesta);
+    } catch (error) {
+      console.error("Error al actualizar asistencia", error);
+    }
+  };
+
 
 
  
@@ -228,6 +245,7 @@ export const HistoryProvider = ({ children }) => {
       fetchAsistencias,
       setAsistencias,
       fetchAsistenciasbycedula,
+      upDateAssistance
        }}>
       {children}
     </HistoryContext.Provider>

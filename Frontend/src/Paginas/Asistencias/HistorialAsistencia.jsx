@@ -164,8 +164,8 @@ const handleDownloadPDF = () => {
       usuario.telefono,
       usuario.cargo,
       usuario.fechaRegistro,
-      usuario.horaIngreso,
-      usuario.horaSalida,
+      usuario.hora_ingreso,
+      usuario.hora_salida,
       usuario.estado,    
     ]),
   });
@@ -178,8 +178,8 @@ const handleDownloadExcel = () => {
     Teléfono: usuario.telefono,
     Cargo: usuario.cargo,
     Fecha: usuario.fechaRegistro,
-    HoraIngreso: usuario.horaIngreso,
-    HoraSalida: usuario.horaSalida,
+    HoraIngreso: usuario.hora_ingreso,
+    HoraSalida: usuario.hora_salida,
     Estado: usuario.estado,
   }));
   const worksheet = XLSX.utils.json_to_sheet(data);

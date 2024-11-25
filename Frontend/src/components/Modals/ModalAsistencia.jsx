@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState,useContext } from "react";
 import PropTypes from "prop-types";
+import { HistoryContext } from "../../context/HistoryContext";
 
 export const ModalAsistencia = ({ isOpen, onClose, onSubmit, title, usuario }) => {
   const [fecha, setFecha] = useState("");
@@ -7,7 +8,15 @@ export const ModalAsistencia = ({ isOpen, onClose, onSubmit, title, usuario }) =
   const [horaSalida, setHoraSalida] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  
 
+  const {upDateAssistance}=useContext(HistoryContext)
+  
+  const handleInputChange = (e) => {
+    setErrorMessage("");
+    setSuccessMessage("");
+    
+  }
   const validarAsistencia = () => {
     const now = new Date();
     const fechaActual = now.toISOString().split("T")[0]; // Fecha actual en formato 'YYYY-MM-DD'
@@ -33,11 +42,11 @@ export const ModalAsistencia = ({ isOpen, onClose, onSubmit, title, usuario }) =
 
   const handleSubmit = () => {
     const error = validarAsistencia();
+    upDateAssistance(usuario.cedula,{fecha,hora_ingreso:horaIngreso ,hora_salida:horaSalida})
     if (error) {
       setErrorMessage(error);
       return;
     }
-
     // Determinar el estado de la asistencia
     const estado = !horaIngreso && !horaSalida ? "Ausente" : "Presente";
 
