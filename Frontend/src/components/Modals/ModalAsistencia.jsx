@@ -19,6 +19,7 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
   const [fecha, setFecha] = useState("");
   const [horaIngreso, setHoraIngreso] = useState("");
   const [horaSalida, setHoraSalida] = useState("");
+  const [justificacion, setJustificacion] = useState(""); // Variable para la justificacion
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   
@@ -39,7 +40,8 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
         setHoraIngreso(response[0].hora_ingreso);
         setHoraSalida(response[0].hora_salida);
       }
-    }
+    };
+
     console.log("Cargando info del modal")
     if (usuario && tipoModal === "actualizar") {
       obtenerAsistencia();
@@ -60,6 +62,9 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
       if (fecha !== formatDate(usuario?.asistencia.fecha)) {
         return "No puedes cambiar la fecha de la asistencia.";
       }
+      if (!justificacion){
+        return "Debes proporcionar una justifiacion para actualizar la informacion"
+      }
 
       return null;
     }
@@ -69,7 +74,6 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0'); // Mes en formato 2 dígitos
     const day = String(now.getDate()).padStart(2, '0'); // Día en formato 2 dígitos
-
     const fechaActual = `${year}-${month}-${day}`; // Fecha en formato YYYY-MM-DD
     const horaActual = String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0") // Hora en formato HH:MM
 
@@ -107,7 +111,7 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
 
   const handleSubmit = () => {
     const error = validarAsistencia();
-    console.log(usuario, { fecha, horaIngreso, horaSalida });
+    console.log(usuario, { fecha, horaIngreso, horaSalida,justificacion });
     
     if (error) {
       setErrorMessage(error);
@@ -117,7 +121,7 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
     if (tipoModal === "actualizar") {
       // Determinar el estado de la asistencia
       const estado = !horaIngreso && !horaSalida ? "Ausente" : "Presente";
-      upDateAssistance(usuario.cedula,{fecha,hora_ingreso:horaIngreso ,hora_salida:horaSalida, estado});
+      upDateAssistance(usuario.cedula,{fecha,hora_ingreso:horaIngreso ,hora_salida:horaSalida, estado, justificacion});
     } else {
       // Enviar los datos
       registerAssistance(usuario.cedula,{fecha,hora_ingreso:horaIngreso ,hora_salida:horaSalida});
@@ -131,6 +135,7 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
     setFecha("");
     setHoraIngreso("");
     setHoraSalida("");
+    setJustificacion
 
     // Cerrar el modal automáticamente después de un breve tiempo
     setTimeout(() => {
@@ -190,6 +195,20 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
             />
           </div>
         </div>
+
+        {/* Campo Justificación solo para Actualizar */}
+        {tipoModal === "actualizar" && (
+          <div className="mt-4">
+            <label className="block text-gray-700 font-semibold mb-2">Justificación:</label>
+            <textarea
+              value={justificacion}
+              onChange={(e) => setJustificacion(e.target.value)}
+              className="w-full border rounded-lg p-2"
+              placeholder="Escribe una justificación para la actualización."
+              required
+            />
+          </div>
+        )}
 
         {/* Botones */}
         <div className="mt-6 flex flex-col items-center gap-4">
