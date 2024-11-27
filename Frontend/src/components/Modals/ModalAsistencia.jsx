@@ -2,7 +2,7 @@ import { useState,useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { HistoryContext } from "../../context/HistoryContext";
 
-export const ModalAsistencia = ({handleShow, title, usuario }) => {
+export const ModalAsistencia = ({handleShow, usuario }) => {
   // Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
   const formatDate = (isoDate) => {
     const date = new Date(isoDate);
@@ -22,8 +22,7 @@ export const ModalAsistencia = ({handleShow, title, usuario }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   
-
-  const {upDateAssistance, fetchAsistencias, registerAssistance}=useContext(HistoryContext);
+  const {upDateAssistance, fetchAsistencias, registerAssistance, tipoModal, fetchUsuarios}=useContext(HistoryContext);
   
   const handleInputChange = (e) => {
     setErrorMessage("");
@@ -42,14 +41,26 @@ export const ModalAsistencia = ({handleShow, title, usuario }) => {
       }
     }
     console.log("Cargando info del modal")
-    if (usuario) {
+    if (usuario && tipoModal === "actualizar") {
       obtenerAsistencia();
+    } else {
+      // Cargar el campo fecha con los datos actuales
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const formattedDate = `${year}-${month}-${day}`;
+      setFecha(formattedDate);
     }
   }, [usuario]);
 
-
   const validarAsistencia = () => {
-    if (usuario?.asistencia){
+    if (tipoModal === "actualizar"){
+      // Validar que la fecha ingresada sea igual a la fecha del registro
+      if (fecha !== formatDate(usuario?.asistencia.fecha)) {
+        return "No puedes cambiar la fecha de la asistencia.";
+      }
+
       return null;
     }
 
@@ -60,7 +71,7 @@ export const ModalAsistencia = ({handleShow, title, usuario }) => {
     const day = String(now.getDate()).padStart(2, '0'); // Día en formato 2 dígitos
 
     const fechaActual = `${year}-${month}-${day}`; // Fecha en formato YYYY-MM-DD
-    const horaActual = now.getHours() + ":" + now.getMinutes(); // Hora en formato HH:MM
+    const horaActual = String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0") // Hora en formato HH:MM
 
     console.log("Fecha actual:", fechaActual);
     console.log("fecha", fecha);
@@ -74,7 +85,15 @@ export const ModalAsistencia = ({handleShow, title, usuario }) => {
     }
 
     // Validar la hora de ingreso si la fecha es hoy
-    if (fecha === fechaActual && horaIngreso < horaActual) {
+    if (fecha !== fechaActual) {
+      return "La fecha no puede ser distinta a la fecha actual.";
+    }
+
+    if (!horaIngreso && !horaSalida) {
+      return null; // Si no hay hora de ingreso ni salida, no hay errores
+    }
+
+    if (horaIngreso && horaIngreso < horaActual) {
       return "La hora de ingreso no puede ser menor a la hora actual.";
     }
 
@@ -95,7 +114,7 @@ export const ModalAsistencia = ({handleShow, title, usuario }) => {
       return;
     }
 
-    if (usuario?.asistencia) {
+    if (tipoModal === "actualizar") {
       // Determinar el estado de la asistencia
       const estado = !horaIngreso && !horaSalida ? "Ausente" : "Presente";
       upDateAssistance(usuario.cedula,{fecha,hora_ingreso:horaIngreso ,hora_salida:horaSalida, estado});
@@ -117,13 +136,16 @@ export const ModalAsistencia = ({handleShow, title, usuario }) => {
     setTimeout(() => {
       setSuccessMessage("");
       handleShow();
+      fetchUsuarios();
     }, 2000); // Cierra el modal después de 2 segundos
   };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-xl font-bold mb-4">{title}</h2>
+        <h2 className="text-xl font-bold mb-4">
+          {(tipoModal === "actualizar")? "Actualizar Asistencia" : "Registrar Asistencia"}
+        </h2>
 
         {/* Mensaje de error */}
         {errorMessage && (
@@ -197,7 +219,6 @@ export const ModalAsistencia = ({handleShow, title, usuario }) => {
 };
 
 ModalAsistencia.propTypes = {
-  handleShow: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
+  handleShow: PropTypes.func.isRequired, // Se asegura que la función handleShow esté pasada como prop
   usuario: PropTypes.object, // Se asegura que el objeto usuario esté pasado como prop
 };

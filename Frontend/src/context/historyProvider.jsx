@@ -11,6 +11,7 @@ export const HistoryProvider = ({ children }) => {
   const [seleccionado, setSeleccionado] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [tipoModal, setTipoModal] = useState(''); // Tipo de modal: 'registrar' o 'actualizar'
 
   // -------------------------------- Modal --------------------------------
   const handleModal = () => {
@@ -194,7 +195,22 @@ export const HistoryProvider = ({ children }) => {
       };
 
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/employee/${id}/assistance`, options);
-      //setAsistencias(response.data); // Suponiendo que la API retorna un array de asistencias
+
+      // const asistencias = response.data.map((asistencia) => {
+      //   return {
+      //     cedula: asistencia.empleado.cedula,
+      //     nombre: asistencia.empleado.nombre,
+      //     telefono: asistencia.empleado.telefono,
+      //     cargo: asistencia.empleado.cargo,
+      //     asistencia: {
+      //       fecha: asistencia.fecha,
+      //       hora_ingreso: asistencia.hora_ingreso,
+      //       hora_salida: asistencia.hora_salida,
+      //       estado: asistencia.estado,
+      //     },
+      //   }
+      // });
+
       return response.data;
     } catch (error) {
       
@@ -262,6 +278,8 @@ export const HistoryProvider = ({ children }) => {
       loading,
       showModal,
       handleModal,
+      tipoModal,
+      setTipoModal
        }}>
       {children}
     </HistoryContext.Provider>

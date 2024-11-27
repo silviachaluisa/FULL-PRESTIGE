@@ -59,10 +59,19 @@ export const TablaAsistencia = ({ usuarios }) => {
       const nuevasAsistencias = [];
       for (const usuario of usuarios) {
         const response = await fetchAsistencias(usuario.cedula);
-        nuevasAsistencias.push({ ...usuario, asistencia: response.at(-1) });
+        console.log("Respuesta asistencias de", usuario.cedula, "=",response);
+        if (response.length === 0) {
+          nuevasAsistencias.push({ ...usuario, asistencia: {} });
+        } else {
+          for (const asistencia of response){
+            nuevasAsistencias.push({ ...usuario, asistencia: asistencia });
+          }
+          //nuevasAsistencias.push({ ...usuario, asistencia: response.at(-1) });
+          //nuevasAsistencias.push(response);
+        }
       }
       setAsistencias(nuevasAsistencias);
-      console.log(nuevasAsistencias);
+      console.log("Nuevas asistencias ->",nuevasAsistencias);
     };
 
     obtenerAsistencias();
@@ -106,7 +115,6 @@ export const TablaAsistencia = ({ usuarios }) => {
         showModal && (
           <ModalAsistencia
             handleShow={handleModal}
-            title={seleccionado?.asistencia ? "Actualizar Asistencia" : "Registrar Asistencia"}
             usuario={seleccionado}
           />
         )
@@ -121,12 +129,13 @@ TablaAsistencia.propTypes = {
       cedula: PropTypes.string.isRequired,
       nombre: PropTypes.string.isRequired,
       telefono: PropTypes.string.isRequired,
-      fecha: PropTypes.string.isRequired,
-      hora_ingreso: PropTypes.string.isRequired,
-      hora_salida: PropTypes.string.isRequired,
+      asistencia: PropTypes.shape({
+        fecha: PropTypes.string.isRequired,
+        hora_ingreso: PropTypes.string.isRequired,
+        hora_salida: PropTypes.string.isRequired,
+      }),
       cargo: PropTypes.string.isRequired,
       estado: PropTypes.string.isRequired,
-      id: PropTypes.string.isRequired,
     })
   ).isRequired,
 };

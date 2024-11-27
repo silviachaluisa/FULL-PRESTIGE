@@ -29,7 +29,16 @@ export const Asistencia = () => {
   //const [isActualizarOpen, setIsActualizarOpen] = useState(false);
 
   const navigate= useNavigate();
-  const {usuarios, loading ,fetchUsuarios, seleccionado, fetchUsuarioByCedula, handleModal}= useContext (HistoryContext);
+  const {
+    usuarios,
+    loading ,
+    fetchUsuarios,
+    fetchAsistencias,
+    seleccionado,
+    fetchUsuarioByCedula,
+    handleModal,
+    setTipoModal
+  }= useContext (HistoryContext);
   
   const [cedula, setCedula] = useState("");
   const [startDate] = useState('');
@@ -83,6 +92,7 @@ const brandLogos = {
 };
 const handleNewClick = (type) => {
   console.log("Tipo de modal:", type);
+  setTipoModal(type);
   handleModal();
 };
 // const handleRegistrarSubmit = (data) => {
@@ -98,14 +108,13 @@ const handleNewClick = (type) => {
 const handleSearch = async () => {
   // Validación de la cédula
   const cedulaRegex = /^[0-9]{10}$/;
-
-  if (!cedulaRegex.test(cedula)) {
-    setErrorMessage("⚠️La cédula debe contener solo 10 dígitos numéricos.");
+  if (cedula === "") {
+    await fetchUsuarios(); // Cargar todos los usuarios si la cédula está vacía
     return;
   }
 
-  if (cedula === "") {
-    await fetchUsuarios(); // Cargar todos los usuarios si la cédula está vacía
+  if (!cedulaRegex.test(cedula)) {
+    setErrorMessage("⚠️La cédula debe contener solo 10 dígitos numéricos.");
     return;
   }
 
@@ -121,6 +130,8 @@ const handleSearch = async () => {
   if (!usuario) {
     setErrorMessage("❌ Usuario no se encuentra registrado");
   } else {
+    const asistencias = await fetchAsistencias(cedula);
+    console.log("Asistencias encontradas:", asistencias);
     setErrorMessage(""); // Limpiar mensaje de error
     setSuccessMessage(" ✅ Usuario encontrado con éxito");
     setFilteredData([usuario]); // Mostrar el usuario encontrado
@@ -259,8 +270,6 @@ const handleDownloadExcel = () => {
           <button
             onClick={() => handleNewClick("registrar")}
             className="px-4 py-2 bg-amber-500 text-white font-semibold rounded-lg hover:bg-orange-300"
-            disabled={seleccionado?.asistencia ? true : false}
-            style={{ cursor: seleccionado?.asistencia ? "not-allowed" : "pointer" }}
           >
             Registrar Asistencia
           </button>
@@ -303,7 +312,7 @@ const handleDownloadExcel = () => {
       <thead className="bg-black text-white font-mono">
         <tr>
           {[
-            'Cédula', 'Nombre y Apellido', 'Teléfono','Cargo', 'Estado'
+            'Cédula', 'Nombre y Apellido', 'Telefono', 'Cargo', 'Fecha', 'Hora de Ingreso', 'Hora de Salida', 'Estado'
           ].map((header) => (
             <th key={header} className="border border-black px-4 py-2">{header}</th>
           ))}
