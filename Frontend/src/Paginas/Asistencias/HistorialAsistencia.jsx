@@ -19,18 +19,17 @@ import { HistoryContext } from '../../context/HistoryContext';
 import { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import { TablaAsistencia } from '../../components/Asistencia/TablaAsistencia';
-import { ModalAsistencia } from '../../components/Modals/ModalAsistencia';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { FaCalendarAlt} from 'react-icons/fa';
 
 export const Asistencia = () => {
-  const [isRegistrarOpen, setIsRegistrarOpen] = useState(false);
-  const [isActualizarOpen, setIsActualizarOpen] = useState(false);
+  //const [isRegistrarOpen, setIsRegistrarOpen] = useState(false);
+  //const [isActualizarOpen, setIsActualizarOpen] = useState(false);
 
   const navigate= useNavigate();
-  const {usuarios,fetchUsuarios, fetchUsuarioByCedula}= useContext (HistoryContext);
+  const {usuarios, loading ,fetchUsuarios, seleccionado, fetchUsuarioByCedula, handleModal}= useContext (HistoryContext);
   
   const [cedula, setCedula] = useState("");
   const [startDate] = useState('');
@@ -83,19 +82,16 @@ const brandLogos = {
   toyota:toyotaLogo
 };
 const handleNewClick = (type) => {
-  if (type === "registrar") {
-    setIsRegistrarOpen(true);
-  } else if (type === "actualizar") {
-    setIsActualizarOpen(true);
-  }
+  console.log("Tipo de modal:", type);
+  handleModal();
 };
-const handleRegistrarSubmit = (data) => {
-  console.log("Datos de Registrar Asistencia:", data);
-};
+// const handleRegistrarSubmit = (data) => {
+//   console.log("Datos de Registrar Asistencia:", data);
+// };
 
-const handleActualizarSubmit = (data) => {
-  console.log("Datos de Actualizar Asistencia:", data);
-};
+// const handleActualizarSubmit = (data) => {
+//   console.log("Datos de Actualizar Asistencia:", data);
+// };
 
 
 // ------------------------------------------------------------------------------------------------------------
@@ -263,6 +259,8 @@ const handleDownloadExcel = () => {
           <button
             onClick={() => handleNewClick("registrar")}
             className="px-4 py-2 bg-amber-500 text-white font-semibold rounded-lg hover:bg-orange-300"
+            disabled={seleccionado?.asistencia ? true : false}
+            style={{ cursor: seleccionado?.asistencia ? "not-allowed" : "pointer" }}
           >
             Registrar Asistencia
           </button>
@@ -270,13 +268,16 @@ const handleDownloadExcel = () => {
           <button
             onClick={() => handleNewClick("actualizar")}
             className="ml-4 px-4 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-500"
+            disabled={seleccionado?.asistencia ? false : true}
+            style={{ cursor: seleccionado?.asistencia ? "pointer" : "not-allowed" }}
           >
             Actualizar Asistencia
           </button>
         </div>
         {/* ---------------------------------------------------------------------------------------------------------------------------- */}
         {/* Modales */}
-      <ModalAsistencia
+
+      {/* <ModalAsistencia
         isOpen={isRegistrarOpen}
         onClose={() => setIsRegistrarOpen(false)}
         onSubmit={handleRegistrarSubmit}
@@ -288,7 +289,7 @@ const handleDownloadExcel = () => {
         onSubmit={handleActualizarSubmit}
         title="Actualizar Asistencia"
         usuario={usuarios}
-      />
+      /> */}
         
 
    {/* TABLA DEL HISTORIAL */}
@@ -311,7 +312,7 @@ const handleDownloadExcel = () => {
       <tbody>
         <tr>
           <td colSpan="8" className="text-center py-4 text-red-700">
-            No existen registros disponibles.
+            { loading ? 'Cargando...' : 'No hay usuarios registrados'}
           </td>
         </tr>
       </tbody>

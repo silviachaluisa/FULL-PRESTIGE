@@ -2,7 +2,20 @@ import { useState,useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { HistoryContext } from "../../context/HistoryContext";
 
-export const ModalAsistencia = ({ isOpen, onClose, onSubmit, title, usuario }) => {
+export const ModalAsistencia = ({handleShow, title, usuario }) => {
+  // Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
+  const formatDate = (isoDate) => {
+    const date = new Date(isoDate);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Meses van de 0 a 11
+    const day = String(date.getDate()).padStart(2, '0');
+
+    if (isNaN(year) || isNaN(month) || isNaN(day)) {
+      return 'N/A';
+    }
+
+    return `${year}-${month}-${day}`;
+  };
   const [fecha, setFecha] = useState("");
   const [horaIngreso, setHoraIngreso] = useState("");
   const [horaSalida, setHoraSalida] = useState("");
@@ -10,12 +23,11 @@ export const ModalAsistencia = ({ isOpen, onClose, onSubmit, title, usuario }) =
   const [successMessage, setSuccessMessage] = useState("");
   
 
-  const {upDateAssistance, seleccionado, fetchAsistencias}=useContext(HistoryContext);
+  const {upDateAssistance, fetchAsistencias, registerAssistance}=useContext(HistoryContext);
   
   const handleInputChange = (e) => {
     setErrorMessage("");
     setSuccessMessage("");
-    
   }
 
   useEffect(() => {
@@ -24,34 +36,45 @@ export const ModalAsistencia = ({ isOpen, onClose, onSubmit, title, usuario }) =
       const response = await fetchAsistencias(usuario.cedula);
       console.log("Respuesta =",response);
       if (response) {
-        const fecha = response.fecha.split("T")[0];
-        console.log(fecha);
-
-
-        setFecha(response.fecha.split("T")[0].replace("-","/"));
-        setHoraIngreso(response.hora_ingreso);
-        setHoraSalida(response.hora_ialida);
+        setFecha(response[0].fecha.split("T")[0]);
+        setHoraIngreso(response[0].hora_ingreso);
+        setHoraSalida(response[0].hora_salida);
       }
     }
     console.log("Cargando info del modal")
     if (usuario) {
       obtenerAsistencia();
     }
-  }, []);
+  }, [usuario]);
 
 
   const validarAsistencia = () => {
-    const now = new Date();
-    const fechaActual = now.toISOString().split("T")[0]; // Fecha actual en formato 'YYYY-MM-DD'
-    const horaActual = now.toTimeString().slice(0, 5); // Hora actual en formato 'HH:MM:SS'
+    if (usuario?.asistencia){
+      return null;
+    }
 
+    const now = new Date();
+    // Formatear manualmente la fecha local
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Mes en formato 2 dígitos
+    const day = String(now.getDate()).padStart(2, '0'); // Día en formato 2 dígitos
+
+    const fechaActual = `${year}-${month}-${day}`; // Fecha en formato YYYY-MM-DD
+    const horaActual = now.getHours() + ":" + now.getMinutes(); // Hora en formato HH:MM
+
+    console.log("Fecha actual:", fechaActual);
+    console.log("fecha", fecha);
+
+    console.log("Hora actual:", horaActual);
+    console.log("horaIngreso", horaIngreso);
+    console.log("horaSalida", horaSalida);
     // Validar que la fecha no sea menor a la actual
     if (fecha < fechaActual) {
       return "La fecha no puede ser menor a la fecha actual.";
     }
 
     // Validar la hora de ingreso si la fecha es hoy
-    if (fecha === fechaActual && horaIngreso && horaIngreso < horaActual) {
+    if (fecha === fechaActual && horaIngreso < horaActual) {
       return "La hora de ingreso no puede ser menor a la hora actual.";
     }
 
@@ -71,13 +94,15 @@ export const ModalAsistencia = ({ isOpen, onClose, onSubmit, title, usuario }) =
       setErrorMessage(error);
       return;
     }
-    return
-    upDateAssistance(usuario.cedula,{fecha,hora_ingreso:horaIngreso ,hora_salida:horaSalida})
-    // Determinar el estado de la asistencia
-    const estado = !horaIngreso && !horaSalida ? "Ausente" : "Presente";
 
-    // Enviar los datos con el estado calculado
-    onSubmit({ usuario, fecha, horaIngreso, horaSalida, estado });
+    if (usuario?.asistencia) {
+      // Determinar el estado de la asistencia
+      const estado = !horaIngreso && !horaSalida ? "Ausente" : "Presente";
+      upDateAssistance(usuario.cedula,{fecha,hora_ingreso:horaIngreso ,hora_salida:horaSalida, estado});
+    } else {
+      // Enviar los datos
+      registerAssistance(usuario.cedula,{fecha,hora_ingreso:horaIngreso ,hora_salida:horaSalida});
+    }
 
     // Mostrar mensaje de éxito
     setErrorMessage("");
@@ -91,11 +116,9 @@ export const ModalAsistencia = ({ isOpen, onClose, onSubmit, title, usuario }) =
     // Cerrar el modal automáticamente después de un breve tiempo
     setTimeout(() => {
       setSuccessMessage("");
-      onClose();
+      handleShow();
     }, 2000); // Cierra el modal después de 2 segundos
   };
-
-  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -155,7 +178,7 @@ export const ModalAsistencia = ({ isOpen, onClose, onSubmit, title, usuario }) =
 
           <div className="flex justify-end gap-4 w-full">
             <button
-              onClick={onClose}
+              onClick={handleShow}
               className="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-800"
             >
               Cancelar
@@ -174,9 +197,7 @@ export const ModalAsistencia = ({ isOpen, onClose, onSubmit, title, usuario }) =
 };
 
 ModalAsistencia.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
+  handleShow: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   usuario: PropTypes.object, // Se asegura que el objeto usuario esté pasado como prop
 };
