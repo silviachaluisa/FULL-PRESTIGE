@@ -57,17 +57,23 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
   }, [usuario]);
 
   const validarAsistencia = () => {
-    if (tipoModal === "actualizar"){
-      // Validar que la fecha ingresada sea igual a la fecha del registro
-      if (fecha !== formatDate(usuario?.asistencia.fecha)) {
+    if (tipoModal === "actualizar") {
+      // Formatear ambas fechas a 'YYYY-MM-DD' para asegurarse de que estén en el mismo formato
+      const fechaAsistencia = formatDate(usuario?.asistencia?.fecha);
+      console.log("Fecha de asistencia:", usuario?.asistencia?.fecha);
+      
+      if (fecha !== fechaAsistencia) {
         return "No puedes cambiar la fecha de la asistencia.";
       }
-      if (!justificacion){
-        return "Debes proporcionar una justifiacion para actualizar la informacion"
+    
+      if (!justificacion) {
+        return "Debes proporcionar una justifiacion para actualizar la informacion";
       }
-
+    
       return null;
     }
+
+    
 
     const now = new Date();
     // Formatear manualmente la fecha local
