@@ -25,8 +25,23 @@ import * as XLSX from 'xlsx';
 import { FaCalendarAlt} from 'react-icons/fa';
 
 export const Asistencia = () => {
-  //const [isRegistrarOpen, setIsRegistrarOpen] = useState(false);
-  //const [isActualizarOpen, setIsActualizarOpen] = useState(false);
+  // Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
+  const formatDate = (isoDate) => {
+    try {
+      if (!isoDate) {
+        return 'N/A'; // Si no hay fecha, retornar 'N/A'
+      }
+
+      const date = new Date(isoDate);
+      if (isNaN(date)) {
+        throw new Error('Fecha inválida');
+      }
+      return date.toISOString().split('T')[0];
+    } catch (error) {
+      console.error(`Error formateando fecha: ${error.message}`);
+      return 'Fecha inválida';
+    }
+  };
 
   const navigate= useNavigate();
   const {
@@ -37,12 +52,11 @@ export const Asistencia = () => {
     seleccionado,
     fetchUsuarioByCedula,
     handleModal,
-    setTipoModal
+    setTipoModal,
+    asistencias
   }= useContext (HistoryContext);
   
   const [cedula, setCedula] = useState("");
-  const [startDate] = useState('');
-  const [endDate] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -95,14 +109,6 @@ const handleNewClick = (type) => {
   setTipoModal(type);
   handleModal();
 };
-// const handleRegistrarSubmit = (data) => {
-//   console.log("Datos de Registrar Asistencia:", data);
-// };
-
-// const handleActualizarSubmit = (data) => {
-//   console.log("Datos de Actualizar Asistencia:", data);
-// };
-
 
 // ------------------------------------------------------------------------------------------------------------
 const handleSearch = async () => {
@@ -134,7 +140,6 @@ const handleSearch = async () => {
     console.log("Asistencias encontradas:", asistencias);
     setErrorMessage(""); // Limpiar mensaje de error
     setSuccessMessage(" ✅ Usuario encontrado con éxito");
-    setFilteredData([usuario]); // Mostrar el usuario encontrado
   }
   
   setCedula(""); // Limpia la cédula del campo de búsqueda
@@ -149,45 +154,38 @@ const handleSearch = async () => {
 // ---------------------------------------------------------------------------------------------------
 
 useEffect(() => {
-  if (startDate && endDate) {
-    const filtered = usuarios.filter((usuario) => {
-      const userDate = new Date(usuario.fechaRegistro);
-      return userDate >= new Date(startDate) && userDate <= new Date(endDate);
-    });
-     setFilteredData(filtered);
-   } else {
-     setFilteredData(usuarios);
-   }
- }, [startDate, endDate, usuarios]);
+  console.log("Usuarios -> useEffect:", usuarios);
+  setFilteredData(usuarios);
+ }, [usuarios]);
 
 const handleDownloadPDF = () => {
   const doc = new jsPDF();
   doc.text('Historial de Usuarios Registrados', 10, 10);
   doc.autoTable({
-    head: [['Cédula', 'Nombre y Apellido', 'Teléfono', 'Cargo', 'Estado']],
-    body: filteredData.map((usuario) => [
+    head: [['Cédula', 'Nombre y Apellido', 'Telefono', 'Cargo', 'Fecha', 'Hora de Ingreso', 'Hora de Salida', 'Estado']],
+    body: asistencias.map((usuario) => [
       usuario.cedula,
       usuario.nombre,
       usuario.telefono,
       usuario.cargo,
-      usuario.fechaRegistro,
-      usuario.hora_ingreso,
-      usuario.hora_salida,
-      usuario.estado,    
+      formatDate(usuario?.asistencia.fecha),
+      usuario?.asistencia.hora_ingreso || 'N/A',
+      usuario?.asistencia.hora_salida || 'N/A',
+      usuario?.asistencia.estado || 'N/A',   
     ]),
   });
   doc.save('HistorialAsistencia.pdf');
 };
 const handleDownloadExcel = () => {
-  const data = filteredData.map((usuario) => ({
+  const data = asistencias.map((usuario) => ({
     Cédula: usuario.cedula,
     Nombre: usuario.nombre,
     Teléfono: usuario.telefono,
     Cargo: usuario.cargo,
-    Fecha: usuario.fechaRegistro,
-    HoraIngreso: usuario.hora_ingreso,
-    HoraSalida: usuario.hora_salida,
-    Estado: usuario.estado,
+    Fecha: formatDate(usuario?.asistencia.fecha),
+    HoraIngreso: usuario?.asistencia.hora_ingreso || 'N/A',
+    HoraSalida: usuario?.asistencia.hora_salida || 'N/A',
+    Estado: usuario?.asistencia.estado || 'N/A',
   }));
   const worksheet = XLSX.utils.json_to_sheet(data);
   const workbook = XLSX.utils.book_new();
