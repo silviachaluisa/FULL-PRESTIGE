@@ -218,8 +218,8 @@ export const HistoryProvider = ({ children }) => {
     }
   };
 
-  const upDateAssistance = async (cedula, asistencia) => {
-    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/employee/${cedula}/assistance`;
+  const upDateAssistance = async (id, asistencia) => {
+    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/employee/assistance/${id}`;
     const token = localStorage.getItem("token");
     const options = {
       headers: {
