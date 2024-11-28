@@ -20,15 +20,18 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
   const [horaIngreso, setHoraIngreso] = useState("");
   const [horaSalida, setHoraSalida] = useState("");
   const [justificacion, setJustificacion] = useState(""); // Variable para la justificacion
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
   
-  const {upDateAssistance, fetchAsistencias, registerAssistance, tipoModal, fetchUsuarios}=useContext(HistoryContext);
-  
-  const handleInputChange = (e) => {
-    setErrorMessage("");
-    setSuccessMessage("");
-  }
+  const {
+    upDateAssistance,
+    fetchAsistencias,
+    registerAssistance,
+    tipoModal,
+    fetchUsuarios,
+    errorMessage,
+    setErrorMessage,
+    successMessage,
+    setSuccessMessage
+  }=useContext(HistoryContext);
 
   useEffect(() => {
     const obtenerAsistencia = async () => {
@@ -64,8 +67,6 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
       return null;
     }
 
-    
-
     const now = new Date();
     // Formatear manualmente la fecha local
     const year = now.getFullYear();
@@ -74,12 +75,6 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
     const fechaActual = `${year}-${month}-${day}`; // Fecha en formato YYYY-MM-DD
     const horaActual = String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0") // Hora en formato HH:MM
 
-    console.log("Fecha actual:", fechaActual);
-    console.log("fecha", fecha);
-
-    console.log("Hora actual:", horaActual);
-    console.log("horaIngreso", horaIngreso);
-    console.log("horaSalida", horaSalida);
     // Validar que la fecha no sea menor a la actual
     if (fecha < fechaActual) {
       return "La fecha no puede ser menor a la fecha actual.";
@@ -115,6 +110,10 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
       return;
     }
 
+    // Limpiar los mensajes de error y éxito
+    setErrorMessage("");
+    setSuccessMessage("");
+
     if (tipoModal === "actualizar") {
       // Determinar el estado de la asistencia
       const estado = !horaIngreso && !horaSalida ? "Ausente" : "Presente";
@@ -123,23 +122,6 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
       // Enviar los datos
       registerAssistance(usuario.cedula,{fecha,hora_ingreso:horaIngreso ,hora_salida:horaSalida});
     }
-
-    // Mostrar mensaje de éxito
-    setErrorMessage("");
-    setSuccessMessage("Asistencia registrada/actualizada con éxito.");
-
-    // Limpiar el formulario
-    setFecha("");
-    setHoraIngreso("");
-    setHoraSalida("");
-    setJustificacion
-
-    // Cerrar el modal automáticamente después de un breve tiempo
-    setTimeout(() => {
-      setSuccessMessage("");
-      handleShow();
-      fetchUsuarios();
-    }, 2000); // Cierra el modal después de 2 segundos
   };
 
   return (

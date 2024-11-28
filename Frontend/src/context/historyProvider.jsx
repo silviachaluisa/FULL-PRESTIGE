@@ -12,6 +12,8 @@ export const HistoryProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [tipoModal, setTipoModal] = useState(''); // Tipo de modal: 'registrar' o 'actualizar'
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   // -------------------------------- Modal --------------------------------
   const handleModal = () => {
@@ -195,24 +197,8 @@ export const HistoryProvider = ({ children }) => {
 
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/employee/${id}/assistance`, options);
 
-      // const asistencias = response.data.map((asistencia) => {
-      //   return {
-      //     cedula: asistencia.empleado.cedula,
-      //     nombre: asistencia.empleado.nombre,
-      //     telefono: asistencia.empleado.telefono,
-      //     cargo: asistencia.empleado.cargo,
-      //     asistencia: {
-      //       fecha: asistencia.fecha,
-      //       hora_ingreso: asistencia.hora_ingreso,
-      //       hora_salida: asistencia.hora_salida,
-      //       estado: asistencia.estado,
-      //     },
-      //   }
-      // });
-
       return response.data;
     } catch (error) {
-      
       console.error("Error al obtener asistencias", error);
     }
   };
@@ -229,8 +215,22 @@ export const HistoryProvider = ({ children }) => {
     try {
       const respuesta = await axios.put(URLActualizar, asistencia, options);
       console.log(respuesta);
+      setSuccessMessage("Asistencia actualizada correctamente");
+      // Cerrar el modal automáticamente después de un breve tiempo
+      setTimeout(() => {
+        setSuccessMessage("");
+        setErrorMessage("");
+        handleModal();
+        fetchUsuarios();
+      }, 2000); // Cierra el modal después de 2 segundos
     } catch (error) {
       console.error("Error al actualizar asistencia", error);
+      setErrorMessage(error.response.data.message);
+
+      // Limpiar el mensaje de error después de un breve tiempo
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 5000); // Limpia el mensaje después de 5 segundos
     }
   };
 
@@ -246,13 +246,24 @@ export const HistoryProvider = ({ children }) => {
     try {
       const respuesta = await axios.post(URLActualizar, asistencia, options);
       console.log(respuesta);
+      setSuccessMessage("Asistencia registrada correctamente");
+      // Cerrar el modal automáticamente después de un breve tiempo
+      setTimeout(() => {
+        setSuccessMessage("");
+        setErrorMessage("");
+        handleModal();
+        fetchUsuarios();
+      }, 2000); // Cierra el modal después de 2 segundos
     } catch (error) {
       console.error("Error al actualizar asistencia", error);
+      setErrorMessage(error.response.data.message);
+
+      // Limpiar el mensaje de error después de un breve tiempo
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 5000); // Limpia el mensaje después de 5 segundos
     }
   };
-
-
-
  
   return (
     <HistoryContext.Provider 
@@ -278,7 +289,11 @@ export const HistoryProvider = ({ children }) => {
       showModal,
       handleModal,
       tipoModal,
-      setTipoModal
+      setTipoModal,
+      errorMessage,
+      setErrorMessage,
+      successMessage,
+      setSuccessMessage,
        }}>
       {children}
     </HistoryContext.Provider>
