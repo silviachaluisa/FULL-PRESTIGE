@@ -39,12 +39,11 @@ export const HistoryProvider = ({ children }) => {
       console.error("Error al obtener usuarios", error);
     } finally {
       setLoading(false); // Desactivar el estado de carga
-    }
-  ;
+    };
   
-  HistoryProvider.propTypes = {
-    children: PropTypes.node.isRequired,
-  };
+    HistoryProvider.propTypes = {
+      children: PropTypes.node.isRequired,
+    };
   };
 
   const upDateUser=async(cedula,registro)=>{
@@ -269,8 +268,8 @@ export const HistoryProvider = ({ children }) => {
       upDateClient,
       fetchClientes,
       asistencias,
-      fetchAsistencias,
       setAsistencias,
+      fetchAsistencias,
       upDateAssistance,
       registerAssistance,
       seleccionado,

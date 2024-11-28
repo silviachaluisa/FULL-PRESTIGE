@@ -58,18 +58,9 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
 
   const validarAsistencia = () => {
     if (tipoModal === "actualizar") {
-      // Formatear ambas fechas a 'YYYY-MM-DD' para asegurarse de que estén en el mismo formato
-      const fechaAsistencia = formatDate(usuario?.asistencia?.fecha);
-      console.log("Fecha de asistencia:", usuario?.asistencia?.fecha);
-      
-      if (fecha !== fechaAsistencia) {
-        return "No puedes cambiar la fecha de la asistencia.";
-      }
-    
       if (!justificacion) {
         return "Debes proporcionar una justifiacion para actualizar la informacion";
       }
-    
       return null;
     }
 
@@ -127,7 +118,7 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
     if (tipoModal === "actualizar") {
       // Determinar el estado de la asistencia
       const estado = !horaIngreso && !horaSalida ? "Ausente" : "Presente";
-      upDateAssistance(usuario.cedula,{fecha,hora_ingreso:horaIngreso ,hora_salida:horaSalida, estado, justificacion});
+      upDateAssistance(usuario?.asistencia._id, {fecha,hora_ingreso:horaIngreso ,hora_salida:horaSalida, estado, justificacion});
     } else {
       // Enviar los datos
       registerAssistance(usuario.cedula,{fecha,hora_ingreso:horaIngreso ,hora_salida:horaSalida});
