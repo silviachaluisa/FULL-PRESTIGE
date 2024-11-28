@@ -19,18 +19,26 @@ import { HistoryContext } from '../../context/HistoryContext';
 import { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import { TablaAsistencia } from '../../components/Asistencia/TablaAsistencia';
-import { ModalAsistencia } from '../../components/Modals/ModalAsistencia';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { FaCalendarAlt} from 'react-icons/fa';
 
 export const Asistencia = () => {
-  const [isRegistrarOpen, setIsRegistrarOpen] = useState(false);
-  const [isActualizarOpen, setIsActualizarOpen] = useState(false);
+  //const [isRegistrarOpen, setIsRegistrarOpen] = useState(false);
+  //const [isActualizarOpen, setIsActualizarOpen] = useState(false);
 
   const navigate= useNavigate();
-  const {usuarios,fetchUsuarios, fetchUsuarioByCedula}= useContext (HistoryContext);
+  const {
+    usuarios,
+    loading ,
+    fetchUsuarios,
+    fetchAsistencias,
+    seleccionado,
+    fetchUsuarioByCedula,
+    handleModal,
+    setTipoModal
+  }= useContext (HistoryContext);
   
   const [cedula, setCedula] = useState("");
   const [startDate] = useState('');
@@ -83,33 +91,30 @@ const brandLogos = {
   toyota:toyotaLogo
 };
 const handleNewClick = (type) => {
-  if (type === "registrar") {
-    setIsRegistrarOpen(true);
-  } else if (type === "actualizar") {
-    setIsActualizarOpen(true);
-  }
+  console.log("Tipo de modal:", type);
+  setTipoModal(type);
+  handleModal();
 };
-const handleRegistrarSubmit = (data) => {
-  console.log("Datos de Registrar Asistencia:", data);
-};
+// const handleRegistrarSubmit = (data) => {
+//   console.log("Datos de Registrar Asistencia:", data);
+// };
 
-const handleActualizarSubmit = (data) => {
-  console.log("Datos de Actualizar Asistencia:", data);
-};
+// const handleActualizarSubmit = (data) => {
+//   console.log("Datos de Actualizar Asistencia:", data);
+// };
 
 
 // ------------------------------------------------------------------------------------------------------------
 const handleSearch = async () => {
   // Validación de la cédula
   const cedulaRegex = /^[0-9]{10}$/;
-
-  if (!cedulaRegex.test(cedula)) {
-    setErrorMessage("⚠️La cédula debe contener solo 10 dígitos numéricos.");
+  if (cedula === "") {
+    await fetchUsuarios(); // Cargar todos los usuarios si la cédula está vacía
     return;
   }
 
-  if (cedula === "") {
-    await fetchUsuarios(); // Cargar todos los usuarios si la cédula está vacía
+  if (!cedulaRegex.test(cedula)) {
+    setErrorMessage("⚠️La cédula debe contener solo 10 dígitos numéricos.");
     return;
   }
 
@@ -125,6 +130,8 @@ const handleSearch = async () => {
   if (!usuario) {
     setErrorMessage("❌ Usuario no se encuentra registrado");
   } else {
+    const asistencias = await fetchAsistencias(cedula);
+    console.log("Asistencias encontradas:", asistencias);
     setErrorMessage(""); // Limpiar mensaje de error
     setSuccessMessage(" ✅ Usuario encontrado con éxito");
     setFilteredData([usuario]); // Mostrar el usuario encontrado
@@ -270,13 +277,16 @@ const handleDownloadExcel = () => {
           <button
             onClick={() => handleNewClick("actualizar")}
             className="ml-4 px-4 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-500"
+            disabled={seleccionado?.asistencia ? false : true}
+            style={{ cursor: seleccionado?.asistencia ? "pointer" : "not-allowed" }}
           >
             Actualizar Asistencia
           </button>
         </div>
         {/* ---------------------------------------------------------------------------------------------------------------------------- */}
         {/* Modales */}
-      <ModalAsistencia
+
+      {/* <ModalAsistencia
         isOpen={isRegistrarOpen}
         onClose={() => setIsRegistrarOpen(false)}
         onSubmit={handleRegistrarSubmit}
@@ -288,7 +298,7 @@ const handleDownloadExcel = () => {
         onSubmit={handleActualizarSubmit}
         title="Actualizar Asistencia"
         usuario={usuarios}
-      />
+      /> */}
         
 
    {/* TABLA DEL HISTORIAL */}
@@ -302,7 +312,7 @@ const handleDownloadExcel = () => {
       <thead className="bg-black text-white font-mono">
         <tr>
           {[
-            'Cédula', 'Nombre y Apellido', 'Teléfono','Cargo', 'Estado'
+            'Cédula', 'Nombre y Apellido', 'Telefono', 'Cargo', 'Fecha', 'Hora de Ingreso', 'Hora de Salida', 'Estado'
           ].map((header) => (
             <th key={header} className="border border-black px-4 py-2">{header}</th>
           ))}
@@ -311,7 +321,7 @@ const handleDownloadExcel = () => {
       <tbody>
         <tr>
           <td colSpan="8" className="text-center py-4 text-red-700">
-            No existen registros disponibles.
+            { loading ? 'Cargando...' : 'No hay usuarios registrados'}
           </td>
         </tr>
       </tbody>

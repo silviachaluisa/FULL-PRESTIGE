@@ -10,34 +10,39 @@ export const TablaAsistencia = ({ usuarios }) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Meses van de 0 a 11
     const day = String(date.getDate()).padStart(2, '0');
+
+    if (isNaN(year) || isNaN(month) || isNaN(day)) {
+      return 'N/A';
+    }
+
     return `${year}-${month}-${day}`;
   };
 
-  const { fetchAsistencias, setSeleccionado } = useContext(HistoryContext);
+  const { fetchAsistencias, seleccionado, setSeleccionado, showModal, handleModal } = useContext(HistoryContext);
   const [asistencias, setAsistencias] = useState([]);
-  const [selectedUsuario, setSelectedUsuario] = useState(null); // Mantener el usuario seleccionado
-  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar la visibilidad del modal
+  //const [selectedUsuario, setSelectedUsuario] = useState(null); // Mantener el usuario seleccionado
+  //const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar la visibilidad del modal
 
   // Función para manejar el clic en una fila
   const handleRowClick = (usuario) => {
     // Al seleccionar el usuario, se completan los campos automáticamente
+    setSeleccionado(usuario); // Actualizar el usuario seleccionado en el contexto
     console.log("Usuario seleccionado:", usuario);
 
-    setSeleccionado(usuario); // Actualizar el usuario seleccionado en el contexto
 
-    setSelectedUsuario({
-      ...usuario
-      // fecha: formatDate(new Date()), // Fecha actual por defecto
-      // hora_ingreso: '', // Puedes poner valor por defecto
-      // hora_salida: '' // Puedes poner valor por defecto
-    });
+    // setSelectedUsuario({
+    //   ...usuario
+    //   // fecha: formatDate(new Date()), // Fecha actual por defecto
+    //   // hora_ingreso: '', // Puedes poner valor por defecto
+    //   // hora_salida: '' // Puedes poner valor por defecto
+    // });
    
   };
 
   // Función para cerrar el modal
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+  // const closeModal = () => {
+  //   setIsModalOpen(false);
+  // };
 
   // Función para manejar el envío de la asistencia
   const handleSubmitAsistencia = (asistencia) => {
@@ -45,7 +50,7 @@ export const TablaAsistencia = ({ usuarios }) => {
     // Aquí iría la lógica para guardar la asistencia
     // Ejemplo de cómo podrías manejar el envío a la API o el almacenamiento
     // fetchSaveAsistencia(asistencia);
-    closeModal(); // Cerrar el modal después de registrar la asistencia
+    //closeModal(); // Cerrar el modal después de registrar la asistencia
   };
 
   // Cargar las asistencias de los usuarios
@@ -54,10 +59,19 @@ export const TablaAsistencia = ({ usuarios }) => {
       const nuevasAsistencias = [];
       for (const usuario of usuarios) {
         const response = await fetchAsistencias(usuario.cedula);
-        nuevasAsistencias.push({ ...usuario, asistencia: response.at(-1) });
+        console.log("Respuesta asistencias de", usuario.cedula, "=",response);
+        if (response.length === 0) {
+          nuevasAsistencias.push({ ...usuario, asistencia: {} });
+        } else {
+          for (const asistencia of response){
+            nuevasAsistencias.push({ ...usuario, asistencia: asistencia });
+          }
+          //nuevasAsistencias.push({ ...usuario, asistencia: response.at(-1) });
+          //nuevasAsistencias.push(response);
+        }
       }
       setAsistencias(nuevasAsistencias);
-      console.log(nuevasAsistencias);
+      console.log("Nuevas asistencias ->",nuevasAsistencias);
     };
 
     obtenerAsistencias();
@@ -81,7 +95,7 @@ export const TablaAsistencia = ({ usuarios }) => {
             <tr
               key={index}
               onClick={() => handleRowClick(item)} // Cambiar la fila seleccionada
-              className={`cursor-pointer ${selectedUsuario?.cedula === item.cedula ? 'bg-red-200' : ''}`} // Marcar la fila seleccionada con color
+              className={`cursor-pointer ${seleccionado?.cedula === item.cedula ? 'bg-red-200' : ''}`} // Marcar la fila seleccionada con color
             >
               <td className="border border-black px-4 py-2">{item.cedula}</td>
               <td className="border border-black px-4 py-2">{item.nombre}</td>
@@ -97,15 +111,14 @@ export const TablaAsistencia = ({ usuarios }) => {
       </table>
 
       {/* Modal de Asistencia */}
-      {isModalOpen && (
-        <ModalAsistencia
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          onSubmit={handleSubmitAsistencia}
-          title="Registrar Asistencia"
-          selectedUsuario={selectedUsuario} // Pasar el usuario seleccionado al modal
-        />
-      )}
+      {
+        showModal && (
+          <ModalAsistencia
+            handleShow={handleModal}
+            usuario={seleccionado}
+          />
+        )
+      }
     </div>
   );
 };
@@ -116,12 +129,13 @@ TablaAsistencia.propTypes = {
       cedula: PropTypes.string.isRequired,
       nombre: PropTypes.string.isRequired,
       telefono: PropTypes.string.isRequired,
-      fecha: PropTypes.string.isRequired,
-      hora_ingreso: PropTypes.string.isRequired,
-      hora_salida: PropTypes.string.isRequired,
+      asistencia: PropTypes.shape({
+        fecha: PropTypes.string.isRequired,
+        hora_ingreso: PropTypes.string.isRequired,
+        hora_salida: PropTypes.string.isRequired,
+      }),
       cargo: PropTypes.string.isRequired,
       estado: PropTypes.string.isRequired,
-      id: PropTypes.string.isRequired,
     })
   ).isRequired,
 };

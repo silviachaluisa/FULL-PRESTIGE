@@ -9,6 +9,14 @@ export const HistoryProvider = ({ children }) => {
   const [clientes, setClientes] = useState ([]);
   const [asistencias, setAsistencias] = useState([]);
   const [seleccionado, setSeleccionado] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [tipoModal, setTipoModal] = useState(''); // Tipo de modal: 'registrar' o 'actualizar'
+
+  // -------------------------------- Modal --------------------------------
+  const handleModal = () => {
+    setShowModal(!showModal);
+  };
 
     // -----------------------------------FUNCIONES PARA USUARIOS--------------------------------------------
 
@@ -17,6 +25,7 @@ export const HistoryProvider = ({ children }) => {
     const token = localStorage.getItem('token')
     if (!token )return
     try {
+      setLoading(true); // Activar el estado de carga
       const options={
         headers:{
           'Content-Type': 'application/json',
@@ -28,7 +37,10 @@ export const HistoryProvider = ({ children }) => {
       setUsuarios(response.data.empleados); // Suponiendo que la API retorna un array de usuarios
     } catch (error) {
       console.error("Error al obtener usuarios", error);
-  };
+    } finally {
+      setLoading(false); // Desactivar el estado de carga
+    }
+  ;
   
   HistoryProvider.propTypes = {
     children: PropTypes.node.isRequired,
@@ -183,7 +195,22 @@ export const HistoryProvider = ({ children }) => {
       };
 
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/employee/${id}/assistance`, options);
-      //setAsistencias(response.data); // Suponiendo que la API retorna un array de asistencias
+
+      // const asistencias = response.data.map((asistencia) => {
+      //   return {
+      //     cedula: asistencia.empleado.cedula,
+      //     nombre: asistencia.empleado.nombre,
+      //     telefono: asistencia.empleado.telefono,
+      //     cargo: asistencia.empleado.cargo,
+      //     asistencia: {
+      //       fecha: asistencia.fecha,
+      //       hora_ingreso: asistencia.hora_ingreso,
+      //       hora_salida: asistencia.hora_salida,
+      //       estado: asistencia.estado,
+      //     },
+      //   }
+      // });
+
       return response.data;
     } catch (error) {
       
@@ -191,26 +218,8 @@ export const HistoryProvider = ({ children }) => {
     }
   };
 
-  const fetchAsistenciasbycedula = async (id) => {
-    const token = localStorage.getItem('token');
-    if (!token) return;
-    try {
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        };
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/employee/${id}/
-          asistencia`, options);
-          setAsistencias(response.data); // Suponiendo que la API retorna un array de asistencias
-          } catch (error) {
-            console.error("Error al obtener asistencias", error);
-          }
-  }
-
-  const upDateAssistance = async (asistencia, cedula) => {
-    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/employee/${cedula}/assistance`;
+  const upDateAssistance = async (id, asistencia) => {
+    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/employee/assistance/${id}`;
     const token = localStorage.getItem("token");
     const options = {
       headers: {
@@ -220,6 +229,23 @@ export const HistoryProvider = ({ children }) => {
     };
     try {
       const respuesta = await axios.put(URLActualizar, asistencia, options);
+      console.log(respuesta);
+    } catch (error) {
+      console.error("Error al actualizar asistencia", error);
+    }
+  };
+
+  const registerAssistance = async (cedula, asistencia) => {
+    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/employee/${cedula}/assistance`;
+    const token = localStorage.getItem("token");
+    const options = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    try {
+      const respuesta = await axios.post(URLActualizar, asistencia, options);
       console.log(respuesta);
     } catch (error) {
       console.error("Error al actualizar asistencia", error);
@@ -245,10 +271,15 @@ export const HistoryProvider = ({ children }) => {
       asistencias,
       fetchAsistencias,
       setAsistencias,
-      fetchAsistenciasbycedula,
       upDateAssistance,
+      registerAssistance,
       seleccionado,
       setSeleccionado,
+      loading,
+      showModal,
+      handleModal,
+      tipoModal,
+      setTipoModal
        }}>
       {children}
     </HistoryContext.Provider>
