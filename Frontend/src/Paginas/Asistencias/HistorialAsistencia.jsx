@@ -57,14 +57,8 @@ export const Asistencia = () => {
   }= useContext (HistoryContext);
   
   const [cedula, setCedula] = useState("");
-  const [filteredData, setFilteredData] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-
-  
-//   const handleChange=(e)=>{
-//     setCedula(e.target.value)
-// };
 
 const handleChange=(e)=>{
   const value = e.target.value
@@ -152,12 +146,6 @@ const handleSearch = async () => {
 };
 
 // ---------------------------------------------------------------------------------------------------
-
-useEffect(() => {
-  console.log("Usuarios -> useEffect:", usuarios);
-  setFilteredData(usuarios);
- }, [usuarios]);
-
 const handleDownloadPDF = () => {
   const doc = new jsPDF();
   doc.text('Historial de Usuarios Registrados', 10, 10);
@@ -275,8 +263,8 @@ const handleDownloadExcel = () => {
           <button
             onClick={() => handleNewClick("actualizar")}
             className="ml-4 px-4 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-500"
-            disabled={seleccionado?.asistencia ? false : true}
-            style={{ cursor: seleccionado?.asistencia ? "pointer" : "not-allowed" }}
+            disabled={Object.keys(seleccionado?.asistencia || {}).length !== 0 ? false : true}
+            style={{ cursor: Object.keys(seleccionado?.asistencia || {}).length !== 0 ? "pointer" : "not-allowed" }}
           >
             Actualizar Asistencia
           </button>
