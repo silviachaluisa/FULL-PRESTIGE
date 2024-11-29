@@ -14,6 +14,7 @@ export const HistoryProvider = ({ children }) => {
   const [tipoModal, setTipoModal] = useState(''); // Tipo de modal: 'registrar' o 'actualizar'
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [pagos, setPagos] = useState([])
 
   // -------------------------------- Modal --------------------------------
   const handleModal = () => {
@@ -226,7 +227,6 @@ export const HistoryProvider = ({ children }) => {
     } catch (error) {
       console.error("Error al actualizar asistencia", error);
       setErrorMessage(error.response.data.message);
-
       // Limpiar el mensaje de error después de un breve tiempo
       setTimeout(() => {
         setErrorMessage("");
@@ -264,7 +264,93 @@ export const HistoryProvider = ({ children }) => {
       }, 5000); // Limpia el mensaje después de 5 segundos
     }
   };
- 
+
+  // -------------------------------FUNCIONES PARA PAGOS-----------------------------------------
+
+  const fetchPagos = async (id) => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/employee/${id}/payments`, options);
+      
+      return(response.data); // Suponiendo que la API retorna un array de pagos
+    } catch (error) {
+      console.error("Error al obtener pagos", error);
+    }
+  };
+
+  const upDatePayment = async (id, pago) => {
+    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/employee/payment/${id}`;
+    const token = localStorage.getItem("token");
+    const options = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    
+      try {
+        const respuesta = await axios.put(URLActualizar, pago, options);
+        console.log(respuesta);
+        successMessage("Pago actualizado correctamente");
+        //Cerrar el modal automáticamente después de un breve tiempo
+        setTimeout(() => {
+          setSuccessMessage("");
+          setErrorMessage("");
+          handleModal();
+          fetchUsuarios();
+        }, 2000); // Cierra el modal después de 2 segundos
+      }catch (error) {
+        console.error("Error al actualizar pago", error);
+        setErrorMessage(error.response.data.message);
+        // Limpiar el mensaje de error después de un breve tiempo
+        setTimeout(() => {
+          setSuccessMessage("");
+          setErrorMessage("");
+        }, 5000); // Limpia el mensaje después de 5 segundos
+      }
+  };
+
+  const registerPayment = async (cedula, pago) => {
+    const URLRegistrar = `${import.meta.env.VITE_BACKEND_URL}/employee/${cedula}payment/`;
+    const token = localStorage.getItem("token");
+    const options = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      try {
+        const respuesta = await axios.post(URLRegistrar, pago, options);
+        console.log(respuesta);
+        successMessage("Pago registrado correctamente");
+        //Cerrar el modal automáticamente después de un breve tiempo
+        setTimeout(() => {
+          setSuccessMessage("");
+          setErrorMessage("");
+          handleModal();
+          fetchUsuarios();
+        }, 2000); // Cierra el modal después de 2 segundos  
+      }catch (error) {
+          console.error("Error al registrar pago", error);
+          setErrorMessage(error.response.data.message);
+          
+          // Limpiar el mensaje de error después de un breve tiempo
+          setTimeout(() => {
+            setSuccessMessage("");
+            setErrorMessage("");
+          }, 5000); // Limpia el mensaje después de 5 segundos
+        }
+      };
+
+
   return (
     <HistoryContext.Provider 
     value={{ 
@@ -294,6 +380,11 @@ export const HistoryProvider = ({ children }) => {
       setErrorMessage,
       successMessage,
       setSuccessMessage,
+      pagos,
+      setPagos,
+      fetchPagos,
+      upDatePayment,
+      registerPayment
        }}>
       {children}
     </HistoryContext.Provider>

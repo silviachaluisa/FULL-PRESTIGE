@@ -8,7 +8,7 @@ import Asistencia from './Paginas/Asistencias/HistorialAsistencia.jsx'
 import ClientesVehiculos  from './Paginas/Clientes/HistorialClientes.jsx'
 import RegistrarClientes from './Paginas/Clientes/RegistrarClientes.jsx'
 import Pagos from './Paginas/Pagos/HistorialPagos.jsx'
-import RegistrarPagos from './Paginas/Pagos/RegistrarPagos.jsx';
+
 import Usuarios from './Paginas/Usuarios/HistorialUsuarios.jsx';
 import RegistrarUsuarios from './Paginas/Usuarios/RegistrarUsuarios.jsx';
 import VisualizarPerfil from './Paginas/Perfil.jsx';
@@ -33,7 +33,7 @@ function App() {
                 <Route path="/historial-clientes" element={<ClientesVehiculos />} />
                 <Route path="/registrar-clientes" element={<RegistrarClientes />} />
                 <Route path="/historial-pagos" element={<Pagos />} />
-                <Route path="/registrar-pagos" element={<RegistrarPagos />} />
+    
                 <Route path="/historial-usuarios" element={<Usuarios />} />
                 <Route path="/registrar-usuarios" element={<RegistrarUsuarios />} />
                 <Route path="/perfil" element={<VisualizarPerfil />} />

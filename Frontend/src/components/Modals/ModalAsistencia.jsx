@@ -66,7 +66,6 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
       }
       return null;
     }
-
     const now = new Date();
     // Formatear manualmente la fecha local
     const year = now.getFullYear();
@@ -74,30 +73,24 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
     const day = String(now.getDate()).padStart(2, '0'); // Día en formato 2 dígitos
     const fechaActual = `${year}-${month}-${day}`; // Fecha en formato YYYY-MM-DD
     const horaActual = String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0") // Hora en formato HH:MM
-
     // Validar que la fecha no sea menor a la actual
     if (fecha < fechaActual) {
       return "La fecha no puede ser menor a la fecha actual.";
     }
-
     // Validar la hora de ingreso si la fecha es hoy
     if (fecha !== fechaActual) {
       return "La fecha no puede ser distinta a la fecha actual.";
     }
-
     if (!horaIngreso && !horaSalida) {
       return null; // Si no hay hora de ingreso ni salida, no hay errores
     }
-
     if (horaIngreso && horaIngreso < horaActual) {
       return "La hora de ingreso no puede ser menor a la hora actual.";
     }
-
     // Validar que la hora de salida sea mayor a la hora de ingreso
     if (horaSalida && horaIngreso && horaSalida <= horaIngreso) {
       return "La hora de salida debe ser mayor a la hora de ingreso.";
     }
-
     return null; // Si todo es válido, no hay errores
   };
 
