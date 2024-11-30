@@ -6,12 +6,21 @@ export const TablaClientes = ({clientes}) => {
   console.log(clientes);
   // Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
   const formatDate = (isoDate) => {
-    const date = new Date(isoDate);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Meses van de 0 a 11
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-};
+    try {
+      if (!isoDate) {
+        return 'N/A'; // Si no hay fecha, retornar 'N/A'
+      }
+
+      const date = new Date(isoDate);
+      if (isNaN(date)) {
+        throw new Error('Fecha inválida');
+      }
+      return date.toISOString().split('T')[0];
+    } catch (error) {
+      console.error(`Error formateando fecha: ${error.message}`);
+      return 'Fecha inválida';
+    }
+  };
     return (
       <div className="overflow-x-auto">
         {/* Tabla de Historial */}
