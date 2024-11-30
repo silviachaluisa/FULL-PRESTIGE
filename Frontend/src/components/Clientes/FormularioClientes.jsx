@@ -267,11 +267,13 @@ export const FormularioClientes = ({clientes}) => {
             <input
               id='cedula'
               type="texto"
-              required
+              maxLength="10"
+              required= {clientes?.propietario.cedula ? false : true}
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
               placeholder='1234567890'
               name="cedula"
               value={regisclientes.cedula}
+              disabled={clientes?.propietario.cedula ? true : false}
               onChange={handleChange}
             />
             {errores.cedula && <p className="text-red-500 text-sm">{errores.cedula}</p>}
@@ -300,6 +302,7 @@ export const FormularioClientes = ({clientes}) => {
               id='telefono'
               type="text"
               name="telefono"
+              maxLength="10"
               value={regisclientes.telefono}
               onChange={handleChange}
               required
