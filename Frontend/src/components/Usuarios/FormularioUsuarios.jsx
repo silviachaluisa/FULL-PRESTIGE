@@ -112,7 +112,7 @@ export const FormularioUsuarios = ({ usuarios }) => {
           
           if(!registro.cargo) nuevosErrores.cargo = "El cargo es obligatorio";
           
-            // Si hay errores, actualiza el estado de errores y detén el proceso
+        // Si hay errores, actualiza el estado de errores y detén el proceso
         if (Object.keys(nuevosErrores).length > 0) {
           setErrores(nuevosErrores);
           console.log(nuevosErrores)
@@ -123,25 +123,23 @@ export const FormularioUsuarios = ({ usuarios }) => {
         setErrores({});
         try {
           if (usuarios?.cedula) {
-              
-                  const updateinfo = { ...registro };
-                  delete updateinfo.estado
-                  delete updateinfo.contrasena
-                  updateinfo.estado = registro?.estado === "Activo" ? true : false;
-                  console.log(updateinfo)
-                  // Llamar a la función para actualizar el usuario
-                  await upDateUser(usuarios?.cedula, updateinfo);
-                  // Configurar el mensaje de éxito
-                  setMensaje({ respuesta: "Usuario actualizado con éxito", tipo: true });
-                  // Limpiar el mensaje después de 4 segundos
-                  setTimeout(() => {
-                    fetchUsuarios()
-                    setMensaje(null);
-                    // Navegar al historial de usuarios
-                    navigate('/historial-usuarios');
-                  }, 4000);
+            const updateinfo = { ...registro };
+            delete updateinfo.estado
+            delete updateinfo.contrasena
+            updateinfo.estado = registro?.estado === "Activo" ? true : false;
+            console.log(updateinfo)
+            // Llamar a la función para actualizar el usuario
+            await upDateUser(usuarios?.cedula, updateinfo);
+            // Configurar el mensaje de éxito
+            setMensaje({ respuesta: "Usuario actualizado con éxito", tipo: true });
+            // Limpiar el mensaje después de 4 segundos
+            setTimeout(() => {
+              fetchUsuarios()
+              setMensaje(null);
+              // Navegar al historial de usuarios
+              navigate('/historial-usuarios');
+            }, 4000);
           }else{
-           
             // Construir la URL de la API para el registro
             const URLRegister = `${import.meta.env.VITE_BACKEND_URL}/register`;
             console.log(registro);
@@ -151,7 +149,6 @@ export const FormularioUsuarios = ({ usuarios }) => {
             const respuesta = await axios.post(URLRegister, DatosRegistrar);
             console.log(respuesta);
 
-            
             // Configurar el mensaje de éxito
             setMensaje({ respuesta: "Usuario registrado con éxito", tipo: true });
             console.log(respuesta)
@@ -162,8 +159,6 @@ export const FormularioUsuarios = ({ usuarios }) => {
               navigate('/historial-usuarios');
             }, 3000);
           }        
-      
-          
         } catch (error) {
           
           // Configurar el mensaje de error recibido desde la respuesta del servidor
@@ -178,9 +173,6 @@ export const FormularioUsuarios = ({ usuarios }) => {
         }
       };
       
-
-
-      
      // Manejador de cambio de valores del formulario
      const handleChange = (e) => {
       const {name, value} = e.target;
@@ -189,25 +181,26 @@ export const FormularioUsuarios = ({ usuarios }) => {
       if(name=== "cedula" || name === "telefono"){
         const soloNumeros = /^[0-9]*$/; //Expresión regular para permitir solo números
         if(!soloNumeros.test(value)){
-          return;//Ignora si se ingresan letras u otros caracteres
+          return; //Ignora si se ingresan letras u otros caracteres
         }
-
       }
       //Actualiza el estado
       setRegistro({
         ...registro,
         [name]: value
       })
-      
-      };
-
+    };
     return (
         
       <div className="w-full max-w-7xl px-10">
         <div className='mb-7'>
-        {mensaje && (<Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} errores={!mensaje.tipo ? errores : {}} 
-        />
-        )}
+          {mensaje && (
+            <Mensaje
+              mensaje={mensaje.respuesta}
+              tipo={mensaje.tipo}
+              errores={!mensaje.tipo ? errores : {}}
+            />
+          )}
         </div>
           
       <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-6 border-2 border-red-600 p-6 rounded-lg bg-black mb-7">
@@ -253,6 +246,7 @@ export const FormularioUsuarios = ({ usuarios }) => {
               id='telefono'
               type="text"
               name="telefono"
+              maxLength="10"
               value={registro.telefono}
               onChange={handleChange}
               required
