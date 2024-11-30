@@ -23,8 +23,7 @@ export const ModalPago = ({ handleShow, usuario }) => {
   const [multas, setMultas] = useState("");
   const [atrasos, setAtrasos] = useState("");
   const [justificacion, setJustificacion] = useState("");
-  const [horaIngreso, setHoraIngreso] = useState("");
-  const [horaSalida, setHoraSalida] = useState("");
+
 
   const {
     upDatePayment,
@@ -33,7 +32,9 @@ export const ModalPago = ({ handleShow, usuario }) => {
     tipoModal,
     errorMessage,
     setErrorMessage,
-    setSuccessMessage,
+    successMessage,
+    setSuccessMessage
+
   } = useContext(HistoryContext);
 
   useEffect(() => {
@@ -103,6 +104,7 @@ export const ModalPago = ({ handleShow, usuario }) => {
     const payload = { fecha, adelantos, permisos, multas, atrasos,justificacion};
     if (tipoModal === "actualizar") {
       // Determinar el estado de la asistencia
+      
       upDatePayment(usuario?.pago._id, payload);
     } else {
       registerPayment(usuario.cedula, payload);
@@ -129,28 +131,54 @@ export const ModalPago = ({ handleShow, usuario }) => {
           onChange={(e) => setFecha(e.target.value)}
           className="w-full border rounded-lg p-2 mb-4"
         />
-        
 
+        {/* Campo Adelantos */}
         <div className="flex gap-4">
-          <div className="flex-1">
-            <label className="block text-gray-700 font-semibold mb-2">Hora de Ingreso:</label>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-semibold mb-2">Adelantos:</label>
             <input
-              type="time"
-              value={horaIngreso}
-              onChange={(e) => setHoraIngreso(e.target.value)}
+              type="number"
+              value={adelantos}
+              onChange={(e) => setAdelantos(e.target.value)}
               className="w-full border rounded-lg p-2"
+              placeholder="Ingresa la cantidad de adelantos"
+            />
+          </div>
+          {/* Campo Permisos */}
+          <div className="mb-4">
+            <label className="block text-gray-700 font-semibold mb-2">Permisos:</label>
+            <input
+              type="number"
+              value={permisos}
+              onChange={(e) => setPermisos(e.target.value)}
+              className="w-full border rounded-lg p-2"
+              placeholder="Ingresa la cantidad de permisos"
             />
           </div>
 
-          <div className="flex-1">
-            <label className="block text-gray-700 font-semibold mb-2">Hora de Salida:</label>
+          {/* Campo Multas */}
+          <div className="mb-4">
+            <label className="block text-gray-700 font-semibold mb-2">Multas:</label>
             <input
-              type="time"
-              value={horaSalida}
-              onChange={(e) => setHoraSalida(e.target.value)}
+              type="number"
+              value={multas}
+              onChange={(e) => setMultas(e.target.value)}
               className="w-full border rounded-lg p-2"
+              placeholder="Ingresa la cantidad de multas"
             />
           </div>
+          {/* Campo Atrasos */}
+          <div className="mb-4">
+            <label className="block text-gray-700 font-semibold mb-2">Atrasos:</label>
+            <input
+              type="number"
+              value={atrasos}
+              onChange={(e) => setAtrasos(e.target.value)}
+              className="w-full border rounded-lg p-2"
+              placeholder="Ingresa la cantidad de atrasos"
+            />
+          </div>
+                  
         </div>
 
         {tipoModal === "actualizar" && (

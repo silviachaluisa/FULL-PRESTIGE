@@ -79,8 +79,6 @@ const handleChange=(e)=>{
  // Llamar a fetchUsuarios una vez cuando el componente carga
  useEffect(() => {
   fetchUsuarios();
- 
-  
 }, []);
 
 
