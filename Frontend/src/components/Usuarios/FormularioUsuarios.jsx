@@ -86,17 +86,17 @@ export const FormularioUsuarios = ({ usuarios }) => {
               nuevosErrores.telefono = 'El teléfono debe contener números';
             }
             // En este bloque se expresa que si la contraseña de un usuario no existe debe registrarse, caso contrario desea actualizar la informacion  
-            if(!usuarios?.contrasena){
+            if(!usuarios?.cedula){
               //Validación de contraseña
-            if(!registro.contrasena){
-              nuevosErrores.contrasena = 'La contraseña es obligatoria';
-            }else if(
-              registro.contrasena &&
-              !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/.test(registro.contrasena)
-            ){
-              nuevosErrores.contrasena =
-              "La contraseña debe tener al menos una mayúscula, una minúscula, un carácter especial y 8 caracteres.";
-            }
+              if(!registro.contrasena){
+                nuevosErrores.contrasena = 'La contraseña es obligatoria';
+              }else if(
+                registro.contrasena &&
+                !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/.test(registro.contrasena)
+              ){
+                nuevosErrores.contrasena =
+                "La contraseña debe tener al menos una mayúscula, una minúscula, un carácter especial y 8 caracteres.";
+              }
             }
             
             // ----------------------------------------------------------------------
@@ -220,12 +220,12 @@ export const FormularioUsuarios = ({ usuarios }) => {
               type="texto"
               name="cedula"
               maxLength="10"
-              required
+              required = { usuarios?.cedula ? false : true}
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
               placeholder='1234567890'
               value={registro.cedula}
+              disabled = { usuarios?.cedula ? true : false}
               onChange={handleChange}
-              
             />
             {errores.cedula && <p className="text-red-500 text-sm">{errores.cedula}</p>}
           </div>
