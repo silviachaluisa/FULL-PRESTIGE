@@ -287,7 +287,7 @@ export const HistoryProvider = ({ children }) => {
   };
 
   const upDatePayment = async (id, pago) => {
-    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/employee/payment/${id}`;
+    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/employee/payments/${id}`;
     const token = localStorage.getItem("token");
     const options = {
       headers: {
@@ -319,7 +319,7 @@ export const HistoryProvider = ({ children }) => {
   };
 
   const registerPayment = async (cedula, pago) => {
-    const URLRegistrar = `${import.meta.env.VITE_BACKEND_URL}/employee/${cedula}payment/`;
+    const URLRegistrar = `${import.meta.env.VITE_BACKEND_URL}/employee/${cedula}payments/`;
     const token = localStorage.getItem("token");
     const options = {
         headers: {
