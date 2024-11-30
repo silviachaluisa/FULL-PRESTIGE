@@ -31,31 +31,7 @@ export const TablaAsistencia = ({ usuarios }) => {
     console.log("Usuario seleccionado:", usuario);
   };
 
-  // // Cargar las asistencias de los usuarios
-  // useEffect(() => {
-  //   const obtenerAsistencias = async () => {
-  //     const nuevasAsistencias = [];
-  //     let indice = 0;
-  //     for (const usuario of usuarios) {
-  //       const response = await fetchAsistencias(usuario.cedula);
-  //       console.log("Respuesta asistencias de", usuario.cedula, "=",response);
-  //       if (response.length === 0) {
-  //         nuevasAsistencias.push({ ...usuario, asistencia: {}, indice: indice });
-  //         indice++;
-  //       } else {
-  //         for (const asistencia of response){
-  //           nuevasAsistencias.push({ ...usuario, asistencia: asistencia, indice: indice });
-  //           indice++;
-  //         }
-  //       }
-  //     }
-  //     setAsistencias(nuevasAsistencias);
-  //     console.log("Nuevas asistencias ->",nuevasAsistencias);
-  //   };
-
-  //   obtenerAsistencias();
-  // }, [usuarios]);
-
+  // Cargar las asistencias de los usuarios
   useEffect(() => {
     const obtenerAsistencias = async () => {
       let indice = 0;

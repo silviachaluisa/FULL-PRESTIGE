@@ -31,28 +31,7 @@ export const TablaPago = ({ usuarios }) => {
     console.log("Usuario seleccionado:", usuario);
   };
 
-  // // Cargar las asistencias de los usuarios
-  // useEffect(() => {
-  //   const obtenerPagos = async () => {
-  //     const nuevasPagos = [];
-  //     for (const usuario of usuarios) {
-  //       const response = await fetchPagos(usuario.cedula);
-  //       console.log("Respuesta pagos de", usuario.cedula, "=",response);
-  //       if (response.length === 0) {
-  //         nuevasPagos.push({ ...usuario, pago: {} });
-  //       } else {
-  //         for (const pago of response){
-  //           nuevasPagos.push({ ...usuario, pago: pago });
-  //         }
-  //       }
-  //     }
-  //     setPagos(nuevasPagos);
-  //     console.log("Nuevas pagos ->",nuevasPagos);
-  //   };
-
-  //   obtenerPagos();
-  // }, [usuarios]);
-
+  // Cargar las asistencias de los usuarios
   useEffect(() => {
     const obtenerPagos = async () => {
       const nuevasPagos = [];
