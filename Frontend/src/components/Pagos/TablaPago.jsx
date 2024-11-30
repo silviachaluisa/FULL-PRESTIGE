@@ -22,6 +22,13 @@ export const TablaPago = ({ usuarios }) => {
     }
   };
 
+  const verifyNumber = (value) => {
+    if (isNaN(value)) {
+      return 'N/A'; // Si no hay valor, retornar 'N/A'
+    }
+    return value;
+  };
+
   const { fetchPagos, seleccionado, setSeleccionado, showModal, handleModal, pagos, setPagos } = useContext(HistoryContext);
 
   // Función para manejar el clic en una fila
@@ -97,12 +104,12 @@ export const TablaPago = ({ usuarios }) => {
             > 
               <td className="border border-black px-4 py-2">{item.cedula}</td>
               <td className="border border-black px-4 py-2">{item.nombre}</td>
-              <td className="border border-black px-4 py-2">{formatDate(item.fecha) || "N/A"}</td>
-              <td className="border border-black px-4 py-2">{item?.pago.adelantos || "N/A"}</td>
-              <td className="border border-black px-4 py-2">{item?.pago.permisos || "N/A"}</td>
-              <td className="border border-black px-4 py-2">{item?.pago.multas || "N/A"}</td>
-              <td className="border border-black px-4 py-2">{item?.pago.atrasos || "N/A"}</td>
-              <td className="border border-black px-4 py-2">{item?.pago.subtotal || "N/A"}</td>
+              <td className="border border-black px-4 py-2">{formatDate(item?.pago.fecha)}</td>
+              <td className="border border-black px-4 py-2">{verifyNumber(item?.pago.adelanto)}</td>
+              <td className="border border-black px-4 py-2">{verifyNumber(item?.pago.permisos)}</td>
+              <td className="border border-black px-4 py-2">{verifyNumber(item?.pago.multas)}</td>
+              <td className="border border-black px-4 py-2">{verifyNumber(item?.pago.atrasos)}</td>
+              <td className="border border-black px-4 py-2">{verifyNumber(item?.pago.subtotal)}</td>
       
             </tr>
           ))}

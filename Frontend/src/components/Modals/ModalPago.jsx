@@ -24,30 +24,24 @@ export const ModalPago = ({ handleShow, usuario }) => {
   const [atrasos, setAtrasos] = useState("");
   const [justificacion, setJustificacion] = useState("");
 
-
   const {
     upDatePayment,
-    fetchPayments,
     registerPayment,
     tipoModal,
     errorMessage,
     setErrorMessage,
     successMessage,
     setSuccessMessage
-
   } = useContext(HistoryContext);
 
   useEffect(() => {
     const obtenerPago = async () => {
-      console.log("Usuario =", usuario);
-      const response = await fetchPayments(usuario.cedula);
-      console.log("Respuesta =", response);
-        if (response) {
-          setFecha(response[0].fecha.split("T")[0]);
-          setAdelantos(response[0].adelantos);
-          setPermisos(response[0].permisos);
-          setMultas(response[0].multas);
-          setAtrasos(response[0].atrasos);
+        if (usuario) {
+          setFecha(usuario?.pago.fecha.split("T")[0] || "N/A");
+          setAdelantos(usuario?.pago.adelanto || "0");
+          setPermisos(usuario?.pago.permisos || "0");
+          setMultas(usuario?.pago.multas || "0");
+          setAtrasos(usuario?.pago.atrasos || "0");
         }
       };
 
@@ -94,6 +88,9 @@ export const ModalPago = ({ handleShow, usuario }) => {
     console.log(usuario, {fecha, adelantos, permisos, multas, atrasos,justificacion})
     if (error) {
       setErrorMessage(error);
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 5000);
       return;
     }
 

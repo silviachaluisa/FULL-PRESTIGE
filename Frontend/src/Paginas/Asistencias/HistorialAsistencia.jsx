@@ -268,29 +268,11 @@ const handleDownloadExcel = () => {
           </button>
         </div>
         {/* ---------------------------------------------------------------------------------------------------------------------------- */}
-        {/* Modales */}
-
-      {/* <ModalAsistencia
-        isOpen={isRegistrarOpen}
-        onClose={() => setIsRegistrarOpen(false)}
-        onSubmit={handleRegistrarSubmit}
-        title="Registrar Asistencia"
-      />
-      <ModalAsistencia
-        isOpen={isActualizarOpen}
-        onClose={() => setIsActualizarOpen(false)}
-        onSubmit={handleActualizarSubmit}
-        title="Actualizar Asistencia"
-        usuario={usuarios}
-      /> */}
-        
-
    {/* TABLA DEL HISTORIAL */}
    {/* Significa que esta esperando una lista, de lo contrario solo muestra el encabezado, esto se modifica del lado del backend */}
    {Array.isArray(usuarios) && usuarios.length !== 0 ? (
   <TablaAsistencia usuarios={usuarios} />
 ) : (
-
   <div className="overflow-x-auto">
     <table className="w-full text-center border-collapse border border-black">
       <thead className="bg-black text-white font-mono">

@@ -23,10 +23,8 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
   
   const {
     upDateAssistance,
-    fetchAsistencias,
     registerAssistance,
     tipoModal,
-    fetchUsuarios,
     errorMessage,
     setErrorMessage,
     successMessage,
@@ -35,13 +33,10 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
 
   useEffect(() => {
     const obtenerAsistencia = async () => {
-      console.log("Usuario =",usuario);
-      const response = await fetchAsistencias(usuario.cedula);
-      console.log("Respuesta =",response);
-      if (response) {
-        setFecha(response[0].fecha.split("T")[0]);
-        setHoraIngreso(response[0].hora_ingreso);
-        setHoraSalida(response[0].hora_salida);
+      if (usuario) {
+        setFecha(usuario?.asistencia.fecha.split("T")[0]);
+        setHoraIngreso(usuario?.asistencia.hora_ingreso);
+        setHoraSalida(usuario?.asistencia.hora_salida);
       }
     };
 
@@ -100,6 +95,10 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
     
     if (error) {
       setErrorMessage(error);
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 5000);
+
       return;
     }
 

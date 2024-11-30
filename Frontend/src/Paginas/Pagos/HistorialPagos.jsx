@@ -138,22 +138,6 @@ export const Pago = () => {
       setSuccessMessage(""); // Limpiar mensaje de éxito
     }, 4000);
   };
-  
-  
-  // useEffect(() => {
-  //   const savedRecords = JSON.parse(localStorage.getItem('pagosRecords')) || [];
-  //   setRecords(savedRecords);
-  //   setFilteredRecords(savedRecords);
-  //   calculateTotalSubtotal(savedRecords);
-  // }, []);
-
-
-
-
-  // const calculateTotalSubtotal = (records) => {
-  //   const total = records.reduce((acc, record) => acc + parseFloat(record.subtotal || 0), 0);
-  //   setTotalSubtotal(total.toFixed(2));
-  // };
 
   // ---------------------------------------------------------------------------------------------------
 const handleDownloadPDF = () => {
@@ -167,9 +151,9 @@ const handleDownloadPDF = () => {
       formatDate(usuario?.pago.fecha),
       usuario?.adelantos|| 'N/A',
       usuario?.permisos || 'N/A',
-      usuario?.multas || 'N/A',   
-      usuario?.atrasos || 'N/A',   
-      usuario?.subtotal || 'N/A',   
+      usuario?.multas || 'N/A',
+      usuario?.atrasos || 'N/A',
+      usuario?.subtotal || 'N/A',
     ]),
   });
   doc.save('HistorialPagos.pdf');
@@ -271,8 +255,8 @@ const handleDownloadExcel = () => {
           <button
             onClick={() => handleNewClick("actualizar")}
             className="ml-4 px-4 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-500"
-            disabled={Object.keys(seleccionado?.asistencia || {}).length !== 0 ? false : true}
-            style={{ cursor: Object.keys(seleccionado?.asistencia || {}).length !== 0 ? "pointer" : "not-allowed" }}
+            disabled={Object.keys(seleccionado?.pago || {}).length !== 0 ? false : true}
+            style={{ cursor: Object.keys(seleccionado?.pago || {}).length !== 0 ? "pointer" : "not-allowed" }}
           >
             Actualizar Pago
           </button>
