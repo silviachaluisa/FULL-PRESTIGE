@@ -16,6 +16,22 @@ export const HistoryProvider = ({ children }) => {
   const [successMessage, setSuccessMessage] = useState("");
   const [pagos, setPagos] = useState([])
 
+  // -------------------------------- Funciones de control en mensajes de validación --------------------------------
+  async function mostrarErrores(errors) {
+    for (const error of errors) {
+      setErrorMessage(error.msg);
+  
+      // Mostrar el mensaje de error en la consola
+      console.error("Error al registrar pago", error.msg);
+  
+      // Esperar 5 segundos antes de pasar al siguiente error
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+  
+      // Limpiar el mensaje de error antes de mostrar el siguiente
+      setErrorMessage("");
+    }
+  }
+
   // -------------------------------- Modal --------------------------------
   const handleModal = () => {
     setShowModal(!showModal);
@@ -339,17 +355,22 @@ export const HistoryProvider = ({ children }) => {
           fetchUsuarios();
         }, 2000); // Cierra el modal después de 2 segundos  
       }catch (error) {
-          console.error("Error al registrar pago", error);
+        console.error("Error al registrar pago", error);
+
+        if (error.response.data?.errors && error.response.data.errors.length > 0) {
+          // Mostrar errores de validación uno por uno
+          await mostrarErrores(error.response.data.errors);
+        } else {
           setErrorMessage(error.response.data.message);
-          
+      
           // Limpiar el mensaje de error después de un breve tiempo
           setTimeout(() => {
-            setSuccessMessage("");
             setErrorMessage("");
-          }, 5000); // Limpia el mensaje después de 5 segundos
+            setSuccessMessage("");
+          }, 5000);
         }
-      };
-
+      }
+    };
 
   return (
     <HistoryContext.Provider 
