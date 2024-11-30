@@ -193,7 +193,7 @@ const handleDownloadExcel = () => {
 
 
   return (
-    <div className="min-h-screen flex flex-col" 
+    <div className="min-h-screen sm:w-full flex flex-col " 
     style={{
         background: '#bdc3c7',  /* Fallback for old browsers */
         background: '-webkit-linear-gradient(to right, #2c3e50, #bdc3c7)',  /* Chrome 10-25, Safari 5.1-6 */
@@ -212,7 +212,7 @@ const handleDownloadExcel = () => {
         </button>
       </header>
 
-      <div className="w-full bg-black shadow p-4 flex justify-between items-center border-2 border-white px-2 py-2">
+      <div className="w-full bg-black p-4 grid grid-cols-3 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-4 items-center justify-items-center">
         {['BMW','Chevrolet','Ford','Honda','Hunday','Kia','Mazda','Mercedes', 'Peugeot','Renault' ,'Susuki','Toyota'].map((brand) => (
           <div key={brand} className="text-white text-sm text-center mx-2">
             <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
@@ -233,11 +233,11 @@ const handleDownloadExcel = () => {
       </div>
 
       {/* Historial de Usuarios */}
-      <main className="flex-grow  max-w-5lx  p-6 bg-white shadow mt-6 rounded-lg mx-auto border border-black">
+      <main className="flex-grow  w-full  p-6 bg-white shadow mt-6 rounded-lg mx-auto border border-black">
       {/* max-w-5xl (Esto hace que el formulario se limite al ancho y no cubra toda la pantalla)*/} 
-      {/* w-full  (Para ponerlo en toda la pantalla)*/}
-        {/* Formulario de Búsqueda */}
+      {/* w-full  (Para ponerlo en toda la pantalla) (NOTA: DEBO PONER ESTO PARA EL RESPONSIVE)*/} 
 
+        {/* Formulario de Búsqueda */}
          {/* Mostrar mensaje de error si no se encuentra cliente o si la cédula es inválida */}
          {errorMessage && <div className="text-red-500">{errorMessage}</div>}
           {successMessage && <div className="text-green-500">{successMessage}</div>}
