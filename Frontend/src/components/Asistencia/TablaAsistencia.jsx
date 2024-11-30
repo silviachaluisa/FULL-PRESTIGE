@@ -31,25 +31,70 @@ export const TablaAsistencia = ({ usuarios }) => {
     console.log("Usuario seleccionado:", usuario);
   };
 
-  // Cargar las asistencias de los usuarios
+  // // Cargar las asistencias de los usuarios
+  // useEffect(() => {
+  //   const obtenerAsistencias = async () => {
+  //     const nuevasAsistencias = [];
+  //     let indice = 0;
+  //     for (const usuario of usuarios) {
+  //       const response = await fetchAsistencias(usuario.cedula);
+  //       console.log("Respuesta asistencias de", usuario.cedula, "=",response);
+  //       if (response.length === 0) {
+  //         nuevasAsistencias.push({ ...usuario, asistencia: {}, indice: indice });
+  //         indice++;
+  //       } else {
+  //         for (const asistencia of response){
+  //           nuevasAsistencias.push({ ...usuario, asistencia: asistencia, indice: indice });
+  //           indice++;
+  //         }
+  //       }
+  //     }
+  //     setAsistencias(nuevasAsistencias);
+  //     console.log("Nuevas asistencias ->",nuevasAsistencias);
+  //   };
+
+  //   obtenerAsistencias();
+  // }, [usuarios]);
+
   useEffect(() => {
     const obtenerAsistencias = async () => {
+      let indice = 0;
       const nuevasAsistencias = [];
-      for (const usuario of usuarios) {
-        const response = await fetchAsistencias(usuario.cedula);
-        console.log("Respuesta asistencias de", usuario.cedula, "=",response);
-        if (response.length === 0) {
-          nuevasAsistencias.push({ ...usuario, asistencia: {} });
-        } else {
-          for (const asistencia of response){
-            nuevasAsistencias.push({ ...usuario, asistencia: asistencia });
+  
+      try {
+        // Realizar las solicitudes en paralelo con manejo de errores individuales
+        const respuestas = await Promise.all(
+          usuarios.map(async usuario => {
+            try {
+              const asistencias = await fetchAsistencias(usuario.cedula);
+              return { usuario, asistencias };
+            } catch (error) {
+              console.error(`Error al obtener asistencias para ${usuario.cedula}:`, error);
+              return { usuario, asistencias: [] }; // Retornar vacío en caso de error
+            }
+          })
+        );
+  
+        // Procesar las respuestas
+        respuestas.forEach(({ usuario, asistencias }) => {
+          if (asistencias.length === 0) {
+            nuevasAsistencias.push({ ...usuario, asistencia: {}, indice });
+            indice++;
+          } else {
+            asistencias.forEach(asistencia => {
+              nuevasAsistencias.push({ ...usuario, asistencia, indice });
+              indice++;
+            });
           }
-        }
+        });
+  
+        setAsistencias(nuevasAsistencias);
+        console.log("Nuevas asistencias ->", nuevasAsistencias);
+      } catch (error) {
+        console.error("Error general al obtener las asistencias:", error);
       }
-      setAsistencias(nuevasAsistencias);
-      console.log("Nuevas asistencias ->",nuevasAsistencias);
     };
-
+  
     obtenerAsistencias();
   }, [usuarios]);
 
@@ -71,7 +116,7 @@ export const TablaAsistencia = ({ usuarios }) => {
             <tr
               key={index}
               onClick={() => handleRowClick(item)} // Cambiar la fila seleccionada
-              className={`cursor-pointer ${seleccionado?.asistencia._id === item.asistencia._id ? 'bg-red-200' : ''}`} // Marcar la fila seleccionada con color
+              className={`cursor-pointer ${seleccionado?.indice === item?.indice ? 'bg-red-200' : ''}`} // Marcar la fila seleccionada con color
             >
               <td className="border border-black px-4 py-2">{item.cedula}</td>
               <td className="border border-black px-4 py-2">{item.nombre}</td>

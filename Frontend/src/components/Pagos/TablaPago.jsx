@@ -31,27 +31,70 @@ export const TablaPago = ({ usuarios }) => {
     console.log("Usuario seleccionado:", usuario);
   };
 
-  // Cargar las asistencias de los usuarios
+  // // Cargar las asistencias de los usuarios
+  // useEffect(() => {
+  //   const obtenerPagos = async () => {
+  //     const nuevasPagos = [];
+  //     for (const usuario of usuarios) {
+  //       const response = await fetchPagos(usuario.cedula);
+  //       console.log("Respuesta pagos de", usuario.cedula, "=",response);
+  //       if (response.length === 0) {
+  //         nuevasPagos.push({ ...usuario, pago: {} });
+  //       } else {
+  //         for (const pago of response){
+  //           nuevasPagos.push({ ...usuario, pago: pago });
+  //         }
+  //       }
+  //     }
+  //     setPagos(nuevasPagos);
+  //     console.log("Nuevas pagos ->",nuevasPagos);
+  //   };
+
+  //   obtenerPagos();
+  // }, [usuarios]);
+
   useEffect(() => {
     const obtenerPagos = async () => {
       const nuevasPagos = [];
-      for (const usuario of usuarios) {
-        const response = await fetchPagos(usuario.cedula);
-        console.log("Respuesta pagos de", usuario.cedula, "=",response);
-        if (response.length === 0) {
-          nuevasPagos.push({ ...usuario, pago: {} });
-        } else {
-          for (const pago of response){
-            nuevasPagos.push({ ...usuario, pago: pago });
+      let indice = 0;
+  
+      try {
+        // Realizar las solicitudes de forma paralela
+        const respuestas = await Promise.all(
+          usuarios.map(async usuario => {
+            try {
+              const pagos = await fetchPagos(usuario.cedula);
+              return { usuario, pagos };
+            } catch (error) {
+              console.error(`Error al obtener pagos para ${usuario.cedula}:`, error);
+              return { usuario, pagos: [] }; // Retornar vacío en caso de error
+            }
+          })
+        );
+  
+        // Procesar las respuestas
+        respuestas.forEach(({ usuario, pagos }) => {
+          if (pagos.length === 0) {
+            nuevasPagos.push({ ...usuario, pago: {}, indice });
+            indice++;
+          } else {
+            pagos.forEach(pago => {
+              nuevasPagos.push({ ...usuario, pago, indice });
+              indice++;
+            });
           }
-        }
+        });
+  
+        setPagos(nuevasPagos);
+        console.log("Nuevos pagos ->", nuevasPagos);
+      } catch (error) {
+        console.error("Error al obtener los pagos:", error);
       }
-      setPagos(nuevasPagos);
-      console.log("Nuevas pagos ->",nuevasPagos);
     };
-
+  
     obtenerPagos();
   }, [usuarios]);
+  
 
   return (
     <div className="overflow-x-auto">
@@ -71,16 +114,16 @@ export const TablaPago = ({ usuarios }) => {
             <tr
               key={index}
               onClick={() => handleRowClick(item)} // Cambiar la fila seleccionada
-              className={`cursor-pointer ${seleccionado?.pago._id === item.pago._id ? 'bg-red-200' : ''}`} // Marcar la fila seleccionada con color
+              className={`cursor-pointer ${seleccionado?.indice === item?.indice ? 'bg-red-200' : ''}`} // Marcar la fila seleccionada con color
             > 
               <td className="border border-black px-4 py-2">{item.cedula}</td>
               <td className="border border-black px-4 py-2">{item.nombre}</td>
               <td className="border border-black px-4 py-2">{formatDate(item.fecha) || "N/A"}</td>
-              <td className="border border-black px-4 py-2">{item.adelantos}</td>
-              <td className="border border-black px-4 py-2">{item.permisos}</td>
-              <td className="border border-black px-4 py-2">{item.multas}</td>
-              <td className="border border-black px-4 py-2">{item.atrasos}</td>
-              <td className="border border-black px-4 py-2">{item.subtotal}</td>
+              <td className="border border-black px-4 py-2">{item?.pago.adelantos || "N/A"}</td>
+              <td className="border border-black px-4 py-2">{item?.pago.permisos || "N/A"}</td>
+              <td className="border border-black px-4 py-2">{item?.pago.multas || "N/A"}</td>
+              <td className="border border-black px-4 py-2">{item?.pago.atrasos || "N/A"}</td>
+              <td className="border border-black px-4 py-2">{item?.pago.subtotal || "N/A"}</td>
       
             </tr>
           ))}

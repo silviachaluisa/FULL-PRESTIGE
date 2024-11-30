@@ -180,7 +180,6 @@ export const ModalPago = ({ handleShow, usuario }) => {
           </div>
                   
         </div>
-
         {tipoModal === "actualizar" && (
           <div className="mt-4">
             <label className="block text-gray-700 font-semibold mb-2">Justificación:</label>
