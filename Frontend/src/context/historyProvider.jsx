@@ -59,10 +59,6 @@ export const HistoryProvider = ({ children }) => {
     } finally {
       setLoading(false); // Desactivar el estado de carga
     };
-  
-    HistoryProvider.propTypes = {
-      children: PropTypes.node.isRequired,
-    };
   };
 
   const upDateUser=async(cedula,registro)=>{
@@ -137,6 +133,7 @@ export const HistoryProvider = ({ children }) => {
 
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/vehicles`, options);
       setClientes(response.data); // Suponiendo que la API retorna un array de clientes
+      console.log("Clientes ->",response.data)
     } catch (error) {
       console.error("Error al obtener clientes", error);
     }
@@ -192,7 +189,22 @@ export const HistoryProvider = ({ children }) => {
   };
 
   // -------------------------------------------------------------------------------
-
+  const updateClientVehicle = async (placa, updateForm) => {
+    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/vehicle/${placa}`;
+    const token = localStorage.getItem("token");
+    const options = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    try {
+      const respuesta = await axios.put(URLActualizar, updateForm, options);
+      console.log(respuesta);
+    } catch (error) {
+      console.error("Error al actualizar vehículo", error);
+    }
+  };
   
 
   const addCliente = (nuevoCliente) => {
@@ -384,6 +396,7 @@ export const HistoryProvider = ({ children }) => {
       addCliente,
       fetchClienteByCedula,
       upDateClient,
+      updateClientVehicle,
       fetchClientes,
       asistencias,
       setAsistencias,
@@ -410,4 +423,8 @@ export const HistoryProvider = ({ children }) => {
       {children}
     </HistoryContext.Provider>
   );
+};
+
+HistoryProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };

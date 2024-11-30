@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 export const TablaClientes = ({clientes}) => {
   const navigate = useNavigate();
+  console.log(clientes);
   // Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
   const formatDate = (isoDate) => {
     const date = new Date(isoDate);
@@ -78,7 +79,7 @@ export const TablaClientes = ({clientes}) => {
       encargado: PropTypes.shape({
         nombre: PropTypes.string.isRequired,
       }).isRequired,
-      estado: PropTypes.bool.isRequired,
+      estado: PropTypes.string.isRequired,
     
     })).isRequired,
   };
