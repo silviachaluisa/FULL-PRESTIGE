@@ -53,9 +53,12 @@ export const HistoryProvider = ({ children }) => {
       }
 
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/employees`,options);
+      console.log("Respuesta fetch usuarios ->",response.data)
       setUsuarios(response.data.empleados); // Suponiendo que la API retorna un array de usuarios
+      return response.data.empleados;
     } catch (error) {
       console.error("Error al obtener usuarios", error);
+      return null;
     } finally {
       setLoading(false); // Desactivar el estado de carga
     };
@@ -205,6 +208,26 @@ export const HistoryProvider = ({ children }) => {
       console.error("Error al actualizar vehículo", error);
     }
   };
+
+  const registerClient = async (formRegistro) => {
+    const URLRegistrar = `${import.meta.env.VITE_BACKEND_URL}/client`;
+    const token = localStorage.getItem("token");
+    const options = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    try {
+      const respuesta = await axios.post(URLRegistrar, formRegistro, options);
+      console.log(respuesta);
+
+      return { success: true, message: "Cliente registrado correctamente" };
+    } catch (error) {
+      console.error("Error al registrar cliente", error);
+      return { success: false, message: error.response.data.message };
+    }
+  }
   
 
   const addCliente = (nuevoCliente) => {
@@ -395,6 +418,7 @@ export const HistoryProvider = ({ children }) => {
       clientes,
       addCliente,
       fetchClienteByCedula,
+      registerClient,
       upDateClient,
       updateClientVehicle,
       fetchClientes,

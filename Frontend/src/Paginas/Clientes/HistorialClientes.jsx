@@ -116,82 +116,79 @@ const handleSearch = async () => {
 };
 // ----------------------------------------------------------------------------------
 
-useEffect(() => {
-  if (startDate && endDate) {
-    const filtered = clientes.filter((usuario) => {
-      const userDate = new Date(usuario.fechaRegistro);
-      return userDate >= new Date(startDate) && userDate <= new Date(endDate);
+  useEffect(() => {
+    if (startDate && endDate) {
+      const filtered = clientes.filter((usuario) => {
+        const userDate = new Date(usuario.fechaRegistro);
+        return userDate >= new Date(startDate) && userDate <= new Date(endDate);
+      });
+      setFilteredData(filtered);
+    } else {
+      setFilteredData(clientes);
+    }
+  }, [startDate, endDate, clientes]);
+
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF({ orientation: 'landscape' }); // Configuración para orientación horizontal
+    doc.text('Historial de Clientes Registrados', 10, 10);
+    
+    doc.autoTable({
+      head: [['Cédula','Nombre/Apellido', 'Contacto', 'Email', 'Dirección', 'N° Orden',
+              'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida',
+              'Descripción del trabajo', 'Técnico Responsable', 'Estado']],
+      body: filteredData.map((cliente) => [
+        cliente.propietario.cedula,
+        cliente.propietario.nombre,
+        cliente.propietario.telefono,
+        cliente.propietario.correo,
+        cliente.propietario.direccion,
+        cliente.n_orden,
+        cliente.marca,
+        cliente.modelo,
+        cliente.placa,
+        formatDate(cliente.fecha_ingreso),
+        formatDate(cliente.fecha_salida),
+        cliente.detalles,
+        cliente.encargado.nombre,
+        cliente.estado,
+      ]),
+      startY: 20, // Opcional: deja un espacio debajo del título
     });
-     setFilteredData(filtered);
-   } else {
-     setFilteredData(clientes);
-   }
- }, [startDate, endDate, clientes]);
+    
+    doc.save('HistorialClientes.pdf');
+  };
 
- const handleDownloadPDF = () => {
-  const doc = new jsPDF({ orientation: 'landscape' }); // Configuración para orientación horizontal
-  doc.text('Historial de Clientes Registrados', 10, 10);
-  
-  doc.autoTable({
-    head: [['Cédula','Nombre/Apellido', 'Contacto', 'Email', 'Dirección', 'N° Orden',
-            'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida',
-            'Descripción del trabajo', 'Técnico Responsable', 'Estado']],
-    body: filteredData.map((cliente) => [
-      cliente.propietario.cedula,
-      cliente.propietario.nombre,
-      cliente.propietario.telefono,
-      cliente.propietario.correo,
-      cliente.propietario.direccion,
-      cliente.n_orden,
-      cliente.marca,
-      cliente.modelo,
-      cliente.placa,
-      formatDate(cliente.fecha_ingreso),
-      formatDate(cliente.fecha_salida),
-      cliente.detalles,
-      cliente.encargado.nombre,
-      cliente.estado,
-    ]),
-    startY: 20, // Opcional: deja un espacio debajo del título
-  });
-  
-  doc.save('HistorialClientes.pdf');
-};
+  const handleDownloadExcel = () => {
+    const data = filteredData.map((cliente) => ({
+      Cédula: cliente.propietario.cedula,
+      Nombre: cliente.propietario.nombre,
+      Teléfono: cliente.propietario.telefono,
+      Email: cliente.propietario.correo,
+      Dirección: cliente.propietario.direccion,
+      Orden: cliente.n_orden,
+      Marca: cliente.marca,
+      Modelo: cliente.modelo,
+      Placa: cliente.placa,
+      FechaIngreso: formatDate(cliente.fecha_ingreso),
+      FechaSalida: formatDate(cliente.fecha_salida),
+      Descripción:cliente.detalles,
+      Técnico: cliente.encargado.nombre,
+      Estado: cliente.estado,
+    }));
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'HistorialClientes');
+    XLSX.writeFile(workbook, 'HistorialClientes.xlsx');
+  };
 
-const handleDownloadExcel = () => {
-  const data = filteredData.map((cliente) => ({
-    Cédula: cliente.propietario.cedula,
-    Nombre: cliente.propietario.nombre,
-    Teléfono: cliente.propietario.telefono,
-    Email: cliente.propietario.correo,
-    Dirección: cliente.propietario.direccion,
-    Orden: cliente.n_orden,
-    Marca: cliente.marca,
-    Modelo: cliente.modelo,
-    Placa: cliente.placa,
-    FechaIngreso: formatDate(cliente.fecha_ingreso),
-    FechaSalida: formatDate(cliente.fecha_salida),
-    Descripción:cliente.detalles,
-    Técnico: cliente.encargado.nombre,
-    Estado: cliente.estado,
-  }));
-  const worksheet = XLSX.utils.json_to_sheet(data);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'HistorialClientes');
-  XLSX.writeFile(workbook, 'HistorialClientes.xlsx');
-};
-
-// Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
-const formatDate = (isoDate) => {
-  const date = new Date(isoDate);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Meses van de 0 a 11
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
-
-
-
+  // Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
+  const formatDate = (isoDate) => {
+    const date = new Date(isoDate);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Meses van de 0 a 11
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
   return (
     <div className="min-h-screen flex flex-col" 

@@ -14,8 +14,8 @@ export const FormularioClientes = ({clientes}) => {
   const {
     upDateClient,
     fetchClientes,
+    registerClient,
     updateClientVehicle,
-    usuarios,
     fetchUsuarios
   }=useContext(HistoryContext)
  
@@ -56,7 +56,7 @@ export const FormularioClientes = ({clientes}) => {
           });
         } else {
           // Limpia los campos si no hay datos de usuario
-            setRegisclientes({
+          setRegisclientes({
             cedula: '',
             nombre: '',
             telefono: '',
@@ -77,11 +77,9 @@ export const FormularioClientes = ({clientes}) => {
 
       useEffect(() => {
         const filtrarTecnicos = async () => {
-          await fetchUsuarios();
-
+          const usuarios = await fetchUsuarios();
           const ltecnicos = usuarios.filter((usuario) => usuario.cargo === "Técnico" && usuario.estado === "Activo");
           setTecnicos(ltecnicos);
-          console.log(ltecnicos);
         }
         filtrarTecnicos();
       }, [])
@@ -206,23 +204,30 @@ export const FormularioClientes = ({clientes}) => {
       }, 4000);
     }else {
 
-    // Preparar los datos para el registro, excluyendo la propiedad 'estado'
-    const DatosRegistrar = { ...regisclientes};
-    delete DatosRegistrar.estado;
-         
-    upDateClient(clientes.cedula, DatosRegistrar);
-    const respuesta = await axios.post(DatosRegistrar);
-    console.log(respuesta);
+      // Preparar los datos para el registro, excluyendo la propiedad 'estado'
+      const DatosRegistrar = { ...regisclientes};
+      delete DatosRegistrar.estado;
+          
+      const respuesta = await registerClient(DatosRegistrar);
 
-         
-    // Limpiar el mensaje después de 3 segundos
-    setTimeout(() => {
-    setMensaje(null);
-    // Navegar al historial de usuarios
-    navigate('/historial-clientes');
-    }, 3000);
-  }
-     
+      if (respuesta.success){
+        // Configurar el mensaje de éxito
+        setMensaje({ respuesta: respuesta.message, tipo: true });
+        // Limpiar el mensaje después de 3 segundos
+        setTimeout(() => {
+          setMensaje(null);
+          // Navegar al historial de usuarios
+          navigate('/historial-clientes');
+        }, 3000);
+      }else{
+        // Configurar el mensaje de error
+        setMensaje({ respuesta: respuesta.message, tipo: false });
+        // Limpiar el mensaje después de 3 segundos
+        setTimeout(() => {
+          setMensaje(null);
+        }, 3000);
+      }
+    }
   } catch (error) {
      // Configurar el mensaje de error recibido desde la respuesta del servidor
      setMensaje({ respuesta: error.response?.data?.message || "Error al actualizar el usuario", tipo: false });
