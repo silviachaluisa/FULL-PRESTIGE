@@ -66,25 +66,22 @@ export const HistoryProvider = ({ children }) => {
 
   const upDateUser=async(cedula,registro)=>{
     const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/employee/${cedula}`;
-                const token=localStorage.getItem("token")
-                const options={
-                    headers:{
-                      'Content-Type': 'application/json',
-                      Authorization:`Bearer ${token}`,
-                    }
-                  }
-                // Realizar la petición POST
-                //const respuesta = await axios.put(URLActualizar, registro, options);
-                
-                //console.log(respuesta)
-                try {
-                  const respuesta = await axios.put(URLActualizar, registro, options);
-                  console.log(respuesta);
-                } catch (error) {
-                  console.error("Error al actualizar usuario", error);
-                }
-          
+    const token=localStorage.getItem("token")
+    const options={
+        headers:{
+          'Content-Type': 'application/json',
+          Authorization:`Bearer ${token}`,
+        }
+      }
+    try {
+      // Enviar la solicitud PUT al backend
+      const respuesta = await axios.put(URLActualizar, registro, options);
+      console.log(respuesta);
+    } catch (error) {
+      console.error("Error al actualizar usuario", error);
+    }
   };
+
   const fetchUsuarioByCedula = async (id) => {
     const token = localStorage.getItem('token');
     if (!token) return null; // Asegurarse de que si no hay token, no haga la búsqueda
@@ -115,18 +112,12 @@ export const HistoryProvider = ({ children }) => {
       return null; // En caso de error, retornar null
     }
   };
-
-  // Función para agregar un usuario y actualizar el estado
-  const addUsuario = (nuevoUsuario) => {
-    setUsuarios([...usuarios, nuevoUsuario]);
-  };
-
-
   // -----------------------------------FUNCIONES PARA CLIENTES--------------------------------------------
   const fetchClientes = async () => {
     const token = localStorage.getItem('token');
     if (!token) return;
     try {
+      setLoading(true); // Activar el estado de carga
       const options = {
         headers: {
           'Content-Type': 'application/json',
@@ -139,6 +130,8 @@ export const HistoryProvider = ({ children }) => {
       console.log("Clientes ->",response.data)
     } catch (error) {
       console.error("Error al obtener clientes", error);
+    } finally {
+      setLoading(false); // Desactivar el estado de carga
     }
   };
   // -------------------------------------------------------------------------------------
@@ -404,12 +397,10 @@ export const HistoryProvider = ({ children }) => {
         }
       }
     };
-
   return (
     <HistoryContext.Provider 
     value={{ 
       usuarios, 
-      addUsuario, 
       fetchUsuarioByCedula,
       upDateUser,
       fetchUsuarios,

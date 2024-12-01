@@ -28,14 +28,19 @@ import { FaCar} from 'react-icons/fa';
 export const ClientesVehiculos = () => {
 
   const navigate= useNavigate();
-  const {clientes,fetchClientes, fetchClienteByCedula}= useContext (HistoryContext);
+  const {
+    clientes,
+    fetchClientes,
+    fetchClienteByCedula,
+    loading
+  }= useContext (HistoryContext);
+
   const [cedula, setCedula] = useState("");
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-
 
   const handleChange=(e)=>{
     const value = e.target.value
@@ -285,10 +290,6 @@ const handleSearch = async () => {
         {Array.isArray(clientes) && clientes.length !== 0 ? (
         <TablaClientes clientes={clientes} />
         ) : (
-        // {Array.isArray(clientes) && clientes.length !== 0 ? (
-        //   <TablaClientes clientes={clientes} />
-        // ) : (
-       
         <div className="overflow-x-auto">
         {/* Tabla de Historial */}
         <table className="w-full text-center border-collapse border border-black">
@@ -303,13 +304,11 @@ const handleSearch = async () => {
               ))}
             </tr>
           </thead>
-          <tbody>
-           
+          <tbody> 
             <tr>
-            <td colSpan="13" className="text-center py-4 text-red-700">
-            No existen registros disponibles.
-          </td>
-              
+              <td colSpan="13" className="text-center py-4 text-red-700">
+                {loading ? 'Cargando...' : 'No hay clientes registrados'}
+              </td>
             </tr>
           </tbody>
         </table>
