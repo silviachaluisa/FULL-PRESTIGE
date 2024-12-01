@@ -1,13 +1,11 @@
 import { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthProvider';
 import logo from '../assets/imagenes/logo.jpg';
 import Mensaje from '../components/Alertas';
 
 const EditarPerfil = () => {
-  const { auth } = useContext(AuthContext);
-  console.log(auth);
+  const { auth, actualizarPerfil, message } = useContext(AuthContext);
   const [perfil, setPerfil] = useState({
     cedula: '',
     nombre: '',
@@ -17,7 +15,6 @@ const EditarPerfil = () => {
     cargo: '',
     estado: 'Activo'
   });
-  const [mensaje, setMensaje] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,16 +45,12 @@ const EditarPerfil = () => {
   const handleSave = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/perfil`, 
-        perfil, 
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setMensaje({ respuesta: "Perfil actualizado exitosamente", tipo: true });
-      setTimeout(() => setMensaje(null), 3000);
+      const updateProfile = {
+        ...perfil,
+        estado: perfil.estado === 'Activo' ? true : false
+      }
+      await actualizarPerfil(updateProfile);
     } catch (error) {
-      setMensaje({ respuesta: "Error al actualizar el perfil", tipo: false });
       console.error("Error al actualizar el perfil:", error);
     }
   };
@@ -79,7 +72,7 @@ const EditarPerfil = () => {
       </h2>
 
       <div className="w-full max-w-3xl px-10 py-6 border-2 border-red-600 rounded-lg bg-black text-white">
-        {mensaje && <Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} />}
+        {message && <Mensaje mensaje={message.respuesta} tipo={message.tipo} />}
 
         <form onSubmit={handleSave} className="grid grid-cols-2 gap-4">
           <div>
