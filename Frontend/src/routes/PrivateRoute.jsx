@@ -4,5 +4,5 @@ export const PrivateRoute = ({ children }) =>
 {
     const autenticado = localStorage.getItem('token')
     
-    return (autenticado) ? children : <Navigate to='/Bienvenido' />
+    return (autenticado) ? children : <Navigate to='/login' />
 }

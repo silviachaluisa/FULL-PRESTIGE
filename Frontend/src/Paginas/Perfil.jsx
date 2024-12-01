@@ -23,10 +23,10 @@ const EditarPerfil = () => {
       try {
         const token = localStorage.getItem('token');
         if (!token) {
-          navigate('/perfil');
+          navigate('/login');
           return;
         }
-        const respuesta = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/perfil`, {
+        const respuesta = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
