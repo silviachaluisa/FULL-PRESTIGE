@@ -268,11 +268,18 @@ export const HistoryProvider = ({ children }) => {
       }, 2000); // Cierra el modal después de 2 segundos
     } catch (error) {
       console.error("Error al actualizar asistencia", error);
-      setErrorMessage(error.response.data.message);
-      // Limpiar el mensaje de error después de un breve tiempo
-      setTimeout(() => {
-        setErrorMessage("");
-      }, 5000); // Limpia el mensaje después de 5 segundos
+      if (error.response.data?.errors && error.response.data.errors.length > 0) {
+        // Mostrar errores de validación uno por uno
+        await mostrarErrores(error.response.data.errors);
+      } else {
+        setErrorMessage(error.response.data.message);
+    
+        // Limpiar el mensaje de error después de un breve tiempo
+        setTimeout(() => {
+          setErrorMessage("");
+          setSuccessMessage("");
+        }, 5000);
+      }
     }
   };
 
@@ -298,12 +305,18 @@ export const HistoryProvider = ({ children }) => {
       }, 2000); // Cierra el modal después de 2 segundos
     } catch (error) {
       console.error("Error al actualizar asistencia", error);
-      setErrorMessage(error.response.data.message);
-
-      // Limpiar el mensaje de error después de un breve tiempo
-      setTimeout(() => {
-        setErrorMessage("");
-      }, 5000); // Limpia el mensaje después de 5 segundos
+      if (error.response.data?.errors && error.response.data.errors.length > 0) {
+        // Mostrar errores de validación uno por uno
+        await mostrarErrores(error.response.data.errors);
+      } else {
+        setErrorMessage(error.response.data.message);
+    
+        // Limpiar el mensaje de error después de un breve tiempo
+        setTimeout(() => {
+          setErrorMessage("");
+          setSuccessMessage("");
+        }, 5000);
+      }
     }
   };
 
@@ -351,12 +364,18 @@ export const HistoryProvider = ({ children }) => {
         }, 2000); // Cierra el modal después de 2 segundos
       }catch (error) {
         console.error("Error al actualizar pago", error);
-        setErrorMessage(error.response.data.message);
-        // Limpiar el mensaje de error después de un breve tiempo
-        setTimeout(() => {
-          setSuccessMessage("");
-          setErrorMessage("");
-        }, 5000); // Limpia el mensaje después de 5 segundos
+        if (error.response.data?.errors && error.response.data.errors.length > 0) {
+          // Mostrar errores de validación uno por uno
+          await mostrarErrores(error.response.data.errors);
+        } else {
+          setErrorMessage(error.response.data.message);
+      
+          // Limpiar el mensaje de error después de un breve tiempo
+          setTimeout(() => {
+            setErrorMessage("");
+            setSuccessMessage("");
+          }, 5000);
+        }
       }
   };
 
@@ -382,7 +401,6 @@ export const HistoryProvider = ({ children }) => {
         }, 2000); // Cierra el modal después de 2 segundos  
       }catch (error) {
         console.error("Error al registrar pago", error);
-
         if (error.response.data?.errors && error.response.data.errors.length > 0) {
           // Mostrar errores de validación uno por uno
           await mostrarErrores(error.response.data.errors);
