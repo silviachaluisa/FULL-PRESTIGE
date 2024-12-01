@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import { useState, useEffect} from 'react';
 import Mensaje from '../Alertas';
 import { useContext } from 'react';
@@ -13,7 +12,6 @@ export const FormularioClientes = ({clientes}) => {
   const [tecnicos, setTecnicos] = useState([]);
   const {
     upDateClient,
-    fetchClientes,
     registerClient,
     updateClientVehicle,
     fetchUsuarios
@@ -187,29 +185,36 @@ export const FormularioClientes = ({clientes}) => {
         estado: updateinfo.estado
       };
 
-      console.log("Actualizacion clientes ->",clientInfo)
-      console.log("Actualizacion vehiculos ->",vehicleInfo)
       // Llamar a la función para actualizar el usuario
-      await upDateClient(clientes?.propietario.cedula, clientInfo);
-      await updateClientVehicle(clientes.placa, vehicleInfo);
-      // Configurar el mensaje de éxito
-      setMensaje({ respuesta: "Cliente actualizado con éxito", tipo: true });
-       
-      // Limpiar el mensaje después de 3 segundos
-      setTimeout(() => {
-        fetchClientes()
-        setMensaje(null);
-        // Navegar al historial de usuarios
-        navigate('/historial-clientes');
-      }, 4000);
-    }else {
+      const res1 = await upDateClient(clientes?.propietario.cedula, clientInfo);
+      if (res1.success){
+        setMensaje({ respuesta: res1.message, tipo: true });
+      }else{
+        setMensaje({ respuesta: res1.message, tipo: false });
+      }
 
+      const res2 = await updateClientVehicle(clientes.placa, vehicleInfo);
+      if (res2.success){
+        setMensaje({ respuesta: res2.message, tipo: true });
+        // Limpiar el mensaje después de 3 segundos
+        setTimeout(() => {
+          setMensaje(null);
+          // Navegar al historial de usuarios
+          navigate('/historial-clientes');
+        }, 3000);
+      }else{
+        setMensaje({ respuesta: res2.message, tipo: false });
+        // Limpiar el mensaje después de 3 segundos
+        setTimeout(() => {
+          setMensaje(null);
+        }, 3000);
+      }
+    }else {
       // Preparar los datos para el registro, excluyendo la propiedad 'estado'
       const DatosRegistrar = { ...regisclientes};
       delete DatosRegistrar.estado;
           
       const respuesta = await registerClient(DatosRegistrar);
-
       if (respuesta.success){
         // Configurar el mensaje de éxito
         setMensaje({ respuesta: respuesta.message, tipo: true });
@@ -229,15 +234,14 @@ export const FormularioClientes = ({clientes}) => {
       }
     }
   } catch (error) {
-     // Configurar el mensaje de error recibido desde la respuesta del servidor
-     setMensaje({ respuesta: error.response?.data?.message || "Error al actualizar el usuario", tipo: false });
-  
-     // Limpiar el mensaje de error después de 3 segundos
-     setTimeout(() => {
-         setMensaje(null);
-     }, 4000);
-  
-     console.log(error);
+    // Configurar el mensaje de error recibido desde la respuesta del servidor
+    setMensaje({ respuesta: error.response?.data?.message || "Error al actualizar el usuario", tipo: false });
+
+    // Limpiar el mensaje de error después de 3 segundos
+    setTimeout(() => {
+        setMensaje(null);
+    }, 4000);
+    console.log(error);
    }
   };
      // Manejador de cambio de valores del formulario

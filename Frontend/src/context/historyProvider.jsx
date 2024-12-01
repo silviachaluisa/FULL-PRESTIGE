@@ -154,8 +154,10 @@ export const HistoryProvider = ({ children }) => {
     try {
       const respuesta = await axios.put(URLActualizar, regisclientes, options);
       console.log(respuesta);
+      return { success: true, message: "Cliente actualizado correctamente" };
     } catch (error) {
       console.error("Error al actualizar cliente", error);
+      return { success: false, message: error.response.data.message };
     }
   };
   // -----------------------------------------------------------------
@@ -204,8 +206,10 @@ export const HistoryProvider = ({ children }) => {
     try {
       const respuesta = await axios.put(URLActualizar, updateForm, options);
       console.log(respuesta);
+      return { success: true, message: "Vehículo actualizado correctamente" };
     } catch (error) {
       console.error("Error al actualizar vehículo", error);
+      return { success: false, message: error.response.data.message };
     }
   };
 
@@ -228,12 +232,6 @@ export const HistoryProvider = ({ children }) => {
       return { success: false, message: error.response.data.message };
     }
   }
-  
-
-  const addCliente = (nuevoCliente) => {
-    setClientes([...clientes, nuevoCliente]);
-  };
-
    // -----------------------------------FUNCIONES PARA ASISTENCIAS--------------------------------------------
 
    const fetchAsistencias = async (id) => {
@@ -416,7 +414,6 @@ export const HistoryProvider = ({ children }) => {
       upDateUser,
       fetchUsuarios,
       clientes,
-      addCliente,
       fetchClienteByCedula,
       registerClient,
       upDateClient,
