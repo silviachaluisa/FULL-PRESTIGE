@@ -33,7 +33,6 @@ export const Dashboard = () => {
                 </div>
 
                 <div className="flex flex-col space-y-4 text-white items-start">
-
                     <div className="flex items-center space-x-2">
                         <span className='w-3 h-3 bg-green-500 rounded-full inline-block'></span>
                         <span>{auth.nombre}</span>
@@ -41,9 +40,9 @@ export const Dashboard = () => {
 
                     <div className="flex flex-row items-center space-x-2">
                         <FaUserAlt className='text-white'/>
-                        <span>{auth.cargo} </span>  
+                        <span>{auth.cargo}</span>  
                     </div>
-                   <Link to="/perfil" className='flex items-center justify-center'>
+                   <Link to="/dashboard/perfil" className='flex items-center justify-center'>
                         <FaCog data-tooltip-id="profile" data-tooltip-content="Edita tu perfil" className='text-white text-2xl ml-20'/>
                         <ReactTooltip id='profile' place='bottom'/>
                    </Link>

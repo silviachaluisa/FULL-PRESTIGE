@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import AuthContext from '../context/AuthProvider';
 import logo from '../assets/imagenes/logo.jpg';
 import Mensaje from '../components/Alertas';
 
 const EditarPerfil = () => {
+  const { auth } = useContext(AuthContext);
+  console.log(auth);
   const [perfil, setPerfil] = useState({
     cedula: '',
     nombre: '',
@@ -12,33 +15,26 @@ const EditarPerfil = () => {
     correo: '',
     direccion: '',
     cargo: '',
-    estado: ''
+    estado: 'Activo'
   });
   const [mensaje, setMensaje] = useState(null);
   const navigate = useNavigate();
 
-  // Obtener el perfil del usuario al cargar el componente
   useEffect(() => {
-    const fetchPerfil = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          navigate('/login');
-          return;
-        }
-        const respuesta = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/profile`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setPerfil(respuesta.data);
-      } catch (error) {
-        console.error("Error al obtener el perfil:", error);
-        navigate('/perfil');
-      }
-    };
-    fetchPerfil();
-  }, [navigate]);
+    if (!auth) {
+      navigate('/login');
+    }
+
+    setPerfil({
+      cedula: auth?.cedula || '',
+      nombre: auth?.nombre || '',
+      telefono: auth?.telefono || '',
+      correo: auth?.correo || '',
+      direccion: auth?.direccion || '',
+      cargo: auth?.cargo || '',
+      estado: auth?.estado || 'Activo'
+    });
+  }, [auth]);
 
   // Manejador de cambios en el formulario
   const handleChange = (e) => {
@@ -94,7 +90,7 @@ const EditarPerfil = () => {
               value={perfil.cedula}
               onChange={handleChange}
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
-              required
+              disabled
             />
           </div>
 
@@ -150,9 +146,8 @@ const EditarPerfil = () => {
           <div className="mb-4">
             <label className="block font-semibold mb-2">Cargo</label>
             <select
-            
               name="cargo"
-              
+              value={perfil.cargo}
               onChange={handleChange}
               required
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
@@ -160,7 +155,7 @@ const EditarPerfil = () => {
               <option value="">Selecciona una opción</option>
               <option value="Gerente">Gerente</option>
               <option value="Administrador">Administrador</option>
-              <option value="Tecnico">Técnico</option>
+              <option value="Técnico">Técnico</option>
             </select>
           </div>
 
