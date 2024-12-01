@@ -3,22 +3,8 @@ import PropTypes from "prop-types";
 import { HistoryContext } from "../../context/HistoryContext";
 
 export const ModalPago = ({ handleShow, usuario }) => {
-  //Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
-  const formatDate = (isoDate) => {
-    const date = new Date(isoDate);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-
-    if (isNaN(year) || isNaN(month) || isNaN(day)) {
-      return 'N/A';
-    }
-
-    return `${year}-${month}-${day}`;
-  };
-
   const [fecha, setFecha] = useState("");
-  const [adelantos, setAdelantos] = useState("");
+  const [adelanto, setAdelanto] = useState("");
   const [permisos, setPermisos] = useState("");
   const [multas, setMultas] = useState("");
   const [atrasos, setAtrasos] = useState("");
@@ -38,7 +24,7 @@ export const ModalPago = ({ handleShow, usuario }) => {
     const obtenerPago = async () => {
         if (usuario) {
           setFecha(usuario?.pago.fecha.split("T")[0] || "N/A");
-          setAdelantos(usuario?.pago.adelanto || "0");
+          setAdelanto(usuario?.pago.adelanto || "0");
           setPermisos(usuario?.pago.permisos || "0");
           setMultas(usuario?.pago.multas || "0");
           setAtrasos(usuario?.pago.atrasos || "0");
@@ -85,7 +71,7 @@ export const ModalPago = ({ handleShow, usuario }) => {
 
   const handleSubmit = () => {
     const error = validarPago();
-    console.log(usuario, {fecha, adelantos, permisos, multas, atrasos,justificacion})
+    console.log(usuario, {fecha, adelanto, permisos, multas, atrasos,justificacion})
     if (error) {
       setErrorMessage(error);
       setTimeout(() => {
@@ -98,7 +84,7 @@ export const ModalPago = ({ handleShow, usuario }) => {
     setErrorMessage("");
     setSuccessMessage("");
 
-    const payload = { fecha, adelantos, permisos, multas, atrasos,justificacion};
+    const payload = { fecha, adelanto, permisos, multas, atrasos, justificacion};
     if (tipoModal === "actualizar") {
       // Determinar el estado de la asistencia
       
@@ -135,8 +121,8 @@ export const ModalPago = ({ handleShow, usuario }) => {
             <label className="block text-gray-700 font-semibold mb-2">Adelantos:</label>
             <input
               type="number"
-              value={adelantos}
-              onChange={(e) => setAdelantos(e.target.value)}
+              value={adelanto}
+              onChange={(e) => setAdelanto(e.target.value)}
               className="w-full border rounded-lg p-2"
               placeholder="Ingresa la cantidad de adelantos"
             />
