@@ -1,10 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-
-
-// Importar algun icono de informacion de react-icons
 import { FaInfoCircle } from 'react-icons/fa'
-
 
 const NotFoundPage = () => {
   return (
