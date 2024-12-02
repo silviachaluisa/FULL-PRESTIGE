@@ -76,7 +76,7 @@ const brandLogos = {
   toyota:toyotaLogo
 };
 const handleNewClick =()=>{
-  navigate('/registrar-usuarios')
+  navigate('/dashboard/registrar-usuarios')
 }
 // const handleSearch = async()=>{
 //  if(cedula === "") {await fetchUsuarios();return}

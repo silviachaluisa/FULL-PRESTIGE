@@ -43,13 +43,13 @@ function App() {
                                     <Route path="registrar-usuarios" element={<RegistrarUsuarios />} />
                                     <Route path="perfil" element={<VisualizarPerfil />} />
                                     <Route path="actualizar-usuarios/:id" element={<ActualizarUsuarios />} />
+                                    <Route path="/actualizar-clientes/:id" element={<ActualizarClientes />} />
                                     <Route path='*' element={<NotFoundPage/>}/> 
                                 </Routes>
                             </PrivateRoute>
                         } />
                         {/* RUTAS PUBLICAS */}
                         <Route path="/recuperar-contrasena" element={<RecuperarContrasena />} />
-                        <Route path="/actualizar-clientes/:id" element={<ActualizarClientes />} />
                         <Route path='*' element={<NotFoundPage/>}/>
                     </Routes>
                 </HistoryProvider>

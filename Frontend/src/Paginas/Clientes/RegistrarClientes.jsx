@@ -15,7 +15,7 @@ export const RegistrarClientes= () => {
   const handleLogout = () => {
     const confirmLogout = window.confirm("¿Deseas abandonar la página?");
     if (confirmLogout === true) {
-      navigate('/historial-clientes');
+      navigate('/dashboard/historial-clientes');
     }
   };
 

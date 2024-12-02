@@ -56,7 +56,7 @@ export const TablaClientes = ({clientes}) => {
                 <td className="border border-black px-4 py-2">
                     <button 
                     className="text-black hover:text-blue-700"
-                    onClick={() => navigate(`/actualizar-clientes/${item.propietario.cedula}`)}
+                    onClick={() => navigate(`/dashboard/actualizar-clientes/${item.propietario.cedula}`)}
                     >
                     ✏️
                     </button>

@@ -73,7 +73,7 @@ export const ClientesVehiculos = () => {
     }  
   };
   const handleNewClick =()=>{
-    navigate('/registrar-clientes')
+    navigate('/dashboard/registrar-clientes')
   }
  // Llamar a fetchUsuarios una vez cuando el componente carga, muestra a todos los clientes en la base de datos
  useEffect(() => {

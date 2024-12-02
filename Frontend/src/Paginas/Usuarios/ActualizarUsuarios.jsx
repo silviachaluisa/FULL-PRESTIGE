@@ -26,7 +26,7 @@ export const ActualizarUsuarios = () => {
   const handleLogout = () => {
     const confirmLogout = window.confirm("¿Deseas abandonar la página?");
     if (confirmLogout) {
-      navigate('/historial-usuarios');
+      navigate('/dashboard/historial-usuarios');
     }
   };
 

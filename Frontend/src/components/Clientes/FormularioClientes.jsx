@@ -200,7 +200,7 @@ export const FormularioClientes = ({clientes}) => {
         setTimeout(() => {
           setMensaje(null);
           // Navegar al historial de usuarios
-          navigate('/historial-clientes');
+          navigate('/dashboard/historial-clientes');
         }, 3000);
       }else{
         setMensaje({ respuesta: res2.message, tipo: false });
@@ -222,7 +222,7 @@ export const FormularioClientes = ({clientes}) => {
         setTimeout(() => {
           setMensaje(null);
           // Navegar al historial de usuarios
-          navigate('/historial-clientes');
+          navigate('/dashboard/historial-clientes');
         }, 3000);
       }else{
         // Configurar el mensaje de error

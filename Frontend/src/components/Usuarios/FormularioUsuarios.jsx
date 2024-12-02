@@ -137,7 +137,7 @@ export const FormularioUsuarios = ({ usuarios }) => {
               fetchUsuarios()
               setMensaje(null);
               // Navegar al historial de usuarios
-              navigate('/historial-usuarios');
+              navigate('/dashboard/historial-usuarios');
             }, 4000);
           }else{
             // Construir la URL de la API para el registro
@@ -156,7 +156,7 @@ export const FormularioUsuarios = ({ usuarios }) => {
             setTimeout(() => {
               setMensaje(null);
               // Navegar al historial de usuarios
-              navigate('/historial-usuarios');
+              navigate('/dashboard/historial-usuarios');
             }, 3000);
           }        
         } catch (error) {
