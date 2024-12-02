@@ -59,8 +59,8 @@ export const Pago = () => {
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleChange = (e) => {
-    const { value } = e.target.value;
-
+    const { value } = e.target; // Se cambio e.target.value por e.target
+    
     //Validación para que ingrese numeros y no sobrepase los 10 digitos
     if (/^\d{0,10}$/.test(value)){
       setCedula(value); // si es valido, actualiza el estado
@@ -229,8 +229,8 @@ const handleDownloadExcel = () => {
         <div className="flex items-center justify-between bg-gray-300 p-4 rounded-lg mb-6">
           <input
             type="text"
-            onChange={handleChange}
             value={cedula}
+            onChange={handleChange}
             placeholder="Cedula"
             className="bg-gray-200 border border-black py-2 px-4 w-full rounded-lg focus:outline-none"
           />
@@ -239,8 +239,6 @@ const handleDownloadExcel = () => {
           className="ml-2 px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-800">
             Buscar
           </button>
-
-          
         </div>
 
         {/* ------------------------------------------------------------------------------------------------------------------------ */}
