@@ -19,6 +19,7 @@ import ActualizarUsuarios from './Paginas/Usuarios/ActualizarUsuarios.jsx';
 import { HistoryProvider } from './context/historyProvider.jsx';
 import RecuperarContrasena from './Paginas/RecuperarContraseña.jsx';
 import ActualizarClientes from './Paginas/Clientes/ActualizarClientes.jsx';
+import HistorialMantenimiento from './Paginas/Tecnicos/HistorialMantenimiento.jsx';
 
 function App() {
     return (
@@ -44,6 +45,7 @@ function App() {
                                     <Route path="perfil" element={<VisualizarPerfil />} />
                                     <Route path="actualizar-usuarios/:id" element={<ActualizarUsuarios />} />
                                     <Route path="/actualizar-clientes/:id" element={<ActualizarClientes />} />
+                                    <Route path="historial-mantenimiento" element={<HistorialMantenimiento />} />
                                     <Route path='*' element={<NotFoundPage/>}/> 
                                 </Routes>
                             </PrivateRoute>
