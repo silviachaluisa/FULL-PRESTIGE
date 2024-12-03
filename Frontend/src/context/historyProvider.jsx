@@ -354,7 +354,7 @@ export const HistoryProvider = ({ children }) => {
       try {
         const respuesta = await axios.put(URLActualizar, pago, options);
         console.log(respuesta);
-        successMessage("Pago actualizado correctamente");
+        setSuccessMessage("Pago actualizado correctamente");
         //Cerrar el modal automáticamente después de un breve tiempo
         setTimeout(() => {
           setSuccessMessage("");
@@ -395,7 +395,7 @@ export const HistoryProvider = ({ children }) => {
       try {
         const respuesta = await axios.post(URLRegistrar, pago, options);
         console.log(respuesta);
-        successMessage("Pago registrado correctamente");
+        setSuccessMessage("Pago registrado correctamente");
 
         //Cerrar el modal automáticamente después de un breve tiempo
         setTimeout(() => {
@@ -410,7 +410,7 @@ export const HistoryProvider = ({ children }) => {
           // Mostrar errores de validación uno por uno
           await mostrarErrores(error.response.data.errors);
         } else {
-          setErrorMessage(error.response?.data?.message || "Error al registrar pago");
+          setErrorMessage(error.response?.data.message || "Error al registrar pago");
           // Limpiar el mensaje de error después de un breve tiempo
           setTimeout(() => {
             setErrorMessage("");

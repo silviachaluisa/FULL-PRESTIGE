@@ -23,14 +23,14 @@ export const ModalPago = ({ handleShow, usuario }) => {
 
   useEffect(() => {
     const obtenerPago = async () => {
-        if (usuario) {
-          setFecha(usuario?.pago.fecha.split("T")[0] || "N/A");
-          setAdelanto(usuario?.pago.adelanto || "0");
-          setPermisos(usuario?.pago.permisos || "0");
-          setMultas(usuario?.pago.multas || "0");
-          setAtrasos(usuario?.pago.atrasos || "0");
-        }
-      };
+      if (usuario) {
+        setFecha(usuario?.pago.fecha.split("T")[0] || "N/A");
+        setAdelanto(usuario?.pago.adelanto || "0");
+        setPermisos(usuario?.pago.permisos || "0");
+        setMultas(usuario?.pago.multas || "0");
+        setAtrasos(usuario?.pago.atrasos || "0");
+      }
+    };
 
     console.log("Cargando info del modal");
     if (usuario && tipoModal === "actualizar") {
@@ -43,7 +43,10 @@ export const ModalPago = ({ handleShow, usuario }) => {
       const day = String(now.getDate()).padStart(2, '0');
       const formattedDate = `${year}-${month}-${day}`;
       setFecha(formattedDate);
-      
+      setAdelanto("0");
+      setPermisos("0");
+      setMultas("0");
+      setAtrasos("0");
     }
   }, [usuario]);
 
@@ -60,12 +63,13 @@ export const ModalPago = ({ handleShow, usuario }) => {
   }, [adelanto, permisos, multas, atrasos]);
 
   const validarPago = () => {
-    if (tipoModal === "actualizar" && !justificacion) {
+    if (tipoModal === "actualizar") {
       if (!justificacion) {
         return "Debes proporcionar una justificación para actualizar la información.";
       }
       return null;
-    } 
+    }
+
     const now = new Date();
      // Formatear manualmente la fecha local
      const year = now.getFullYear();
@@ -91,7 +95,7 @@ export const ModalPago = ({ handleShow, usuario }) => {
   const handleSubmit = () => {
     const error = validarPago();
     console.log("Datos del usuario: ", usuario);
-    console.log("Datos enviados", {fecha, adelanto, permisos, multas, atrasos,justificacion})
+    console.log("Datos enviados", {fecha, adelanto, permisos, multas, atrasos,justificacion, subtotal})
     if (error) {
       setErrorMessage(error);
       setTimeout(() => {
@@ -104,13 +108,14 @@ export const ModalPago = ({ handleShow, usuario }) => {
     setErrorMessage("");
     setSuccessMessage("");
 
-    const payload = { fecha, adelanto, permisos, multas, atrasos, justificacion};
+    const payload = { fecha, adelanto, permisos, multas, atrasos, subtotal: parseFloat(subtotal), justificacion: justificacion };
     if (tipoModal === "actualizar") {
       // Determinar el estado de la asistencia
-      
       upDatePayment(usuario?.pago._id, payload);
     } else {
-      registerPayment(usuario.cedula, payload);
+      const paymentInfo = { ...payload }
+      delete paymentInfo.justificacion;
+      registerPayment(usuario.cedula, { ...paymentInfo});
     }
   };
 

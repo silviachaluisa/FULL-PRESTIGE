@@ -12,8 +12,8 @@ export const TablaPago = ({ usuarios }) => {
       }
 
       const date = new Date(isoDate);
-      if (isNaN(date.getTime)) {
-        return 'Fecha inválida';
+      if (isNaN(date)) {
+        throw new Error('Fecha inválida');
       }
       return date.toISOString().split('T')[0];
     } catch (error) {
