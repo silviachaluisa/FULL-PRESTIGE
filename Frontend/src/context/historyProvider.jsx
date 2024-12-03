@@ -388,10 +388,15 @@ export const HistoryProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       };
+
+      console.log("URLRegistrar:", URLRegistrar);
+      console.log("Payload enviando", pago);
+
       try {
         const respuesta = await axios.post(URLRegistrar, pago, options);
         console.log(respuesta);
         successMessage("Pago registrado correctamente");
+
         //Cerrar el modal automáticamente después de un breve tiempo
         setTimeout(() => {
           setSuccessMessage("");
@@ -401,12 +406,11 @@ export const HistoryProvider = ({ children }) => {
         }, 2000); // Cierra el modal después de 2 segundos  
       }catch (error) {
         console.error("Error al registrar pago", error);
-        if (error.response.data?.errors && error.response.data.errors.length > 0) {
+        if (error.response?.data?.errors && error.response.data.errors.length > 0) {
           // Mostrar errores de validación uno por uno
           await mostrarErrores(error.response.data.errors);
         } else {
-          setErrorMessage(error.response.data.message);
-      
+          setErrorMessage(error.response?.data?.message || "Error al registrar pago");
           // Limpiar el mensaje de error después de un breve tiempo
           setTimeout(() => {
             setErrorMessage("");
@@ -415,6 +419,7 @@ export const HistoryProvider = ({ children }) => {
         }
       }
     };
+
   return (
     <HistoryContext.Provider 
     value={{ 

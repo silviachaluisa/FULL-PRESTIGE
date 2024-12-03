@@ -7,13 +7,13 @@ export const TablaPago = ({ usuarios }) => {
   // Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
   const formatDate = (isoDate) => {
     try {
-      if (!isoDate) {
+      if (!isoDate || typeof isoDate !== 'string') {
         return 'N/A'; // Si no hay fecha, retornar 'N/A'
       }
 
       const date = new Date(isoDate);
-      if (isNaN(date)) {
-        throw new Error('Fecha inválida');
+      if (isNaN(date.getTime)) {
+        return 'Fecha inválida';
       }
       return date.toISOString().split('T')[0];
     } catch (error) {
@@ -104,7 +104,7 @@ export const TablaPago = ({ usuarios }) => {
             > 
               <td className="border border-black px-4 py-2">{item.cedula}</td>
               <td className="border border-black px-4 py-2">{item.nombre}</td>
-              <td className="border border-black px-4 py-2">{formatDate(item?.pago.fecha)}</td>
+              <td className="border border-black px-4 py-2">{formatDate(item?.pago?.fecha || 'N/A')}</td>
               <td className="border border-black px-4 py-2">{verifyNumber(item?.pago.adelanto)}</td>
               <td className="border border-black px-4 py-2">{verifyNumber(item?.pago.permisos)}</td>
               <td className="border border-black px-4 py-2">{verifyNumber(item?.pago.multas)}</td>
@@ -137,8 +137,9 @@ TablaPago.propTypes = {
       fecha: PropTypes.string.isRequired,
       adelantos: PropTypes.string.isRequired,
       permisos: PropTypes.string.isRequired, 
-      cargo: PropTypes.string.isRequired,
-      estado: PropTypes.string.isRequired,
+      multas: PropTypes.string.isRequired,
+      atrasos: PropTypes.string.isRequired,
+      subtotal: PropTypes.string.isRequired,
     })
   ).isRequired,
 };

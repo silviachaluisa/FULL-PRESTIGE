@@ -90,7 +90,8 @@ export const ModalPago = ({ handleShow, usuario }) => {
 
   const handleSubmit = () => {
     const error = validarPago();
-    console.log(usuario, {fecha, adelanto, permisos, multas, atrasos,justificacion})
+    console.log("Datos del usuario: ", usuario);
+    console.log("Datos enviados", {fecha, adelanto, permisos, multas, atrasos,justificacion})
     if (error) {
       setErrorMessage(error);
       setTimeout(() => {
