@@ -43,7 +43,8 @@ export const Dashboard = () => {
                         <span>{auth.cargo}</span>  
                     </div>
                    <Link to="/dashboard/perfil" className='flex items-center justify-center'>
-                        <FaCog data-tooltip-id="profile" data-tooltip-content="Edita tu perfil" className='text-white text-2xl ml-20'/>
+                        <FaCog data-tooltip-id="profile" data-tooltip-content="Edita tu perfil " className='text-white text-2xl ml-20'/>
+
                         <ReactTooltip id='profile' place='bottom'/>
                    </Link>
                 </div>

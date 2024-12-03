@@ -217,7 +217,7 @@ const handleSearch = async () => {
       </header>
       
 
-      <div className="w-full bg-black shadow p-4 flex justify-between items-center border-2 border-white px-2 py-2">
+      <div className="w-full bg-black p-4 grid grid-cols-3 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-4 items-center justify-items-center">
         {['BMW','Chevrolet','Ford','Honda','Hunday','Kia','Mazda','Mercedes', 'Peugeot','Renault' ,'Susuki','Toyota'].map((brand) => (
           <div key={brand} className="text-white text-sm text-center mx-2">
             <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
