@@ -8,6 +8,7 @@ export const ModalPago = ({ handleShow, usuario }) => {
   const [permisos, setPermisos] = useState("");
   const [multas, setMultas] = useState("");
   const [atrasos, setAtrasos] = useState("");
+  const [subtotal, setSubtotal] = useState("");
   const [justificacion, setJustificacion] = useState("");
 
   const {
@@ -42,11 +43,24 @@ export const ModalPago = ({ handleShow, usuario }) => {
       const day = String(now.getDate()).padStart(2, '0');
       const formattedDate = `${year}-${month}-${day}`;
       setFecha(formattedDate);
+      
     }
   }, [usuario]);
 
+  useEffect(() => {
+    const calcularSubtotal = () => {
+      const suma=
+      parseFloat(adelanto || 0) +
+      parseFloat(permisos || 0) +
+      parseFloat(multas || 0) +
+      parseFloat(atrasos || 0);
+      setSubtotal(suma. toFixed(2));
+    };
+    calcularSubtotal();
+  }, [adelanto, permisos, multas, atrasos]);
+
   const validarPago = () => {
-    if (tipoModal === "actualizar") {
+    if (tipoModal === "actualizar" && !justificacion) {
       if (!justificacion) {
         return "Debes proporcionar una justificación para actualizar la información.";
       }
@@ -67,6 +81,11 @@ export const ModalPago = ({ handleShow, usuario }) => {
       return "La fecha no puede ser distinta a la fecha actual.";
     }
     return null; // Si todo es válido, no hay errores
+  };
+
+  const handleNumericInput = (value) => {
+    const regex = /^[0-9]*\.?[0-9]*$/;
+    return regex.test(value) ? value : "";
   };
 
   const handleSubmit = () => {
@@ -122,7 +141,7 @@ export const ModalPago = ({ handleShow, usuario }) => {
             <input
               type="number"
               value={adelanto}
-              onChange={(e) => setAdelanto(e.target.value)}
+              onChange={(e) => setAdelanto(handleNumericInput(e.target.value))}
               className="w-full border rounded-lg p-2"
               placeholder="Ingresa la cantidad de adelantos"
             />
@@ -133,7 +152,7 @@ export const ModalPago = ({ handleShow, usuario }) => {
             <input
               type="number"
               value={permisos}
-              onChange={(e) => setPermisos(e.target.value)}
+              onChange={(e) => setPermisos(handleNumericInput(e.target.value))}
               className="w-full border rounded-lg p-2"
               placeholder="Ingresa la cantidad de permisos"
             />
@@ -145,7 +164,7 @@ export const ModalPago = ({ handleShow, usuario }) => {
             <input
               type="number"
               value={multas}
-              onChange={(e) => setMultas(e.target.value)}
+              onChange={(e) => setMultas(handleNumericInput(e.target.value))}
               className="w-full border rounded-lg p-2"
               placeholder="Ingresa la cantidad de multas"
             />
@@ -156,12 +175,12 @@ export const ModalPago = ({ handleShow, usuario }) => {
             <input
               type="number"
               value={atrasos}
-              onChange={(e) => setAtrasos(e.target.value)}
+              onChange={(e) => setAtrasos(handleNumericInput(e.target.value))}
               className="w-full border rounded-lg p-2"
               placeholder="Ingresa la cantidad de atrasos"
             />
           </div>
-                  
+          
         </div>
         {tipoModal === "actualizar" && (
           <div className="mt-4">
@@ -173,7 +192,20 @@ export const ModalPago = ({ handleShow, usuario }) => {
               placeholder="Escribe una justificación para la actualización."
             />
           </div>
+          
         )}
+        {/* Campo Subtotal */}
+        <div className="mt-4">
+            <label className="block text-red-700 font-semibold mb-2">Subtotal:</label>
+            <input
+              type="number"
+              value={subtotal}
+              readOnly
+              className="w-full border  rounded-lg p-2  bg-gray-400"
+              
+            />
+          </div>
+                  
 
         <div className="mt-6 flex flex-col items-center gap-4">
           {successMessage && <div className="text-green-600 font-semibold">{successMessage}</div>}
