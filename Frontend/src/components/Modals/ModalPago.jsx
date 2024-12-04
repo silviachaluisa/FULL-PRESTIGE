@@ -246,28 +246,28 @@ export const ModalPago = ({ handleShow, usuario }) => {
           </div>
         </div>
         {/* Modal de confirmación */}
-      {showConfirmModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-xl font-bold mb-4">Confirmar Acción</h2>
-            <p>¿Estás segur@ que deseas guardar esta información?</p>
-            <div className="mt-6 flex justify-end gap-4">
-              <button
-                onClick={() => setShowConfirmModal(false)} // Cerrar el sub-modal
-                className="px-4 py-2 bg-gray-300 text-black font-semibold rounded-lg hover:bg-gray-600"
-              >
-                No
-              </button>
-              <button
-                onClick={handleConfirmSave} // Confirmar y ejecutar guardar
-                className="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-800"
-              >
-                Sí
-              </button>
+        {showConfirmModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+              <h2 className="text-xl font-bold mb-4">Confirmar Acción</h2>
+              <p>¿Estás segur@ que deseas guardar esta información?</p>
+              <div className="mt-6 flex justify-end gap-4">
+                <button
+                  onClick={() => setShowConfirmModal(false)} // Cerrar el sub-modal
+                  className="px-4 py-2 bg-gray-300 text-black font-semibold rounded-lg hover:bg-gray-600"
+                >
+                  No
+                </button>
+                <button
+                  onClick={handleConfirmSave} // Confirmar y ejecutar guardar
+                  className="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-800"
+                >
+                  Sí
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
       </div> 
     </div> 

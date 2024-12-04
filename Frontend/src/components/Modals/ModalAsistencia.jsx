@@ -20,6 +20,7 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
   const [horaIngreso, setHoraIngreso] = useState("");
   const [horaSalida, setHoraSalida] = useState("");
   const [justificacion, setJustificacion] = useState(""); // Variable para la justificacion
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   
   const {
     upDateAssistance,
@@ -116,6 +117,16 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
     }
   };
 
+  const handleConfirmSave = () => {
+    setShowConfirmModal(false); //Cierra el modal de confirmación
+    handleSubmit(); //Ejecuta la logica de guardar
+  }
+
+  const handleSave = () => {
+    //Muestra el modal de confirmación
+    setShowConfirmModal(true);
+  };  
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
@@ -196,13 +207,36 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
               Cancelar
             </button>
             <button
-              onClick={handleSubmit}
+              onClick={handleSave}
               className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-800"
             >
               Guardar
             </button>
           </div>
         </div>
+        {/* Modal de confirmación */}
+        {showConfirmModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+              <h2 className="text-xl font-bold mb-4">Confirmar Acción</h2>
+              <p>¿Estás segur@ que deseas guardar esta información?</p>
+              <div className="mt-6 flex justify-end gap-4">
+                <button
+                  onClick={() => setShowConfirmModal(false)} // Cerrar el sub-modal
+                  className="px-4 py-2 bg-gray-300 text-black font-semibold rounded-lg hover:bg-gray-600"
+                >
+                  No
+                </button>
+                <button
+                  onClick={handleConfirmSave} // Confirmar y ejecutar guardar
+                  className="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-800"
+                >
+                  Sí
+                </button>
+              </div>
+            </div>
+          </div>
+        )}     
       </div>
     </div>
   );
