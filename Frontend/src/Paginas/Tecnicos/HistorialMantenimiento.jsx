@@ -278,7 +278,9 @@ const handleDownloadExcel = () => {
       <thead className="bg-black text-white font-mono">
         <tr>
           {[
-            'Cédula', 'Nombre y Apellido', 'Telefono', 'Cargo', 'Fecha', 'Hora de Ingreso', 'Hora de Salida', 'Estado'
+            'Cédula','Nombre/Apellido','N° Orden',
+              'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida',
+              'Descripción del trabajo', 'Técnico Responsable', 'Estado'
           ].map((header) => (
             <th key={header} className="border border-black px-4 py-2">{header}</th>
           ))}
