@@ -10,6 +10,7 @@ export const ModalPago = ({ handleShow, usuario }) => {
   const [atrasos, setAtrasos] = useState("");
   const [subtotal, setSubtotal] = useState("");
   const [justificacion, setJustificacion] = useState("");
+  const [showConfirmModal, setShowConfirmModal] = useState(false); //En este estado Controla si el sub-modal de confirmación se muestra o no
 
   const {
     upDatePayment,
@@ -118,6 +119,16 @@ export const ModalPago = ({ handleShow, usuario }) => {
       registerPayment(usuario.cedula, { ...paymentInfo});
     }
   };
+  //Se llama al confirmar en el sub-modal, ejecuta la función ""handleSubmit" y cierra el modal de confirmación
+  const handleConfirmSave = () => {
+    setShowConfirmModal(false); //Cierra el modal de confirmación
+    handleSubmit(); //Ejecuta la lógica de guardar
+  };
+  // Muestra el sub-modal al presionar "Guardar"
+  const handleSave = () => {
+    //Mostrar el modal de confirmación
+    setShowConfirmModal(true);
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -126,9 +137,12 @@ export const ModalPago = ({ handleShow, usuario }) => {
           {tipoModal === "actualizar" ? "Actualizar Pago" : "Registrar Pago"}
         </h2>
 
-        {/* Mensaje de error */}
+        {/* Mensaje de error y exito */}
         {errorMessage && (
           <div className="text-red-600 font-semibold mb-4">{errorMessage}</div>
+        )}
+        {successMessage && (
+          <div className="text-green-600 font-semibold mb-4">{successMessage}</div>
         )}
 
         {/* Campo de Fecha */}
@@ -224,13 +238,37 @@ export const ModalPago = ({ handleShow, usuario }) => {
               Cancelar
             </button>
             <button
-              onClick={handleSubmit}
+              onClick={handleSave}
               className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-800"
             >
               Guardar
             </button>
           </div>
         </div>
+        {/* Modal de confirmación */}
+      {showConfirmModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-xl font-bold mb-4">Confirmar Acción</h2>
+            <p>¿Estás segur@ que deseas guardar esta información?</p>
+            <div className="mt-6 flex justify-end gap-4">
+              <button
+                onClick={() => setShowConfirmModal(false)} // Cerrar el sub-modal
+                className="px-4 py-2 bg-gray-300 text-black font-semibold rounded-lg hover:bg-gray-600"
+              >
+                No
+              </button>
+              <button
+                onClick={handleConfirmSave} // Confirmar y ejecutar guardar
+                className="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-800"
+              >
+                Sí
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       </div> 
     </div> 
   ); 
