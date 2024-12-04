@@ -13,12 +13,12 @@ export const TablaPago = ({ usuarios }) => {
 
       const date = new Date(isoDate);
       if (isNaN(date)) {
-        throw new Error('Fecha inválida');
+        throw new Error('Sin registro');
       }
       return date.toISOString().split('T')[0];
     } catch (error) {
       console.error(`Error formateando fecha: ${error.message}`);
-      return 'Fecha inválida';
+      return 'Sin registro';
     }
   };
 
