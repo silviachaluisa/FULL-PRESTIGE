@@ -8,13 +8,14 @@ export const HistoryProvider = ({ children }) => {
   const [usuarios, setUsuarios] = useState([]);
   const [clientes, setClientes] = useState ([]);
   const [asistencias, setAsistencias] = useState([]);
+  const [pagos, setPagos] = useState([])
+  const [mantenimientos, setMantenimientos] = useState([])
   const [seleccionado, setSeleccionado] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [tipoModal, setTipoModal] = useState(''); // Tipo de modal: 'registrar' o 'actualizar'
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [pagos, setPagos] = useState([])
 
   // -------------------------------- Funciones de control en mensajes de validación --------------------------------
   async function mostrarErrores(errors) {
@@ -421,7 +422,7 @@ export const HistoryProvider = ({ children }) => {
     };
 
     // -------------------------------FUNCIONES PARA HISTORIAL DE MANTENIMIENTOS-----------------------------------------
-  const fecthMantenimientos = async (id) => {
+  const fethMantenimientos = async (id) => {
     const token = localStorage.getItem('token');
     if (!token) return;
     try {
@@ -438,6 +439,83 @@ export const HistoryProvider = ({ children }) => {
         console.error("Error al obtener mantenimientos", error);
     };
   }
+
+  const upDateMaintance = async (id, mantenimiento) => {
+    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/maintenance/${id}`;
+    const token = localStorage.getItem("token");
+    const options = {
+      headers : {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const respuesta = await axios.put(URLActualizar, mantenimiento, options);
+      console.log(respuesta);
+      setSuccessMessage("Mantenimiento actualizado correctamente");
+      //Cerrar el modal automáticamente después de un breve tiempo
+      setTimeout(() => {
+        setSuccessMessage("");
+        setErrorMessage("");
+        handleModal();
+        fetchClientes();
+      }, 2000); // Cierra el modal después de 2 segundos
+    }catch (error) {
+      console.error("Error al actualizar mantenimiento", error);
+      if (error.response.data?.errors && error.response.data.errors.length > 0) {
+        // Mostrar errores de validación uno por uno
+        await mostrarErrores(error.response.data.errors);
+      } else {
+        setErrorMessage(error.response.data.message);
+    
+        // Limpiar el mensaje de error después de un breve tiempo
+        setTimeout(() => {
+          setErrorMessage("");
+          setSuccessMessage("");
+        }, 5000);
+      }
+    }
+  };
+
+  const registerMaintance = async (cedula,mantenimiento) => {
+    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/maintenance/${cedula}/register`;
+    const token = localStorage.getItem("token");
+    const options = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    try{
+      const respuesta = await axios.post(URLActualizar, mantenimiento, options);
+      console.log(respuesta);
+      setSuccessMessage("Mantenimiento registrado correctamente");
+      //Cerrar el modal automáticamente después de un breve tiempo
+      setTimeout(() => {
+        setSuccessMessage("");
+        setErrorMessage("");
+        handleModal();
+        fetchClientes();
+      }, 2000); // Cierra el modal después de 2 segundos
+    } catch (error) {
+      console.error("Error al registrar mantenimiento", error);
+      if (error.response.data?.errors && error.response.data.errors.length > 0) {
+        // Mostrar errores de validación uno por uno
+        await mostrarErrores(error.response.data.errors);
+      } else {
+        setErrorMessage(error.response.data.message);
+    
+        // Limpiar el mensaje de error después de un breve tiempo
+        setTimeout(() => {
+          setErrorMessage("");
+          setSuccessMessage("");
+        }, 5000);
+      }
+    };
+  };
+
+  
 
   return (
     <HistoryContext.Provider 
@@ -472,7 +550,12 @@ export const HistoryProvider = ({ children }) => {
       setPagos,
       fetchPagos,
       upDatePayment,
-      registerPayment
+      registerPayment,
+      mantenimientos,
+      setMantenimientos,
+      fethMantenimientos,
+      upDateMaintance,
+      registerMaintance
        }}>
       {children}
     </HistoryContext.Provider>
