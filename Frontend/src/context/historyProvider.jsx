@@ -420,6 +420,25 @@ export const HistoryProvider = ({ children }) => {
       }
     };
 
+    // -------------------------------FUNCIONES PARA HISTORIAL DE MANTENIMIENTOS-----------------------------------------
+  const fecthMantenimientos = async (id) => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/maintenances`, options);
+      
+      return response.data;
+    } catch (error) {
+        console.error("Error al obtener mantenimientos", error);
+    };
+  }
+
   return (
     <HistoryContext.Provider 
     value={{ 
