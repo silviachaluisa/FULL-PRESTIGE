@@ -202,8 +202,6 @@ export const FormularioClientes = ({clientes}) => {
         // Limpiar el mensaje después de 3 segundos
         setTimeout(() => {
           setMensaje(null);
-          // Navegar al historial de usuarios
-          navigate('/dashboard/historial-clientes');
         }, 3000);
       }else{
         setMensaje({ respuesta: res2.message, tipo: false });
@@ -211,6 +209,28 @@ export const FormularioClientes = ({clientes}) => {
         setTimeout(() => {
           setMensaje(null);
         }, 3000);
+      }
+
+      if (res1.success && res2.success) {
+        // Limpiar los campos del formulario
+        setRegisclientes({
+          cedula: '',
+          nombre: '',
+          telefono: '',
+          correo: '',
+          direccion: '',
+          orden: '',
+          marca: '',
+          modelo: '',
+          placa: '',
+          fecha_ingreso: '',
+          fecha_salida: '',
+          // descripcion: '',
+          // tecnico: '',
+          estado: '',
+        });
+        // Navegar al historial de usuarios
+        navigate('/dashboard/historial-clientes');
       }
     }else {
       // Preparar los datos para el registro, excluyendo la propiedad 'estado'
