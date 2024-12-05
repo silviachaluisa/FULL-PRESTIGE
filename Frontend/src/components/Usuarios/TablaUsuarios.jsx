@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import PropTypes from 'prop-types'
+import { FaPencilAlt } from "react-icons/fa";
 
 export const TablaUsuarios = ({usuarios}) => {
     const navigate = useNavigate()
@@ -28,12 +29,12 @@ export const TablaUsuarios = ({usuarios}) => {
                         <td className="border border-black px-4 py-2">{item.cargo}</td>
                         <td className="border border-black px-4 py-2">{item.estado}</td>
                         <td className="border border-black px-4 py-2">
-                        <button 
-                        className="text-black hover:text-blue-700"
-                        onClick={() => navigate(`/dashboard/actualizar-usuarios/${item.cedula}`)}
-                        >
-                            ✏️
-                        </button>
+                            <div className="flex justify-center gap-4">
+                                <FaPencilAlt
+                                    className="text-black hover:text-blue-700 cursor-pointer"
+                                    onClick={() => navigate(`/dashboard/actualizar-usuarios/${item.cedula}`)}
+                                />
+                            </div>
                         </td>
                         </tr>
                     ))}

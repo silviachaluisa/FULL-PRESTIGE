@@ -22,7 +22,15 @@ export const TablaAsistencia = ({ usuarios }) => {
     }
   };
 
-  const { fetchAsistencias, seleccionado, setSeleccionado, showModal, handleModal, asistencias, setAsistencias } = useContext(HistoryContext);
+  const {
+    fetchAsistencias,
+    seleccionado,
+    setSeleccionado,
+    showModal,
+    handleModal,
+    asistencias,
+    setAsistencias
+  } = useContext(HistoryContext);
 
   // Función para manejar el clic en una fila
   const handleRowClick = (usuario) => {
