@@ -10,28 +10,62 @@ const ModalAsignacionTecnico = ({infoVehiculo, handleShow}) => {
         successMessage,
         errorMessage,
         setErrorMessage,
+        setSuccessMessage,
+        fetchMantenimientosByID,
+        upDateMaintance,
     } = useContext(HistoryContext);
     const [ tecnicos, setTecnicos ] = useState([]);
     const [ cargando, setCargando ] = useState(false);
-    const [ infoMantenimiento, setInfoMantenimiento ] = useState({
+    const [ listaMantenimientos, setListaMantenimientos ] = useState([]);
+    const [infoMantenimiento, setInfoMantenimiento] = useState({
+        id: null, // Indica que no hay mantenimiento seleccionado
         placa: infoVehiculo.placa,
         encargado: "",
         costo: 0,
         descripcion: "",
     });
+    
 
     const handleSubmit = async () => {
         if (infoMantenimiento.encargado === "Seleccionar Técnico") {
             setErrorMessage("Debes seleccionar un técnico");
-            setInterval(() => {
-                setErrorMessage("");
-            }, 5000);
+            setTimeout(() => setErrorMessage(""), 5000);
             return;
         }
-
-        console.log("Mantenimiento ->", infoMantenimiento);
-        await registerMaintance(infoMantenimiento);
+    
+        setCargando(true);
+    
+        try {
+            if (infoMantenimiento.id) {
+                // Actualizar mantenimiento
+                await upDateMaintance(infoMantenimiento.id, {
+                    encargado: infoMantenimiento.encargado,
+                    costo: infoMantenimiento.costo,
+                    descripcion: infoMantenimiento.descripcion,
+                });
+                console.log("Mantenimiento actualizado:", infoMantenimiento.id);
+            } else {
+                // Registrar nuevo mantenimiento
+                await registerMaintance({
+                    placa: infoVehiculo.placa,
+                    encargado: infoMantenimiento.encargado,
+                    costo: infoMantenimiento.costo,
+                    descripcion: infoMantenimiento.descripcion,
+                });
+                console.log("Nuevo mantenimiento registrado");
+            }
+    
+            setSuccessMessage("Operación realizada con éxito");
+            setTimeout(() => setSuccessMessage(""), 5000);
+        } catch (error) {
+            console.error("Error al registrar o actualizar:", error);
+            setErrorMessage("Error al procesar la solicitud");
+            setTimeout(() => setErrorMessage(""), 5000);
+        } finally {
+            setCargando(false);
+        }
     };
+    
 
     const handleChange = (e) => {
         setInfoMantenimiento({
@@ -40,31 +74,71 @@ const ModalAsignacionTecnico = ({infoVehiculo, handleShow}) => {
         );
     }
 
+    const handleChangeMaintance = async (e) => {
+        const id = e.target.value;
+    
+        if (id === "Seleccionar Mantenimiento") {
+            setInfoMantenimiento({
+                ...infoMantenimiento,
+                id: null, // Limpiar el ID si no se selecciona ninguno
+                descripcion: "",
+            });
+            return;
+        }
+    
+        setCargando(true);
+        try {
+            const mantenimiento = await fetchMantenimientosByID(id);
+            if (!mantenimiento) {
+                setErrorMessage("Error al cargar el mantenimiento");
+                setTimeout(() => setErrorMessage(""), 5000);
+                setCargando(false);
+                return;
+            }
+    
+            setInfoMantenimiento({
+                ...infoMantenimiento,
+                id, // Guardar el ID del mantenimiento seleccionado
+                encargado: mantenimiento.encargado.cedula,
+                costo: mantenimiento.costo,
+                descripcion: mantenimiento.descripcion,
+            });
+        } catch (error) {
+            console.log(error)
+            setErrorMessage("Hubo un problema al cargar los datos del mantenimiento");
+            setTimeout(() => setErrorMessage(""), 5000);
+        } finally {
+            setCargando(false);
+        }
+    };
+    
+    
     useEffect(() => {
         const filtrarTecnicos = async () => {
             const usuarios = await fetchUsuarios();
-            const ltecnicos = usuarios.filter((usuario) => usuario.cargo === "Técnico" && usuario.estado === "Activo");
+            const ltecnicos = usuarios.filter(
+                (usuario) => usuario.cargo === "Técnico" && usuario.estado === "Activo"
+            );
             setTecnicos(ltecnicos);
         };
-        
-        const obtenerMantenimiento = async () => {
+    
+        const obtenerMantenimientos = async () => {
             const mantenimientos = await fetchMantenimientosByPlaca(infoVehiculo.placa);
             if (mantenimientos && mantenimientos.length > 0) {
-                const mantenimiento = mantenimientos.at(-1);
-                setInfoMantenimiento({
-                    ... infoMantenimiento,
-                    encargado: mantenimiento.encargado.cedula,
-                    costo: mantenimiento.costo,
-                    descripcion: mantenimiento.descripcion,
-                })
+                const lista = mantenimientos.map((mantenimiento) => ({
+                    id: mantenimiento._id,
+                    descripcion: mantenimiento.descripcion || "Sin descripción",
+                }));
+                setListaMantenimientos(lista);
             }
         };
-        
+    
         setCargando(true);
-        filtrarTecnicos();
-        obtenerMantenimiento();
-        setCargando(false);
-    }, [])
+        Promise.all([filtrarTecnicos(), obtenerMantenimientos()])
+            .catch(() => setErrorMessage("Error al cargar datos iniciales"))
+            .finally(() => setCargando(false));
+    }, []);
+    
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -77,6 +151,28 @@ const ModalAsignacionTecnico = ({infoVehiculo, handleShow}) => {
                 {successMessage && (
                 <div className="text-green-600 font-semibold mb-4">{successMessage}</div>
                 )}
+
+                {/* Selector de mantenimiento de la lista */}
+                <div className="mb-4">
+                    <label htmlFor="mantenimientos" className="block text-gray-700 font-semibold mb-2">
+                        Mantenimientos:
+                    </label>
+                    <select
+                        id="mantenimientos"
+                        name="mantenimientos"
+                        className="w-full border rounded-lg p-2"
+                        onChange={handleChangeMaintance}
+                        defaultValue="Seleccionar Mantenimiento"
+                    >
+                        <option>Seleccionar Mantenimiento</option>
+                        {listaMantenimientos.map((mantenimiento) => (
+                            <option key={mantenimiento.id} value={mantenimiento.id}>
+                                {mantenimiento.descripcion}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
 
                 {/* Selección del Técnico */}
                 <div className="mb-4">

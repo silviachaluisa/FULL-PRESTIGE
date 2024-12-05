@@ -478,6 +478,23 @@ export const HistoryProvider = ({ children }) => {
     };
   }
 
+  const fetchMantenimientosByID = async (id) => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/maintenance/${id}`, options);
+      return response.data;
+    } catch (error) {
+      console.error("Error al obtener mantenimientos", error);
+    }
+  };
+
   const upDateMaintance = async (id, mantenimiento) => {
     const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/maintenance/${id}`;
     const token = localStorage.getItem("token");
@@ -554,6 +571,7 @@ export const HistoryProvider = ({ children }) => {
       return { success: false, message: error.response.data.message
     };
   };
+};
 
   
 
@@ -596,6 +614,7 @@ export const HistoryProvider = ({ children }) => {
       setMantenimientos,
       fetchMantenimientos,
       fetchMantenimientosByPlaca,
+      fetchMantenimientosByID,
       upDateMaintance,
       registerMaintance
        }}>
