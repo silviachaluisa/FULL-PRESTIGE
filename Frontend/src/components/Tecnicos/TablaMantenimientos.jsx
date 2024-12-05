@@ -22,7 +22,15 @@ export const TablaMantenimiento = ({ clientes }) => {
     }
   };
 
-  const { fetchMantenimientos, seleccionado, setSeleccionado, showModal, handleModal, mantenimientos, setMantenimientos } = useContext(HistoryContext);
+  const {
+    fetchMantenimientos,
+    seleccionado,
+    setSeleccionado,
+    showModal,
+    handleModal,
+    mantenimientos,
+    setMantenimientos
+  } = useContext(HistoryContext);
 
   // Función para manejar el clic en una fila
   const handleRowClick = (cliente) => {
@@ -38,29 +46,13 @@ export const TablaMantenimiento = ({ clientes }) => {
       const nuevosMantenimientos = [];
       try {
         // Realizar las solicitudes en paralelo con manejo de errores individuales
-        const respuestas = await Promise.all(
-          clientes.map(async cliente => {
-            try {
-              const mantenimientos= await fetchMantenimientos(cliente.cedula);
-              return { cliente, mantenimientos };
-            } catch (error) {
-              console.error(`Error al obtener mantenimientos para ${cliente.cedula}:`, error);
-              return { cliente, mantenimientos: [] }; // Retornar vacío en caso de error
-            }
-          })
-        );
+        const respuestas = await fetchMantenimientos();
+        console.log("Respuestas Mantenimientos ->", respuestas);
   
         // Procesar las respuestas
-        respuestas.forEach(({ cliente, mantenimientos}) => {
-          if (mantenimientos.length === 0) {
-            nuevosMantenimientos.push({ ...cliente, mantenimiento: {}, indice });
-            indice++;
-          } else {
-            mantenimientos.forEach(mantenimiento => {
-              nuevosMantenimientos.push({ ...cliente, mantenimiento, indice });
-              indice++;
-            });
-          }
+        respuestas.forEach((mantenimiento) => {
+          nuevosMantenimientos.push({ ...mantenimiento, indice });
+          indice++;
         });
   
         setMantenimientos(nuevosMantenimientos);
@@ -69,7 +61,6 @@ export const TablaMantenimiento = ({ clientes }) => {
         console.error("Error general al obtener historial de mantenimientos:", error);
       }
     };
-  
     obtenerMantenimientos();
   }, [clientes]);
 
@@ -79,8 +70,7 @@ export const TablaMantenimiento = ({ clientes }) => {
       <table className="w-full text-center border-collapse border border-black">
         <thead className="bg-black text-white font-mono">
           <tr>
-            {['Cédula','Nombre/Apellido',
-                'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida',
+            {['Cédula','Nombre/Apellido', 'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida',
                 'Descripción del trabajo', 'Técnico Responsable', 'Estado'].map((header) => (
               <th key={header} className="border border-white px-4 py-2">
                 {header}
@@ -95,16 +85,16 @@ export const TablaMantenimiento = ({ clientes }) => {
               onClick={() => handleRowClick(item)} // Cambiar la fila seleccionada
                className={`cursor-pointer ${seleccionado?.vehiculo?.placa === item?.vehiculo?.placa ? 'bg-red-200' : ''}`} // Marcar la fila seleccionada con color
             >
-                <td className="border border-black px-4 py-2">{item?.vehiculo?.propietario?.cedula || 'N/A'} </td>
-                <td className="border border-black px-4 py-2">{item?.vehiculo?.propietario.nombre || 'N/A'} </td>
-                <td className="border border-black px-4 py-2">{item?.vehiculo?.marca || 'N/A'} </td>
-                <td className="border border-black px-4 py-2">{item?.vehiculo?.modelo|| 'N/A'} </td>
-                <td className="border border-black px-4 py-2">{item?.vehiculo.placa || 'N/A'} </td>
-                <td className="border border-black px-4 py-2">{formatDate(item?.vehiculo?.fecha_ingreso) } </td>
-                <td className="border border-black px-4 py-2">{formatDate(item?.vehiculo?.fecha_salida)} </td>
-                <td className="border border-black px-4 py-2">{item?.descripcion || 'N/A'} </td>
-                <td className="border border-black px-4 py-2">{item?.encargado?.nombre || 'N/A'} </td>
-                
+              <td className="border border-black px-4 py-2">{item?.vehiculo?.propietario?.cedula || 'N/A'} </td>
+              <td className="border border-black px-4 py-2">{item?.vehiculo?.propietario.nombre || 'N/A'} </td>
+              <td className="border border-black px-4 py-2">{item?.vehiculo?.marca || 'N/A'} </td>
+              <td className="border border-black px-4 py-2">{item?.vehiculo?.modelo|| 'N/A'} </td>
+              <td className="border border-black px-4 py-2">{item?.vehiculo.placa || 'N/A'} </td>
+              <td className="border border-black px-4 py-2">{formatDate(item?.vehiculo?.fecha_ingreso) } </td>
+              <td className="border border-black px-4 py-2">{formatDate(item?.vehiculo?.fecha_salida)} </td>
+              <td className="border border-black px-4 py-2">{item?.descripcion || 'N/A'} </td>
+              <td className="border border-black px-4 py-2">{item?.encargado?.nombre || 'N/A'} </td>
+              <td className="border border-black px-4 py-2">{item?.estado || 'N/A'} </td>
             </tr>
           ))}
         </tbody>
