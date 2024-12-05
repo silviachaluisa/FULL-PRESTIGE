@@ -29,8 +29,8 @@ export const FormularioClientes = ({clientes}) => {
         placa: '',
         fecha_ingreso: '',
         fecha_salida: '',
-        descripcion: '',
-        tecnico: '',
+        // descripcion: '',
+        // tecnico: '',
         estado: '',
       });
       // Sincronizar los valores cuando cambia `usuarios`
@@ -48,8 +48,8 @@ export const FormularioClientes = ({clientes}) => {
             placa: clientes.placa ?? '',
             fecha_ingreso: clientes.fecha_ingreso.split("T")[0] ?? '',
             fecha_salida: clientes.fecha_salida.split("T")[0] ?? '',
-            descripcion: clientes.detalles ?? '',
-            tecnico: clientes.encargado.cedula ?? '',
+            // descripcion: clientes.detalles ?? '',
+            // tecnico: clientes.encargado.cedula ?? '',
             estado: clientes.estado ?? '',
           });
         } else {
@@ -66,8 +66,8 @@ export const FormularioClientes = ({clientes}) => {
             placa: '',
             fecha_ingreso: '',
             fecha_salida: '',
-            descripcion: '',
-            tecnico: '',
+            // descripcion: '',
+            // tecnico: '',
             estado: '',
           });
         }
@@ -142,14 +142,14 @@ export const FormularioClientes = ({clientes}) => {
         nuevosErrores.fechaSalida = "La fecha de salida debe ser posterior a la fecha de ingreso.";
       }
       // Validaciones de descripción
-      if (!regisclientes.descripcion) {
-        nuevosErrores.descripcion = "La descripción del mantenimiento es obligatoria.";
-      }
+      // if (!regisclientes.descripcion) {
+      //   nuevosErrores.descripcion = "La descripción del mantenimiento es obligatoria.";
+      // }
 
       // Validaciones de técnico
-      if (!regisclientes.tecnico) {
-        nuevosErrores.tecnico = "El técnico responsable es obligatorio.";
-      }
+      // if (!regisclientes.tecnico) {
+      //   nuevosErrores.tecnico = "El técnico responsable es obligatorio.";
+      // }
       if (Object.keys(nuevosErrores).length > 0) {
         setErrores(nuevosErrores);
         return;
@@ -179,8 +179,8 @@ export const FormularioClientes = ({clientes}) => {
         placa: updateinfo.placa,
         fecha_ingreso: updateinfo.fecha_ingreso,
         fecha_salida: updateinfo.fecha_salida,
-        detalles: updateinfo.descripcion,
-        cedula_encargado: updateinfo.tecnico,
+        // detalles: updateinfo.descripcion,
+        // cedula_encargado: updateinfo.tecnico,
         cedula_cliente: clientes?.propietario.cedula,
         estado: updateinfo.estado
       };
@@ -454,7 +454,7 @@ export const FormularioClientes = ({clientes}) => {
           </div>
 
           {/* Descripcion */}
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label className="block font-semibold mb-2">Descripción de Mantenimiento ⚙️</label>
             <input
               id='descripcion'
@@ -467,11 +467,11 @@ export const FormularioClientes = ({clientes}) => {
               placeholder='Detalle el mantenimiento a realizar'
             />
             {errores.descripcion && <p className="text-red-500 text-sm">{errores.descripcion}</p>}
-          </div>
+          </div> */}
 
 
           {/* Tecnico Responsable */}
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label className="block font-semibold mb-2">Técnico Responsable 👤</label>
             <select
               id='tecnico'
@@ -488,7 +488,7 @@ export const FormularioClientes = ({clientes}) => {
               ))}
             </select>
             {errores.tecnico && <p className="text-red-500 text-sm">{errores.tecnico}</p>}
-          </div>
+          </div> */}
 
           {/* Estado (solo visible en actualización) */}
           {clientes && (

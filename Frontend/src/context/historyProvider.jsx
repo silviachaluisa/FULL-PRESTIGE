@@ -422,7 +422,7 @@ export const HistoryProvider = ({ children }) => {
     };
 
     // -------------------------------FUNCIONES PARA HISTORIAL DE MANTENIMIENTOS-----------------------------------------
-  const fethMantenimientos = async (id) => {
+  const fethMantenimientos = async () => {
     const token = localStorage.getItem('token');
     if (!token) return;
     try {
