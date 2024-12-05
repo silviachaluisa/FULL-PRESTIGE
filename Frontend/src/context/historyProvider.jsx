@@ -226,6 +226,26 @@ export const HistoryProvider = ({ children }) => {
       return { success: false, message: error.response.data.message };
     }
   }
+
+  const registerVehicle = async (formRegistro) => {
+    const URLRegistrar = `${import.meta.env.VITE_BACKEND_URL}/vehicle`;
+    const token = localStorage.getItem("token");
+    const options = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    try {
+      const respuesta = await axios.post(URLRegistrar, formRegistro, options);
+      console.log(respuesta);
+
+      return { success: true, message: "Vehículo registrado correctamente" };
+    } catch (error) {
+      console.error("Error al registrar vehículo", error);
+      return { success: false, message: error.response.data.message };
+    }
+  };
    // -----------------------------------FUNCIONES PARA ASISTENCIAS--------------------------------------------
 
    const fetchAsistencias = async (id) => {
@@ -527,6 +547,7 @@ export const HistoryProvider = ({ children }) => {
       clientes,
       fetchClienteByCedula,
       registerClient,
+      registerVehicle,
       upDateClient,
       updateClientVehicle,
       fetchClientes,

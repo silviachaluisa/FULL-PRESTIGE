@@ -9,12 +9,13 @@ export const FormularioClientes = ({clientes}) => {
   const navigate = useNavigate();
   const [mensaje, setMensaje] = useState("");
   const [errores, setErrores] = useState({});
-  const [tecnicos, setTecnicos] = useState([]);
+  // const [tecnicos, setTecnicos] = useState([]);
   const {
     upDateClient,
     registerClient,
     updateClientVehicle,
-    fetchUsuarios
+    fetchUsuarios,
+    registerVehicle
   }=useContext(HistoryContext)
  
   const [regisclientes, setRegisclientes] = useState({
@@ -73,14 +74,14 @@ export const FormularioClientes = ({clientes}) => {
         }
       }, [clientes]);
 
-      useEffect(() => {
-        const filtrarTecnicos = async () => {
-          const usuarios = await fetchUsuarios();
-          const ltecnicos = usuarios.filter((usuario) => usuario.cargo === "Técnico" && usuario.estado === "Activo");
-          setTecnicos(ltecnicos);
-        }
-        filtrarTecnicos();
-      }, [])
+      // useEffect(() => {
+      //   const filtrarTecnicos = async () => {
+      //     const usuarios = await fetchUsuarios();
+      //     const ltecnicos = usuarios.filter((usuario) => usuario.cargo === "Técnico" && usuario.estado === "Activo");
+      //     setTecnicos(ltecnicos);
+      //   }
+      //   filtrarTecnicos();
+      // }, [])
 
       const handleSubmit = async (event) => {
         event.preventDefault();
@@ -159,31 +160,33 @@ export const FormularioClientes = ({clientes}) => {
    setErrores({});
 
    try {
+    const updateinfo = { ...regisclientes };
+
+    const clientInfo = { 
+      nombre: updateinfo.nombre,
+      telefono: updateinfo.telefono,
+      correo: updateinfo.correo,
+      direccion: updateinfo.direccion
+    };
+
+    const vehicleInfo = {
+      n_orden: updateinfo.orden,
+      marca: updateinfo.marca,
+      modelo: updateinfo.modelo,
+      placa: updateinfo.placa,
+      fecha_ingreso: updateinfo.fecha_ingreso,
+      fecha_salida: updateinfo.fecha_salida,
+      // detalles: updateinfo.descripcion,
+      // cedula_encargado: updateinfo.tecnico,
+      cedula_cliente: "",
+      estado: updateinfo.estado
+    };
      if (clientes?.propietario.cedula) {
-        console.log("Actualizando cliente...");
-        console.log(clientes);
-        
-       const updateinfo = { ...regisclientes };
-
-       const clientInfo = { 
-        nombre: updateinfo.nombre,
-        telefono: updateinfo.telefono,
-        correo: updateinfo.correo,
-        direccion: updateinfo.direccion
-      };
-
-      const vehicleInfo = {
-        n_orden: updateinfo.orden,
-        marca: updateinfo.marca,
-        modelo: updateinfo.modelo,
-        placa: updateinfo.placa,
-        fecha_ingreso: updateinfo.fecha_ingreso,
-        fecha_salida: updateinfo.fecha_salida,
-        // detalles: updateinfo.descripcion,
-        // cedula_encargado: updateinfo.tecnico,
-        cedula_cliente: clientes?.propietario.cedula,
-        estado: updateinfo.estado
-      };
+      console.log("Actualizando cliente...");
+      console.log(clientes);
+      console.log(clientInfo);
+      vehicleInfo.cedula_cliente = clientes.propietario.cedula;
+      console.log(vehicleInfo);
 
       // Llamar a la función para actualizar el usuario
       const res1 = await upDateClient(clientes?.propietario.cedula, clientInfo);
@@ -211,18 +214,20 @@ export const FormularioClientes = ({clientes}) => {
       }
     }else {
       // Preparar los datos para el registro, excluyendo la propiedad 'estado'
-      const DatosRegistrar = { ...regisclientes};
-      delete DatosRegistrar.estado;
+      clientInfo.cedula = regisclientes.cedula;
+      vehicleInfo.cedula_cliente = regisclientes.cedula;
+      delete vehicleInfo.estado;
+      console.log("Registrando cliente...");
+      console.log(clientInfo);
+      console.log(vehicleInfo);
           
-      const respuesta = await registerClient(DatosRegistrar);
+      const respuesta = await registerClient(clientInfo);
       if (respuesta.success){
         // Configurar el mensaje de éxito
         setMensaje({ respuesta: respuesta.message, tipo: true });
         // Limpiar el mensaje después de 3 segundos
         setTimeout(() => {
           setMensaje(null);
-          // Navegar al historial de usuarios
-          navigate('/dashboard/historial-clientes');
         }, 3000);
       }else{
         // Configurar el mensaje de error
@@ -231,6 +236,46 @@ export const FormularioClientes = ({clientes}) => {
         setTimeout(() => {
           setMensaje(null);
         }, 3000);
+      }
+
+      const respuesta2 = await registerVehicle(vehicleInfo);
+      if (respuesta2.success){
+        // Configurar el mensaje de éxito
+        setMensaje({ respuesta: respuesta2.message, tipo: true });
+        // Limpiar el mensaje después de 3 segundos
+        setTimeout(() => {
+          setMensaje(null);
+        }, 3000);
+      } else {
+        // Configurar el mensaje de error
+        setMensaje({ respuesta: respuesta2.message, tipo: false });
+        // Limpiar el mensaje después de 3 segundos
+        setTimeout(() => {
+          setMensaje(null);
+        }, 3000);
+      }
+
+      if (respuesta.success && respuesta2.success) {
+        // Limpiar los campos del formulario
+        setRegisclientes({
+          cedula: '',
+          nombre: '',
+          telefono: '',
+          correo: '',
+          direccion: '',
+          orden: '',
+          marca: '',
+          modelo: '',
+          placa: '',
+          fecha_ingreso: '',
+          fecha_salida: '',
+          // descripcion: '',
+          // tecnico: '',
+          estado: '',
+        });
+        
+        // Navegar al historial de usuarios
+        navigate('/dashboard/historial-clientes');
       }
     }
   } catch (error) {
