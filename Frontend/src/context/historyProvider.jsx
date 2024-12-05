@@ -246,6 +246,27 @@ export const HistoryProvider = ({ children }) => {
       return { success: false, message: error.response.data.message };
     }
   };
+
+  const asignarVehiculo = async (payload) => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      const options = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        },
+      }
+
+      const URLAsignar = `${import.meta.env.VITE_BACKEND_URL}/vehicle/assign`;
+      await axios.post(URLAsignar, payload, options);
+      return { success: true, message: "Vehículo asignado correctamente" };
+    } catch (error) {
+      console.error("Error al asignar vehículo", error);
+      return { success: false, message: error.response.data };
+    }
+  };
+
    // -----------------------------------FUNCIONES PARA ASISTENCIAS--------------------------------------------
 
    const fetchAsistencias = async (id) => {
@@ -586,6 +607,7 @@ export const HistoryProvider = ({ children }) => {
       fetchClienteByCedula,
       registerClient,
       registerVehicle,
+      asignarVehiculo,
       upDateClient,
       updateClientVehicle,
       fetchClientes,

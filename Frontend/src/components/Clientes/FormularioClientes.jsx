@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import Mensaje from '../Alertas';
 import { useContext } from 'react';
 import { HistoryContext } from '../../context/HistoryContext.jsx';
@@ -9,12 +9,15 @@ export const FormularioClientes = ({clientes}) => {
   const navigate = useNavigate();
   const [mensaje, setMensaje] = useState("");
   const [errores, setErrores] = useState({});
+  const [tecnicos, setTecnicos] = useState([]);
   
   const {
     upDateClient,
     registerClient,
     updateClientVehicle,
-    registerVehicle
+    registerVehicle,
+    fetchUsuarios,
+    asignarVehiculo,
   }=useContext(HistoryContext)
  
   const [regisclientes, setRegisclientes] = useState({
@@ -29,6 +32,7 @@ export const FormularioClientes = ({clientes}) => {
     placa: '',
     fecha_ingreso: '',
     fecha_salida: '',
+    cedula_tecnico: '',
     estado: '',
   });
       // Sincronizar los valores cuando cambia `usuarios`
@@ -46,10 +50,22 @@ export const FormularioClientes = ({clientes}) => {
             placa: clientes.placa ?? '',
             fecha_ingreso: clientes.fecha_ingreso.split("T")[0] ?? '',
             fecha_salida: clientes.fecha_salida.split("T")[0] ?? '',
+            cedula_tecnico: clientes?.encargado?.cedula ?? '',
             estado: clientes.estado ?? '',
           });
-        } 
+        }
       }, [clientes]);
+
+      useEffect(() => {
+        const filtrarTecnicos = async () => {
+          const usuarios = await fetchUsuarios();
+          const ltecnicos = usuarios.filter(
+              (usuario) => usuario.cargo === "Técnico" && usuario.estado === "Activo"
+          );
+          setTecnicos(ltecnicos);
+        };
+        filtrarTecnicos();
+      }, []);
 
       const handleSubmit = async (event) => {
         event.preventDefault();
@@ -105,6 +121,16 @@ export const FormularioClientes = ({clientes}) => {
       if (!regisclientes.placa) {
         nuevosErrores.placa = "La placa es obligatoria.";
       }
+
+      // Validacion de seleccion del técnico
+      if (!regisclientes.cedula_tecnico || regisclientes.cedula_tecnico === "") {
+        nuevosErrores.tecnico = "Debes seleccionar un técnico.";
+      }
+
+      // Validaciones de fecha de ingreso
+      if (!regisclientes.fecha_ingreso) {
+        nuevosErrores.fechaIngreso = "La fecha de ingreso es obligatoria.";
+      }
    
       // Validaciones de fecha de salida
       if (new Date(regisclientes.fecha_ingreso) > new Date(regisclientes.fecha_salida)) {
@@ -135,8 +161,7 @@ export const FormularioClientes = ({clientes}) => {
       placa: updateinfo.placa,
       fecha_ingreso: updateinfo.fecha_ingreso,
       fecha_salida: updateinfo.fecha_salida,
-      // detalles: updateinfo.descripcion,
-      // cedula_encargado: updateinfo.tecnico,
+      cedula_tecnico: updateinfo.cedula_tecnico,
       cedula_cliente: "",
       estado: updateinfo.estado
     };
@@ -169,8 +194,29 @@ export const FormularioClientes = ({clientes}) => {
           setMensaje(null);
         }, 3000);
       }
+      let res3 = {
+        success: true,
+      };
+      console.log("Actualizacion tecnico encargado ->", clientes)
+      // Comprobar si se selecciono un nuevo tecnico
+      if (clientes?.encargado?.cedula !== regisclientes.cedula_tecnico) {
+        res3 = await asignarVehiculo({placa: vehicleInfo.placa, cedula_tecnico: vehicleInfo.cedula_tecnico});
+        if (res3.success){
+          setMensaje({ respuesta: res3.message, tipo: true });
+          // Limpiar el mensaje después de 3 segundos
+          setTimeout(() => {
+            setMensaje(null);
+          }, 3000);
+        }else{
+          setMensaje({ respuesta: res3.message, tipo: false });
+          // Limpiar el mensaje después de 3 segundos
+          setTimeout(() => {
+            setMensaje(null);
+          }, 3000);
+        }
+      }
 
-      if (res1.success && res2.success) {
+      if (res1.success && res2.success && res3.success) {
         // Limpiar los campos del formulario
         setRegisclientes({
           cedula: '',
@@ -184,8 +230,7 @@ export const FormularioClientes = ({clientes}) => {
           placa: '',
           fecha_ingreso: '',
           fecha_salida: '',
-          // descripcion: '',
-          // tecnico: '',
+          cedula_tecnico: '',
           estado: '',
         });
         // Navegar al historial de usuarios
@@ -234,6 +279,24 @@ export const FormularioClientes = ({clientes}) => {
         }, 3000);
       }
 
+      // Comprobar si se seleccionó un técnico diferente
+      if (regisclientes.cedula_tecnico) {
+        const res3 = await asignarVehiculo({placa: vehicleInfo.placa, cedula_tecnico: vehicleInfo.cedula_tecnico});
+        if (res3.success){
+          setMensaje({ respuesta: res3.message, tipo: true });
+          // Limpiar el mensaje después de 3 segundos
+          setTimeout(() => {
+            setMensaje(null);
+          }, 3000);
+        } else {
+          setMensaje({ respuesta: res3.message, tipo: false });
+          // Limpiar el mensaje después de 3 segundos
+          setTimeout(() => {
+            setMensaje(null);
+          }, 3000);
+        }
+      }
+
       if (respuesta.success && respuesta2.success) {
         // Limpiar los campos del formulario
         setRegisclientes({
@@ -248,8 +311,7 @@ export const FormularioClientes = ({clientes}) => {
           placa: '',
           fecha_ingreso: '',
           fecha_salida: '',
-          // descripcion: '',
-          // tecnico: '',
+          cedula_tecnico: '',
           estado: '',
         });
         
@@ -495,12 +557,12 @@ export const FormularioClientes = ({clientes}) => {
 
 
           {/* Tecnico Responsable */}
-          {/* <div className="mb-4">
+          <div className="mb-4">
             <label className="block font-semibold mb-2">Técnico Responsable 👤</label>
             <select
-              id='tecnico'
-              name="tecnico"
-              value={regisclientes.tecnico}
+              id='cedula_tecnico'
+              name="cedula_tecnico"
+              value={regisclientes.cedula_tecnico}
               onChange={handleChange}
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
             >
@@ -512,7 +574,7 @@ export const FormularioClientes = ({clientes}) => {
               ))}
             </select>
             {errores.tecnico && <p className="text-red-500 text-sm">{errores.tecnico}</p>}
-          </div> */}
+          </div>
 
           {/* Estado (solo visible en actualización) */}
           {clientes && (

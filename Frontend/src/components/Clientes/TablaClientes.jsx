@@ -43,8 +43,8 @@ export const TablaClientes = ({clientes}) => {
             <tr>
               {[
                 'Cédula','Nombre/Apellido', 'Contacto', 'Email', 'Dirección', 'N° Orden',
-                'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida', 'Estado', 'Opciones'
-                //'Descripción del trabajo', 'Técnico Responsable', 'Estado', 'Opciones'
+                'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida',
+                'Técnico Responsable', 'Estado', 'Opciones'
               ].map((header) => (
                 <th key={header} className="border border-white px-4 py-2">{header}</th>
               ))}
@@ -64,8 +64,8 @@ export const TablaClientes = ({clientes}) => {
                 <td className="border border-black px-4 py-2">{item?.placa} </td>
                 <td className="border border-black px-4 py-2">{formatDate(item.fecha_ingreso) } </td>
                 <td className="border border-black px-4 py-2">{formatDate(item.fecha_salida)} </td>
-                {/* <td className="border border-black px-4 py-2">{item?.detalles} </td>
-                <td className="border border-black px-4 py-2">{item?.encargado?.nombre} </td> */}
+                {/* <td className="border border-black px-4 py-2">{item?.detalles} </td> */}
+                <td className="border border-black px-4 py-2">{item?.encargado?.nombre} </td>
                 <td className="border border-black px-4 py-2">{item?.estado} </td>
                 <td className="border border-black px-4 py-2">
                   <div
@@ -77,14 +77,14 @@ export const TablaClientes = ({clientes}) => {
                       data-tooltip-id="edit_client"
                       data-tooltip-content="Editar cliente"
                     />
-                    <IoPersonAddSharp
+                    {/* <IoPersonAddSharp
                       onClick={() => handleClick(item)}
                       className="text-black hover:text-blue-700 cursor-pointer"
                       data-tooltip-id="add_tech"
                       data-tooltip-content="Asignar un mantenimiento"
-                    />
+                    /> */}
                     <ReactTooltip id='edit_client' place='bottom'/>
-                    <ReactTooltip id='add_tech' place='bottom'/>
+                    {/* <ReactTooltip id='add_tech' place='bottom'/> */}
                   </div>
                 </td>
                 </tr>
