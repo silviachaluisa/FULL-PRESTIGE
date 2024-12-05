@@ -81,7 +81,7 @@ export const TablaClientes = ({clientes}) => {
                       onClick={() => handleClick(item)}
                       className="text-black hover:text-blue-700 cursor-pointer"
                       data-tooltip-id="add_tech"
-                      data-tooltip-content="Asignar a un técnico"
+                      data-tooltip-content="Asignar un mantenimiento"
                     />
                     <ReactTooltip id='edit_client' place='bottom'/>
                     <ReactTooltip id='add_tech' place='bottom'/>
