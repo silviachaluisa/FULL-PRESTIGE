@@ -460,6 +460,24 @@ export const HistoryProvider = ({ children }) => {
     };
   }
 
+  const fetchMantenimientosByPlaca = async (placa) => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/maintenance/vehicle/${placa}`, options);
+      
+      return response.data;
+    } catch (error) {
+        console.error("Error al obtener mantenimientos", error);
+    };
+  }
+
   const upDateMaintance = async (id, mantenimiento) => {
     const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/maintenance/${id}`;
     const token = localStorage.getItem("token");
@@ -498,8 +516,8 @@ export const HistoryProvider = ({ children }) => {
     }
   };
 
-  const registerMaintance = async (cedula,mantenimiento) => {
-    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/maintenance/${cedula}/register`;
+  const registerMaintance = async (infoMantenimiento) => {
+    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/maintenance/register`;
     const token = localStorage.getItem("token");
     const options = {
       headers: {
@@ -508,7 +526,7 @@ export const HistoryProvider = ({ children }) => {
       },
     };
     try{
-      const respuesta = await axios.post(URLActualizar, mantenimiento, options);
+      const respuesta = await axios.post(URLActualizar, infoMantenimiento, options);
       console.log(respuesta);
       setSuccessMessage("Mantenimiento registrado correctamente");
       //Cerrar el modal automáticamente después de un breve tiempo
@@ -518,6 +536,7 @@ export const HistoryProvider = ({ children }) => {
         handleModal();
         fetchClientes();
       }, 2000); // Cierra el modal después de 2 segundos
+      return { success: true, message: "Mantenimiento registrado correctamente" };
     } catch (error) {
       console.error("Error al registrar mantenimiento", error);
       if (error.response.data?.errors && error.response.data.errors.length > 0) {
@@ -532,6 +551,7 @@ export const HistoryProvider = ({ children }) => {
           setSuccessMessage("");
         }, 5000);
       }
+      return { success: false, message: error.response.data.message
     };
   };
 
@@ -575,6 +595,7 @@ export const HistoryProvider = ({ children }) => {
       mantenimientos,
       setMantenimientos,
       fetchMantenimientos,
+      fetchMantenimientosByPlaca,
       upDateMaintance,
       registerMaintance
        }}>

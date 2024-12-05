@@ -9,31 +9,28 @@ export const FormularioClientes = ({clientes}) => {
   const navigate = useNavigate();
   const [mensaje, setMensaje] = useState("");
   const [errores, setErrores] = useState({});
-  // const [tecnicos, setTecnicos] = useState([]);
+  
   const {
     upDateClient,
     registerClient,
     updateClientVehicle,
-    fetchUsuarios,
     registerVehicle
   }=useContext(HistoryContext)
  
   const [regisclientes, setRegisclientes] = useState({
-        cedula: '',
-        nombre: '',
-        telefono: '',
-        correo: '',
-        direccion: '',
-        orden: '',
-        marca: '',
-        modelo: '',
-        placa: '',
-        fecha_ingreso: '',
-        fecha_salida: '',
-        // descripcion: '',
-        // tecnico: '',
-        estado: '',
-      });
+    cedula: '',
+    nombre: '',
+    telefono: '',
+    correo: '',
+    direccion: '',
+    orden: '',
+    marca: '',
+    modelo: '',
+    placa: '',
+    fecha_ingreso: '',
+    fecha_salida: '',
+    estado: '',
+  });
       // Sincronizar los valores cuando cambia `usuarios`
       useEffect(() => {
         if (clientes) {
@@ -49,39 +46,10 @@ export const FormularioClientes = ({clientes}) => {
             placa: clientes.placa ?? '',
             fecha_ingreso: clientes.fecha_ingreso.split("T")[0] ?? '',
             fecha_salida: clientes.fecha_salida.split("T")[0] ?? '',
-            // descripcion: clientes.detalles ?? '',
-            // tecnico: clientes.encargado.cedula ?? '',
             estado: clientes.estado ?? '',
           });
-        } else {
-          // Limpia los campos si no hay datos de usuario
-          setRegisclientes({
-            cedula: '',
-            nombre: '',
-            telefono: '',
-            correo: '',
-            direccion: '',
-            orden: '',
-            marca: '',
-            modelo: '',
-            placa: '',
-            fecha_ingreso: '',
-            fecha_salida: '',
-            // descripcion: '',
-            // tecnico: '',
-            estado: '',
-          });
-        }
+        } 
       }, [clientes]);
-
-      // useEffect(() => {
-      //   const filtrarTecnicos = async () => {
-      //     const usuarios = await fetchUsuarios();
-      //     const ltecnicos = usuarios.filter((usuario) => usuario.cargo === "Técnico" && usuario.estado === "Activo");
-      //     setTecnicos(ltecnicos);
-      //   }
-      //   filtrarTecnicos();
-      // }, [])
 
       const handleSubmit = async (event) => {
         event.preventDefault();
@@ -142,15 +110,6 @@ export const FormularioClientes = ({clientes}) => {
       if (new Date(regisclientes.fecha_ingreso) > new Date(regisclientes.fecha_salida)) {
         nuevosErrores.fechaSalida = "La fecha de salida debe ser posterior a la fecha de ingreso.";
       }
-      // Validaciones de descripción
-      // if (!regisclientes.descripcion) {
-      //   nuevosErrores.descripcion = "La descripción del mantenimiento es obligatoria.";
-      // }
-
-      // Validaciones de técnico
-      // if (!regisclientes.tecnico) {
-      //   nuevosErrores.tecnico = "El técnico responsable es obligatorio.";
-      // }
       if (Object.keys(nuevosErrores).length > 0) {
         setErrores(nuevosErrores);
         return;
