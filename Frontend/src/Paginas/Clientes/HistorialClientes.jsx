@@ -298,7 +298,7 @@ const handleSearch = async () => {
               {[
                 'Cédula', 'Contacto', 'Email', 'Dirección', 'N° Orden',
                 'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida',
-                'Descripción del trabajo', 'Técnico a cargo', 'Estado', 'Opciones'
+                'Descripción del trabajo', 'Técnico Responsable', 'Estado', 'Opciones'
               ].map((header) => (
                 <th key={header} className="border border-black px-4 py-2">{header}</th>
               ))}
