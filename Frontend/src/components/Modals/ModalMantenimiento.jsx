@@ -48,7 +48,7 @@ const ModalMantenimiento = ({info, handleShow}) => {
             try {
                 // Actualizar mantenimiento
                 await upDateMaintance(info?._id, {
-                    encargado: infoMantenimiento.encargado,
+                    cedula_encargado: infoMantenimiento.encargado,
                     costo: infoMantenimiento.costo,
                     descripcion: infoMantenimiento.descripcion,
                 });
@@ -73,7 +73,7 @@ const ModalMantenimiento = ({info, handleShow}) => {
                 // Registrar nuevo mantenimiento
                 await registerMaintance({
                     placa: info?.vehiculo?.placa,
-                    encargado: infoMantenimiento.encargado,
+                    cedula_encargado: infoMantenimiento.encargado,
                     costo: infoMantenimiento.costo,
                     descripcion: infoMantenimiento.descripcion,
                 });
@@ -128,16 +128,16 @@ const ModalMantenimiento = ({info, handleShow}) => {
                             Técnico:
                         </label>
                         <select
-                            id="tecnicos"
-                            name="tecnicos"
-                            autoComplete="tecnicos"
+                            id="encargado"
+                            name="encargado"
+                            autoComplete="encargado"
                             className="w-full border rounded-lg p-2"
                             value={infoMantenimiento.encargado}
                             onChange={handleChange}
                         >
-                            <option>Seleccionar Técnico</option>
+                            <option value="">Seleccionar Técnico</option>
                             {cargando ? (
-                            <option>Cargando...</option>
+                            <option value="">Cargando...</option>
                             ) : (
                             tecnicos.map((tecnico) => (
                                 <option key={tecnico.cedula} value={tecnico.cedula}>

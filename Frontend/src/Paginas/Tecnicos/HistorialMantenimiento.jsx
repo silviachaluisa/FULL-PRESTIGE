@@ -23,7 +23,7 @@ import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { FaCalendarAlt} from 'react-icons/fa';
-import { CgLaptop } from 'react-icons/cg';
+import AuthContext from '../../context/AuthProvider';
 
 export const HistorialMantenimiento = () => {
   // Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
@@ -57,6 +57,8 @@ export const HistorialMantenimiento = () => {
     mantenimientos
   }= useContext (HistoryContext);
   
+  const { auth } = useContext(AuthContext);
+
   const [placa, setPlaca] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -104,6 +106,16 @@ const handleNewClick = (type) => {
   setTipoModal(type);
   handleModal();
 };
+
+let encabezadoTabla = [
+  'Cédula','Nombre/Apellido', 'Marca', 'Modelo', 'Placa', 'Fecha Ingreso',
+  'Fecha Salida', 'Descripción del trabajo', 'Técnico Responsable', 'Estado'
+];
+
+if (auth?.cargo === "Administrador"){
+  // Si el usuario es un administrador, mostrar la columna de opciones
+  encabezadoTabla.push('Opciones');
+}
 
 // ------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------
@@ -298,18 +310,14 @@ const handleSearch = async () => {
     <table className="w-full text-center border-collapse border border-black">
       <thead className="bg-black text-white font-mono">
         <tr>
-          {[
-            'Cédula','Nombre/Apellido','N° Orden',
-              'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida',
-              'Descripción del trabajo', 'Técnico Responsable', 'Estado'
-          ].map((header) => (
+          {encabezadoTabla.map((header) => (
             <th key={header} className="border border-black px-4 py-2">{header}</th>
           ))}
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td colSpan="8" className="text-center py-4 text-red-700">
+          <td colSpan={encabezadoTabla.length} className="text-center py-4 text-red-700">
             { loading ? 'Cargando...' : 'No hay mantenimientos registrados'}
           </td>
         </tr>
