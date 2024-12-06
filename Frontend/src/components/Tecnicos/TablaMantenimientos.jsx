@@ -39,7 +39,7 @@ export const TablaMantenimiento = ({ clientes }) => {
     console.log("Cliente seleccionado:", cliente);
   };
 
-  // Cargar las asistencias de los clientes
+  
   useEffect(() => {
     const obtenerMantenimientos = async () => {
       let indice = 0;

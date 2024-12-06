@@ -106,15 +106,15 @@ const handleNewClick = (type) => {
 // ------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------
 const handleSearch = async () => {
-  // Validación de la cédula
-  const cedulaRegex = /^[0-9]{10}$/;
+  // Validación de la placa (formato: ABC-1234 o similar)
+  const placaRegex = /^[A-Z]{3}-?[0-9]{3,4}$/;
 
-  if (cedula === "") {
-    await fetchClientes(); // Cargar todos los clientes si la cédula está vacía
+  if (placa === "") {
+    await fetchClientes(); // Cargar todos los clientes si la placa está vacía
     return;
   }
 
-  if (!cedulaRegex.test(cedula)) {
+  if (!placaRegex.test(cedula)) {
     setErrorMessage("⚠️ La cédula debe contener solo 10 dígitos numéricos.");
     return;
   }
@@ -256,7 +256,7 @@ const handleSearch = async () => {
             type="text"
             onChange={handleChange}
             value={cedula}
-            placeholder="Cedula"
+            placeholder="Placa"
             className="bg-gray-200 border border-black py-2 px-4 w-full rounded-lg focus:outline-none"
           />
           <button 
