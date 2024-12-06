@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types';
 import { HistoryContext } from '../../context/HistoryContext';
-import { useContext, useEffect } from 'react';
-import { ModalMantenimiento } from '../Modals/ModalMantenimientos';
+import { useContext, useEffect, useState } from 'react';
+import { Tooltip as ReactTooltip } from 'react-tooltip'
+import { FaPencilAlt } from "react-icons/fa";
+import ModalMantenimiento from "../Modals/ModalMantenimiento";
+import AuthContext from '../../context/AuthProvider';
 
 export const TablaMantenimiento = ({ clientes }) => {
   // Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
@@ -28,18 +31,37 @@ export const TablaMantenimiento = ({ clientes }) => {
     setSeleccionado,
     showModal,
     handleModal,
+    setTipoModal,
     mantenimientos,
     setMantenimientos
   } = useContext(HistoryContext);
 
+  const { auth } = useContext(AuthContext);
+  const [ infoMantenimiento, setInfoMantenimiento ] = useState({});
+  console.log("Auth ->", auth);
+
   // Función para manejar el clic en una fila
-  const handleRowClick = (cliente) => {
+  const handleRowClick = (cliente, abrir=false) => {
     // Al seleccionar el cliente, se completan los campos automáticamente
     setSeleccionado(cliente); // Actualizar el cliente seleccionado en el contexto
+    setInfoMantenimiento(cliente);
     console.log("Cliente seleccionado:", cliente);
-  };
+    if (abrir) {
+      setTipoModal("actualizar");
+      handleModal();
+    }
+  }; 
 
-  
+  let encabezadoTabla = [
+    'Cédula','Nombre/Apellido', 'Marca', 'Modelo', 'Placa', 'Fecha Ingreso',
+    'Fecha Salida', 'Descripción del trabajo', 'Técnico Responsable', 'Estado'
+  ];
+
+  if (auth?.cargo === "Administrador"){
+    // Si el usuario es un administrador, mostrar la columna de opciones
+    encabezadoTabla.push('Opciones');
+  }
+
   useEffect(() => {
     const obtenerMantenimientos = async () => {
       let indice = 0;
@@ -70,8 +92,7 @@ export const TablaMantenimiento = ({ clientes }) => {
       <table className="w-full text-center border-collapse border border-black">
         <thead className="bg-black text-white font-mono">
           <tr>
-            {['Cédula','Nombre/Apellido', 'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida',
-                'Descripción del trabajo', 'Técnico Responsable', 'Estado'].map((header) => (
+            {encabezadoTabla.map((header) => (
               <th key={header} className="border border-white px-4 py-2">
                 {header}
               </th>
@@ -83,7 +104,7 @@ export const TablaMantenimiento = ({ clientes }) => {
              <tr
               key={index}
               onClick={() => handleRowClick(item)} // Cambiar la fila seleccionada
-               className={`cursor-pointer ${seleccionado?.vehiculo?.placa === item?.vehiculo?.placa ? 'bg-red-200' : ''}`} // Marcar la fila seleccionada con color
+               className={`cursor-pointer ${seleccionado?.indice=== item?.indice ? 'bg-red-200' : ''}`} // Marcar la fila seleccionada con color
             >
               <td className="border border-black px-4 py-2">{item?.vehiculo?.propietario?.cedula || 'N/A'} </td>
               <td className="border border-black px-4 py-2">{item?.vehiculo?.propietario.nombre || 'N/A'} </td>
@@ -95,6 +116,25 @@ export const TablaMantenimiento = ({ clientes }) => {
               <td className="border border-black px-4 py-2">{item?.descripcion || 'N/A'} </td>
               <td className="border border-black px-4 py-2">{item?.encargado?.nombre || 'N/A'} </td>
               <td className="border border-black px-4 py-2">{item?.estado || 'N/A'} </td>
+              {
+                auth?.cargo === "Administrador" && (
+                  // Si el usuario es un administrador, mostrar la columna de opciones
+                  <td className="border border-black px-4 py-2">
+                    <div
+                      className="flex justify-around"
+                    >
+                      <FaPencilAlt
+                        onClick={() => handleRowClick(item, true)}
+                        className="text-black hover:text-blue-700 cursor-pointer"
+                        data-tooltip-id="edit_client"
+                        data-tooltip-content="Editar mantenimiento"
+                      />
+                      
+                      <ReactTooltip id='edit_client' place='bottom'/>
+                    </div>
+                  </td>
+                )
+              }
             </tr>
           ))}
         </tbody>
@@ -104,8 +144,8 @@ export const TablaMantenimiento = ({ clientes }) => {
       {
         showModal && (
           <ModalMantenimiento
+            info={infoMantenimiento}
             handleShow={handleModal}
-            cliente={seleccionado}
           />
         )
       }

@@ -282,8 +282,8 @@ const handleSearch = async () => {
           <button
             onClick={() => handleNewClick("actualizar")}
             className="ml-4 px-4 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-500"
-            disabled={Object.keys(seleccionado?.cliente || {}).length !== 0 ? false : true}
-            style={{ cursor: Object.keys(seleccionado?.cliente || {}).length !== 0 ? "pointer" : "not-allowed" }}
+            disabled={Object.keys(seleccionado?.encargado || {}).length !== 0 ? false : true}
+            style={{ cursor: Object.keys(seleccionado?.encargado || {}).length !== 0 ? "pointer" : "not-allowed" }}
           >
             Solicitar Actualización
           </button>
