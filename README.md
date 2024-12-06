@@ -1,19 +1,55 @@
-# Estructura del Frontend <br>
-## Módulo Administrador <br>
-### Componente: Registrar Usuario <br>
-El componente RegistrarUsuario permite al administrador registrar nuevos usuarios en el sistema y asignarles roles específicos (como Gerente, Administrador o Técnico). Este componente facilita la creación de usuarios 
-con sus datos personales y la asignación de un cargo dentro de la empresa.<br>
+# GESTION DE UN TALLER AUTOMOTRIZ "FULL PRESTIGE" <br>
 
-***Características***<br>
-* **Registro de Usuarios:** Permite al administrador crear cuentas de usuario en el sistema 
-  ingresando campos necesarios como cédula, nombre, teléfono, correo, dirección, cargo y 
-  contraseña.
-* **Asignación de Roles:** Asigna un rol a cada usuario según sus responsabilidades en la empresa.
-* **Validación de Datos:** Realiza validaciones básicas de los datos para asegurar que los campos 
-  sean completados correctamente.
-* **Almacenamiento de Token:** Guarda el token de autenticación en localStorage después de 
-  registrar exitosamente al usuario.
-### Estructura del Código <br>
+## Estructura del Frontend <br>
+### Descripción del Proyecto
+
+Este proyecto es la interfaz web para gestionar los servicios web del taller automotriz Full Prestige. <br>
+Permite a los usuarios manejar información de clientes y vehículos de forma segura y eficiente.<br>
+  
+### Características <br>
+Se presenta una lista de las principales funcionalidades del frontend:
+* Inicio de sesión y autenticación
+* Gestión de perfiles de usuarios
+* Visualización y gestión de clientes y vehículos
+* Control de asistencia del personal
+* Historial de mantenimientos realizados y pagos
+  
+### Tecnologías Utilizadas 
+Lista de tecnologías, frameworks y librerías utilizadas
+- **React.js:**
+- **Redux:**
+- **Axios:** Para realizar solicitudes HTTP
+- **TailwindCss:**
+- 
+### Requisitos Previos <br>
+Herramientras y configuraciones necesarias para trabajar en el proyecto:
+- Node js
+- Npm
+- Visual Studio Code
+- 
+### Instalación <br>
+Intrucciones paso a paso para configurar y ejecutar el proyecto localmente
+1. Clonar repositorio:
+2. Ir al directorio del proyecto:
+3. Instalar dependencias: npm create vite@latest
+4. Iniciar el servidor de desarrollo: npm run dev
+5. Abrir el navegador en: http:localhost:3000
+
+  
+### Estructura del Proyecto <br>
+### Contribución <br>
+Instrucciones para colaborar en el proyecto
+Si deseas contribuir, por favor abre un issue o envia un pull request con tus cambios
+
+### Estado del Proyecto <br>
+El proyecto esta en desarrollo y sujeto a cambios frecuentemente
+
+### Autores <br>
+Desarrollado por:
+
+### Licencia <br>
+Este proyecto esta licenciado bajo la ...
+
 ***Dependencias***<br>
 
 El componente utiliza:
@@ -34,103 +70,25 @@ El componente utiliza:
 
 
 ***Estructura del Formulario***<br>
-Campos de Registro
-1. Cédula
-2. Nombre y Apellido
-3. Teléfono
-4. Correo Electrónico
-5. Dirección
-6. Cargo: Selección de roles predefinidos (Gerente, Administrador, Técnico).
-7. Contraseña
-8. Campo de Estado (opcional en edición)
-9. El campo de Estado solo es visible cuando el formulario es utilizado en modo de edición de 
-   usuario. En el modo de registro, este campo está oculto.
+
+   
 > [!NOTE]
 > **Campo de Estado (opcional en edición)**<br>
 > El campo de Estado solo es visible cuando el formulario es utilizado en modo de edición de usuario. En el modo de registro, este campo está oculto.
 
-## Componente EditarPerfil
-Este componente permite a los usuarios ver y editar su perfil en una página que incluye un formulario prellenado con la información actual del usuario. Los usuarios pueden actualizar campos como cédula, nombre, teléfono, correo, dirección, cargo y estado.
+> [!WARNING]
+> DKJFHD
 
-Características
-Visualización de datos personales en un formulario editable.
-Actualización de la información del perfil mediante una solicitud PUT al backend.
-Validación de token de usuario para asegurar que solo los usuarios autenticados accedan a esta página.
-Mensaje de confirmación de éxito o error al guardar los cambios.
-Estructura del Código
-Dependencias
-Este componente utiliza:
+> [!TIP]
+> **Campo de Estado (opcional en edición)**<br>
+> El campo de Estado solo es visible cuando el formulario es utilizado en modo de edición de usuario. En el modo de registro, este campo está oculto.
 
-axios para realizar solicitudes HTTP.
-useState y useEffect de React para manejar el estado y los efectos del componente.
-useNavigate de React Router para redirigir al usuario.
-Componente personalizado Mensaje para mostrar alertas (mensajes de éxito o error).
-Código Principal
-Estados y Hooks:
+> [!IMPORTANT]
+> DKJFHD
 
-perfil: Estado que contiene los datos del perfil del usuario.
-mensaje: Estado para manejar el mensaje de confirmación tras guardar cambios.
-useEffect: Al montarse el componente, realiza una solicitud GET al backend para obtener el perfil del usuario.
-Manejadores de Eventos:
-
-handleChange: Actualiza el estado perfil conforme el usuario cambia los campos en el formulario.
-handleSave: Envía los cambios al backend con una solicitud PUT al hacer clic en "Guardar cambios".
-Autenticación:
-
-Utiliza localStorage para verificar la existencia de un token. Si no existe, redirige al usuario a la página de inicio de sesión.
-Estilos
-El componente usa TailwindCSS para estilizar el formulario, botones y estructura. Asegúrate de tener instalado y configurado TailwindCSS en tu proyecto.
-
-Instalación y Configuración
-Instalar Axios
-
-Si aún no tienes Axios en tu proyecto, instálalo con:
-
-bash
-Copy code
-npm install axios
-Configurar URL de Backend
-
-Este componente asume que tienes una variable de entorno llamada VITE_BACKEND_URL que apunta a tu backend. Asegúrate de que esta variable esté configurada correctamente.
-
-Ejemplo de Backend para Endpoint
-
-Tu backend debe tener un endpoint para obtener (GET /perfil) y actualizar (PUT /perfil) la información del perfil del usuario autenticado. Ejemplo:
-
-javascript
-Copy code
-// Backend - perfilController.js
-
-const obtenerPerfil = async (req, res) => {
-  const usuario = await Usuario.findById(req.usuario.id);
-  res.json(usuario);
-};
-
-const actualizarPerfil = async (req, res) => {
-  const usuario = await Usuario.findByIdAndUpdate(req.usuario.id, req.body, { new: true });
-  res.json(usuario);
-};
-Uso
-javascript
-Copy code
-import EditarPerfil from './ruta/del/componente/EditarPerfil';
-
-function App() {
-  return (
-    <div className="App">
-      <EditarPerfil />
-    </div>
-  );
-}
-
-export default App;
-Personalización
-Puedes adaptar este componente:
-
-Campos adicionales: Si necesitas campos adicionales, agrégalos al estado perfil y ajusta el formulario.
-Estilos: Modifica los estilos CSS o usa tu propio sistema de diseño.
-Capturas de Pantalla
-Formulario para Editar Perfil
+> [!CAUTION]
+> DKJFHD
 
 
-Mensaje de Confirmación
+
+
