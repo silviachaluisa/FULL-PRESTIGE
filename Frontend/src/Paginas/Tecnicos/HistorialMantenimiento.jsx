@@ -287,6 +287,8 @@ const handleSearch = async () => {
           <button
             onClick={() => handleNewClick("registrar")}
             className="px-4 py-2 bg-amber-500 text-white font-semibold rounded-lg hover:bg-orange-300"
+            disabled={auth?.cargo !== "Técnico" ? true : false}
+            style={{ cursor: auth?.cargo !== "Técnico" ? "not-allowed" : "pointer" }}
           >
             Registrar Mantenimiento
           </button>
