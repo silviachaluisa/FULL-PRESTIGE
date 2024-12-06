@@ -38,7 +38,6 @@ export const TablaMantenimiento = ({ clientes }) => {
 
   const { auth } = useContext(AuthContext);
   const [ infoMantenimiento, setInfoMantenimiento ] = useState({});
-  console.log("Auth ->", auth);
 
   // Función para manejar el clic en una fila
   const handleRowClick = (cliente, abrir=false) => {
