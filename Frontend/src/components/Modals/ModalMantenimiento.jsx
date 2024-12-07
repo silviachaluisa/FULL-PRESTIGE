@@ -38,7 +38,7 @@ const ModalMantenimiento = ({info, handleShow}) => {
                 return;
             }
 
-            if (infoMantenimiento.encargado === "Seleccionar Técnico") {
+            if (infoMantenimiento.encargado === "") {
                 setErrorMessage("Debes seleccionar un técnico");
                 setTimeout(() => setErrorMessage(""), 5000);
                 return;
@@ -61,7 +61,7 @@ const ModalMantenimiento = ({info, handleShow}) => {
                 setCargando(false);
             }
         } else {
-            if (infoMantenimiento.encargado === "Seleccionar Técnico") {
+            if (infoMantenimiento.encargado === "") {
                 setErrorMessage("Debes seleccionar un técnico");
                 setTimeout(() => setErrorMessage(""), 5000);
                 return;
@@ -110,7 +110,7 @@ const ModalMantenimiento = ({info, handleShow}) => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-96">
                 <h2 className="text-xl font-bold mb-4">
-                    { tipoModal === "actualizar" ? "Actualizar" : "Registrar"} mantenimiento
+                    { tipoModal === "actualizar" ? "Actualizar" : tipoModal === "soli-actualizacion"? "Solicitar actualizacion de": "Registrar"} un mantenimiento
                 </h2>
 
                 {errorMessage && (
@@ -206,13 +206,39 @@ const ModalMantenimiento = ({info, handleShow}) => {
                 >
                     Cancelar
                 </button>
-                <button
-                    className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-800"
-                    disabled={cargando}
-                    onClick={handleSubmit}
-                >
-                    Guardar
-                </button>
+                {
+                    tipoModal === "actualizar" && (
+                        <button
+                            className="px-4 py-2 bg-yellow-600 text-white font-semibold rounded-lg hover:bg-yellow-800"
+                            disabled={cargando}
+                            onClick={handleSubmit}
+                        >
+                            Actualizar
+                        </button>
+                    )
+                }
+                {
+                    tipoModal === "registrar" && (
+                        <button
+                            className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-800"
+                            disabled={cargando}
+                            onClick={handleSubmit}
+                        >
+                            Guardar
+                        </button>
+                    )
+                }
+                {
+                    tipoModal === "soli-actualizacion" && (
+                        <button
+                            className="px-4 py-2 bg-yellow-600 text-white font-semibold rounded-lg hover:bg-yellow-800"
+                            disabled={cargando}
+                            onClick={handleSubmit}
+                        >
+                            Solicitar actualización
+                        </button>
+                    )
+                }
                 </div>
             </div>
         </div>

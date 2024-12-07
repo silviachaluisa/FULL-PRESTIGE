@@ -291,8 +291,15 @@ const handleSearch = async () => {
               <button
                 onClick={() => handleNewClick("registrar")}
                 className="px-4 py-2 bg-amber-500 text-white font-semibold rounded-lg hover:bg-orange-300"
-                disabled={auth?.cargo !== "Técnico" ? true : false}
-                style={{ cursor: auth?.cargo !== "Técnico" ? "not-allowed" : "pointer" }}
+                disabled={
+                  (auth?.cargo !== "Técnico") || // Si el usuario no es técnico deshabilitar el botón o
+                  (seleccionado?.descripcion && seleccionado?.costo) ? true : false // Si ya hay una descripción y costo deshabilitar el botón
+                }
+                style={{
+                  cursor: 
+                    (auth?.cargo !== "Técnico") || // Si el usuario no es técnico mostrar cursor de no permitido
+                    (seleccionado?.descripcion && seleccionado?.costo) ? "not-allowed" : "pointer" // Si ya hay una descripción y costo mostrar cursor de no permitido
+                }}
               >
                 Registrar Mantenimiento
               </button>
@@ -303,10 +310,12 @@ const handleSearch = async () => {
             // Si el usuario es un tecnico o gerente, puede solicitar actualizaciones
             (auth?.cargo === "Técnico" || auth?.cargo === "Gerente") && (
               <button
-                onClick={() => handleNewClick("actualizar")}
+                onClick={() => handleNewClick("soli-actualizacion")}
                 className="ml-4 px-4 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-500"
-                disabled={Object.keys(seleccionado?.encargado || {}).length !== 0 ? false : true}
-                style={{ cursor: Object.keys(seleccionado?.encargado || {}).length !== 0 ? "pointer" : "not-allowed" }}
+                disabled={!(seleccionado?.descripcion && seleccionado?.costo)} // Si no hay descripción o costo deshabilitar el botón
+                style={{
+                  cursor: seleccionado?.descripcion && seleccionado?.costo ? "pointer" : "not-allowed" // Si hay descripción y costo mostrar cursor de permitido
+                }}
               >
                 Solicitar Actualización
               </button>
