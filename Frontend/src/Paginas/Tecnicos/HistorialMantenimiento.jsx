@@ -59,6 +59,7 @@ export const HistorialMantenimiento = () => {
   
   const { auth } = useContext(AuthContext);
 
+  console.log("Auth ->", auth);
   const [placa, setPlaca] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -284,23 +285,33 @@ const handleSearch = async () => {
 
         {/* ------------------------------------------------------------------------------------------------------------------------ */}
         <div className="flex justify-center items-center bg-gray-300 p-4 rounded-lg mb-6">
-          <button
-            onClick={() => handleNewClick("registrar")}
-            className="px-4 py-2 bg-amber-500 text-white font-semibold rounded-lg hover:bg-orange-300"
-            disabled={auth?.cargo !== "Técnico" ? true : false}
-            style={{ cursor: auth?.cargo !== "Técnico" ? "not-allowed" : "pointer" }}
-          >
-            Registrar Mantenimiento
-          </button>
+          {
+            // Si el usuario no es técnico o administrador, no puede registrar mantenimientos
+            (auth?.cargo === "Técnico" || auth?.cargo === "Administrador") && (
+              <button
+                onClick={() => handleNewClick("registrar")}
+                className="px-4 py-2 bg-amber-500 text-white font-semibold rounded-lg hover:bg-orange-300"
+                disabled={auth?.cargo !== "Técnico" ? true : false}
+                style={{ cursor: auth?.cargo !== "Técnico" ? "not-allowed" : "pointer" }}
+              >
+                Registrar Mantenimiento
+              </button>
+            )
+          }
 
-          <button
-            onClick={() => handleNewClick("actualizar")}
-            className="ml-4 px-4 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-500"
-            disabled={Object.keys(seleccionado?.encargado || {}).length !== 0 ? false : true}
-            style={{ cursor: Object.keys(seleccionado?.encargado || {}).length !== 0 ? "pointer" : "not-allowed" }}
-          >
-            Solicitar Actualización
-          </button>
+          {
+            // Si el usuario es un tecnico o gerente, puede solicitar actualizaciones
+            (auth?.cargo === "Técnico" || auth?.cargo === "Gerente") && (
+              <button
+                onClick={() => handleNewClick("actualizar")}
+                className="ml-4 px-4 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-500"
+                disabled={Object.keys(seleccionado?.encargado || {}).length !== 0 ? false : true}
+                style={{ cursor: Object.keys(seleccionado?.encargado || {}).length !== 0 ? "pointer" : "not-allowed" }}
+              >
+                Solicitar Actualización
+              </button>
+            )
+          }
         </div>
         {/* ---------------------------------------------------------------------------------------------------------------------------- */}
    {/* TABLA DEL HISTORIAL */}
@@ -331,18 +342,28 @@ const handleSearch = async () => {
 
 
        {/* BOTONES------------------------------------------------------------- */}
-       <div className='flex space-x-4 justify-center mt-20'>
-        <button  onClick={handleDownloadPDF} className="bg-red-400 text-black font-bold px-3 py-2 rounded flex items-center space-x-5"> 
-          <img src={pdf} alt="pdf" className='h-6' />
-          Descargar PDF
-        </button>
+       {
+        // Si el usuario es un administrador o gerente, mostrar los botones de descarga
+        auth?.cargo === "Administrador" || auth?.cargo === "Gerente" && (
+          <div className="flex space-x-4 justify-center mt-20">
+            <button
+              onClick={handleDownloadPDF}
+              className="bg-red-400 text-black font-bold px-3 py-2 rounded flex items-center space-x-5"
+            >
+              <img src={pdf} alt="pdf" className="h-6" />
+              Descargar PDF
+            </button>
 
-        <button onClick={handleDownloadExcel} className="bg-green-300 text-black font-bold px-3 py-2 rounded flex item-center space-x-5">
-        <img src={excel} alt="excel" className='h-6' />
-          Descargar Excel
-        </button>
-      </div>
-
+            <button
+              onClick={handleDownloadExcel}
+              className="bg-green-300 text-black font-bold px-3 py-2 rounded flex item-center space-x-5"
+            >
+              <img src={excel} alt="excel" className="h-6" />
+              Descargar Excel
+            </button>
+          </div>
+        )
+       }
       </main>
 
         {/* Footer------------------------------------------------------------------- */}

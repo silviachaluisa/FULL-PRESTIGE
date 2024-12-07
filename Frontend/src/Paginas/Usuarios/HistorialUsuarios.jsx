@@ -15,6 +15,7 @@ import renaultLogo from '../../assets/LogosAutos/Renault.png'
 import susukiLogo from '../../assets/LogosAutos/Susuki.png'
 import toyotaLogo from '../../assets/LogosAutos/Toyota.png'
 import { HistoryContext } from '../../context/HistoryContext';
+import AuthContext from '../../context/AuthProvider';
 import { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import { TablaUsuarios } from '../../components/Usuarios/TablaUsuarios';
@@ -24,9 +25,9 @@ import * as XLSX from 'xlsx';
 import { FaUserAlt} from 'react-icons/fa';
 
 export const Usuarios = () => {
-
   const navigate= useNavigate();
   const {usuarios,fetchUsuarios, fetchUsuarioByCedula}= useContext (HistoryContext);
+  const {auth}= useContext(AuthContext);
   const [cedula, setCedula] = useState("");
   const [startDate] = useState('');
   const [endDate] = useState('');
@@ -34,19 +35,14 @@ export const Usuarios = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  
-//   const handleChange=(e)=>{
-//     setCedula(e.target.value)
-// };
+  const handleChange=(e)=>{
+    const value = e.target.value
 
-const handleChange=(e)=>{
-  const value = e.target.value
-
-  //Validación para que solo ingresen números y que no sobrepase los 10 dígitos
-  if (/^\d{0,10}$/.test(value)){
-    setCedula(value); // si es valido, actualiza el estado
-  }
-};
+    //Validación para que solo ingresen números y que no sobrepase los 10 dígitos
+    if (/^\d{0,10}$/.test(value)){
+      setCedula(value); // si es valido, actualiza el estado
+    }
+  };
 
   const handleLogout=()=>{
     const confirmLogout = window.confirm ("¿Deseas abandonar la página?")
@@ -54,121 +50,125 @@ const handleChange=(e)=>{
     if(confirmLogout===true){
         navigate('/dashboard');
     }  
-};
+  };
  // Llamar a fetchUsuarios una vez cuando el componente carga
- useEffect(() => {
-  fetchUsuarios();
-}, []);
+  useEffect(() => {
+    fetchUsuarios();
+  }, []);
 
-
-const brandLogos = {
-  bmw: BMWLogo,
-  chevrolet: chevroletLogo,
-  ford: fordLogo,
-  honda:hondaLogo,
-  hunday:hundayLogo,
-  kia:kiaLogo,
-  mazda: mazdaLogo,
-  mercedes:mercedesLogo,
-  peugeot:peugeotLogo,
-  renault:renaultLogo,
-  susuki:susukiLogo,
-  toyota:toyotaLogo
-};
-const handleNewClick =()=>{
-  navigate('/dashboard/registrar-usuarios')
-}
-// const handleSearch = async()=>{
-//  if(cedula === "") {await fetchUsuarios();return}
-//  await fetchUsuariosByCedula(cedula);
-// };
+  const brandLogos = {
+    bmw: BMWLogo,
+    chevrolet: chevroletLogo,
+    ford: fordLogo,
+    honda:hondaLogo,
+    hunday:hundayLogo,
+    kia:kiaLogo,
+    mazda: mazdaLogo,
+    mercedes:mercedesLogo,
+    peugeot:peugeotLogo,
+    renault:renaultLogo,
+    susuki:susukiLogo,
+    toyota:toyotaLogo
+  };
+  const handleNewClick =()=>{
+    navigate('/dashboard/registrar-usuarios')
+  };
 
 // ------------------------------------------------------------------------------------------------------------
-const handleSearch = async () => {
-  // Validación de la cédula
-  const cedulaRegex = /^[0-9]{10}$/;
+  const handleSearch = async () => {
+    // Validación de la cédula
+    const cedulaRegex = /^[0-9]{10}$/;
 
-  if (!cedulaRegex.test(cedula)) {
-    setErrorMessage("⚠️La cédula debe contener solo 10 dígitos numéricos.");
-    return;
-  }
+    if (!cedulaRegex.test(cedula)) {
+      setErrorMessage("⚠️La cédula debe contener solo 10 dígitos numéricos.");
+      return;
+    }
 
-  if (cedula === "") {
-    await fetchUsuarios(); // Cargar todos los usuarios si la cédula está vacía
-    return;
-  }
+    if (cedula === "") {
+      await fetchUsuarios(); // Cargar todos los usuarios si la cédula está vacía
+      return;
+    }
 
-  // Verificar que la cédula se está pasando correctamente
-  console.log("Buscando usuario con cédula:", cedula);
+    // Verificar que la cédula se está pasando correctamente
+    console.log("Buscando usuario con cédula:", cedula);
 
-  const usuario = await fetchUsuarioByCedula(cedula);
+    const usuario = await fetchUsuarioByCedula(cedula);
 
-  // Verificar que el usuario se encontró
-  console.log("Usuario encontrado:", usuario);
-  
+    // Verificar que el usuario se encontró
+    console.log("Usuario encontrado:", usuario);
+    
 
-  if (!usuario) {
-    setErrorMessage("❌ Usuario no se encuentra registrado"); 
-  } else {
-    setErrorMessage(""); // Limpiar mensaje de error
-    setSuccessMessage(" ✅ Usuario encontrado con éxito");
-    setFilteredData([usuario]); // Mostrar el usuario encontrado
-  }
-  
-  setCedula(""); // Limpia la cédula del campo de búsqueda
+    if (!usuario) {
+      setErrorMessage("❌ Usuario no se encuentra registrado"); 
+    } else {
+      setErrorMessage(""); // Limpiar mensaje de error
+      setSuccessMessage(" ✅ Usuario encontrado con éxito");
+      setFilteredData([usuario]); // Mostrar el usuario encontrado
+    }
+    
+    setCedula(""); // Limpia la cédula del campo de búsqueda
 
-  // Limpiar los mensajes después de 4 segundos
-  setTimeout(() => {
-    setErrorMessage(""); // Limpiar mensaje de error
-    setSuccessMessage(""); // Limpiar mensaje de éxito
-  }, 4000);
-};
+    // Limpiar los mensajes después de 4 segundos
+    setTimeout(() => {
+      setErrorMessage(""); // Limpiar mensaje de error
+      setSuccessMessage(""); // Limpiar mensaje de éxito
+    }, 4000);
+  };
 // ---------------------------------------------------------------------------------------------------
 
-useEffect(() => {
-  if (startDate && endDate) {
-    const filtered = usuarios.filter((usuario) => {
-      const userDate = new Date(usuario.fechaRegistro);
-      return userDate >= new Date(startDate) && userDate <= new Date(endDate);
-    });
-     setFilteredData(filtered);
-   } else {
-     setFilteredData(usuarios);
-   }
- }, [startDate, endDate, usuarios]);
+  useEffect(() => {
+    if (startDate && endDate) {
+      const filtered = usuarios.filter((usuario) => {
+        const userDate = new Date(usuario.fechaRegistro);
+        return userDate >= new Date(startDate) && userDate <= new Date(endDate);
+      });
+      setFilteredData(filtered);
+    } else {
+      setFilteredData(usuarios);
+    }
+  }, [startDate, endDate, usuarios]);
 
-const handleDownloadPDF = () => {
-  const doc = new jsPDF();
-  doc.text('Historial de Usuarios Registrados', 10, 10);
-  doc.autoTable({
-    head: [['Cédula', 'Nombre y Apellido', 'Teléfono', 'Correo', 'Dirección', 'Cargo', 'Estado']],
-    body: filteredData.map((usuario) => [
-      usuario.cedula,
-      usuario.nombre,
-      usuario.telefono,
-      usuario.correo,
-      usuario.direccion,
-      usuario.cargo,
-      usuario.estado,
-    ]),
-  });
-  doc.save('HistorialUsuarios.pdf');
-};
-const handleDownloadExcel = () => {
-  const data = filteredData.map((usuario) => ({
-    Cédula: usuario.cedula,
-    Nombre: usuario.nombre,
-    Teléfono: usuario.telefono,
-    Email: usuario.correo,
-    Dirección: usuario.direccion,
-    Cargo: usuario.cargo,
-    Estado: usuario.estado,
-  }));
-  const worksheet = XLSX.utils.json_to_sheet(data);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'HistorialUsuarios');
-  XLSX.writeFile(workbook, 'HistorialUsuarios.xlsx');
-};
+  const encabezadoTabla = [
+    'Cédula', 'Nombre y Apellido', 'Teléfono', 'Email', 'Dirección', 
+    'Cargo', 'Estado'
+  ]
+
+  if (auth?.cargo === 'Administrador') {
+    encabezadoTabla.push('Opciones');
+  }
+
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+    doc.text('Historial de Usuarios Registrados', 10, 10);
+    doc.autoTable({
+      head: [['Cédula', 'Nombre y Apellido', 'Teléfono', 'Correo', 'Dirección', 'Cargo', 'Estado']],
+      body: filteredData.map((usuario) => [
+        usuario.cedula,
+        usuario.nombre,
+        usuario.telefono,
+        usuario.correo,
+        usuario.direccion,
+        usuario.cargo,
+        usuario.estado,
+      ]),
+    });
+    doc.save('HistorialUsuarios.pdf');
+  };
+  const handleDownloadExcel = () => {
+    const data = filteredData.map((usuario) => ({
+      Cédula: usuario.cedula,
+      Nombre: usuario.nombre,
+      Teléfono: usuario.telefono,
+      Email: usuario.correo,
+      Dirección: usuario.direccion,
+      Cargo: usuario.cargo,
+      Estado: usuario.estado,
+    }));
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'HistorialUsuarios');
+    XLSX.writeFile(workbook, 'HistorialUsuarios.xlsx');
+  };
 
   return (
     <div className="min-h-screen flex flex-col" 
@@ -236,11 +236,16 @@ const handleDownloadExcel = () => {
             Buscar
           </button>
 
-          <button 
-          onClick={handleNewClick}
-          className="ml-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-800">
-            Nuevo
-          </button>
+          {
+            auth?.cargo === 'Administrador' && (
+              // Si el usuario es un administrador, mostrar el botón de nuevo
+              <button 
+              onClick={handleNewClick}
+              className="ml-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-800">
+                Nuevo
+              </button>
+            )
+          }
         </div>
        
    {/* TABLA DEL HISTORIAL */}
@@ -253,17 +258,14 @@ const handleDownloadExcel = () => {
     <table className="w-full text-center border-collapse border border-black">
       <thead className="bg-black text-white font-mono">
         <tr>
-          {[
-            'Cédula', 'Nombre y Apellido', 'Teléfono', 'Email', 'Dirección', 
-            'Cargo', 'Estado', 'Opciones',
-          ].map((header) => (
+          {encabezadoTabla.map((header) => (
             <th key={header} className="border border-black px-4 py-2">{header}</th>
           ))}
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td colSpan="8" className="text-center py-4 text-red-700">
+          <td colSpan={encabezadoTabla.length} className="text-center py-4 text-red-700">
             No existen registros disponibles.
           </td>
         </tr>
@@ -272,24 +274,27 @@ const handleDownloadExcel = () => {
   </div>
 )}
 
-
-
        {/* BOTONES------------------------------------------------------------- */}
-        <div className='flex space-x-4 justify-center mt-20'>
-
-          <button  onClick={handleDownloadPDF} className="bg-red-400 text-black font-bold px-3 py-2 rounded flex items-center space-x-5"> 
-            <img src={pdf} alt="pdf" className='h-6' />
-            Descargar PDF
-          </button>
-          
-
-          <button onClick={handleDownloadExcel} className="bg-green-300 text-black font-bold px-3 py-2 rounded flex item-center space-x-5">
-          <img src={excel} alt="excel" className='h-6' />
-            Descargar Excel
-          </button>
-        </div>
+       {
+        // Si el usuario es un administrador o gerente, mostrar los botones de descarga
+        auth?.cargo === 'Administrador' || auth?.cargo === 'Gerente' && (
+          <div className='flex space-x-4 justify-center mt-20'>
+            <button 
+            onClick={handleDownloadPDF}
+            className="bg-red-400 text-black font-bold px-3 py-2 rounded flex items-center space-x-5">
+              <img src={pdf} alt="pdf" className='h-6' />
+              Descargar PDF
+            </button>
+            <button 
+            onClick={handleDownloadExcel}
+            className="bg-green-300 text-black font-bold px-3 py-2 rounded flex item-center space-x-5">
+              <img src={excel} alt="excel" className='h-6' />
+              Descargar Excel
+            </button>
+          </div>
+        )
+       }
       </main>
-
       
       {/* Footer------------------------------------------------------------------- */}
       <footer className="w-full py-1 text-center text-white bg-black border-t border-white">

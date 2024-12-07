@@ -39,6 +39,10 @@ export const TablaAsistencia = ({ usuarios }) => {
     console.log("Usuario seleccionado:", usuario);
   };
 
+  const encabezadoTabla = [
+    'Cédula', 'Nombre y Apellido', 'Telefono', 'Cargo', 'Fecha', 'Hora de Ingreso', 'Hora de Salida', 'Estado'
+  ]
+
   // Cargar las asistencias de los usuarios
   useEffect(() => {
     const obtenerAsistencias = async () => {
@@ -88,7 +92,7 @@ export const TablaAsistencia = ({ usuarios }) => {
       <table className="w-full text-center border-collapse border border-black">
         <thead className="bg-black text-white font-mono">
           <tr>
-            {['Cédula', 'Nombre y Apellido', 'Telefono', 'Cargo', 'Fecha', 'Hora de Ingreso', 'Hora de Salida', 'Estado'].map((header) => (
+            {encabezadoTabla.map((header) => (
               <th key={header} className="border border-white px-4 py-2">
                 {header}
               </th>
