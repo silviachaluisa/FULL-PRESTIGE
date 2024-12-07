@@ -13,8 +13,7 @@ Se presenta una lista de las principales funcionalidades del frontend:
 * Control de asistencia del personal
 * Historial de mantenimientos realizados y pagos
   
-## Tecnologías Utilizadas 
-Lista de tecnologías, frameworks y librerías utilizadas<br>
+## Tecnologías Utilizadas <br>
 ***Herramientas y entorno***<br>
 - **npm**: Gestor de paquetes
 - **Node.js**: Entorno de ejecución de JavaScript en el servidor<br>
@@ -32,7 +31,7 @@ Lista de tecnologías, frameworks y librerías utilizadas<br>
   
 ***Hooks y Estados Principales***<br>
 * **useState:** Hook para manejar el estado en componentes funcionales.
-* **useContext:** Obtiene el contexto de HistoryContext para añadir el historial del usuario.
+* **useContext:** Hook para acceder al contexto `HistoryContext`.
 * **useLocation y useNavigate:** Hook para manejar el estado en componente funcionales.
 
 ***Estilo y diseño***<br>
@@ -40,9 +39,13 @@ Lista de tecnologías, frameworks y librerías utilizadas<br>
 
 ***Caraterísticas nativas
 - **Prototype:** Propiedad nativa de JavaScript para extender y modificar clases y objetos.
-
   
+> [!CAUTION]
+> Al momento de instalar las dependencias si da algun error y no se instala, forzarlo con el siguiente comando: `npm install nombre-paquete --force`(NO RECOMENDABLE)<br>
+> Ejemplo: `npm i --force`
 
+> [!NOTE]
+> Este comando puede forzar la instalación, pero podría generar inestabilidad en el proyecto. Úsalo solo como último recurso y verifica el funcionamiento del proyecto después de aplicarlo. 
     
 ## Requisitos Previos <br>
 Herramientras y configuraciones necesarias para trabajar en el proyecto:
@@ -50,19 +53,54 @@ Herramientras y configuraciones necesarias para trabajar en el proyecto:
 - Git
 - Node js (v22.11.0)
 - Npm
-  
+-  
 ## Instalación <br>
 Intrucciones paso a paso para configurar y ejecutar el proyecto localmente
-1. Clonar repositorio: `git status`  hola ``
-2. Ir al directorio del proyecto:
-3. Instalar dependencias: npm create vite@latest
-4. Iniciar el servidor de desarrollo: npm run dev
+1. Clonar repositorio: `git clone https://github.com/silviachaluisa/FULL-PRESTIGE.git`  
+2. Ir al directorio del proyecto: `cd frontend`
+3. Instalar dependencias: `npm install`
+4. Iniciar el servidor de desarrollo: `npm run dev`
 5. Abrir el navegador en: http:localhost:3000
 
 > [!TIP]
 > **Para clonar el repositorio se lo puede realizar mediante la terminal de windows o
 > utilizando GitHub Desktop para mayor facilidad**<br>
+> Para crear iniciar un proyecto desde 0 usar el comando: `npm create vite@latest`
 
+
+
+## Estructura del Proyecto<br>
+<pre>
+src/
+├── assets/
+│   ├── imagenes/
+│   │   ├── Redes/
+│   │   ├── asistencia.png
+│   │   ├── bg.jpg
+│   │   ├── bg2.png
+│   │   ├── client.png
+│   │   ├── excel.png
+│   │   ├── Fondo.png
+│   │   ├── icon.jpg
+│   │   ├── logo.jpg
+│   │   ├── pdf.png
+│   │   ├── user.jpg
+│   │   └── usuarios.png
+├── components/
+├── context/
+│   ├── AuthProvider.jsx
+│   ├── HistoryContext.jsx
+│   └── historyProvider.jsx
+├── Layouts/
+│   └── verifyAuth.jsx
+├── Paginas/
+│   ├── Asistencias/
+│   ├── Clientes/
+│   ├── Pagos/
+│   ├── Tecnicos/
+│   └── Borrador.jsx
+
+</pre>
 ## Contribución <br>
 Instrucciones para colaborar en el proyecto
 Si deseas contribuir, por favor abre un issue o envia un pull request con tus cambios
@@ -72,35 +110,19 @@ Si deseas contribuir, por favor abre un issue o envia un pull request con tus ca
 > **El proyecto esta en desarrollo y sujeto a cambios frecuentemente**<br>
 
 ## Autores <br>
-**Full Prestige (Frontend) Desarrollado por Silvia Chaluisa:**  veronica-14-1998@hotmail.com
+**Frontend-Silvia Chaluisa:**<br>  
+Correo: veronica-14-1998@hotmail.com
 > [!NOTE]
-> **Full Prestige (Backend) Desarrollado por Marcelo Pinzón:** marcelo.pinzon@epn.edu.ec
+> **Backend-Marcelo Pinzón:**<br>  
+> Correo: marcelo.pinzon@epn.edu.ec
 
 ## Licencia <br>
-Este proyecto esta licenciado bajo la ...
-
-
-
-
-
-
-   
-> [!NOTE]
-> **Campo de Estado (opcional en edición)**<br>
-> El campo de Estado solo es visible cuando el formulario es utilizado en modo de edición de usuario. En el modo de registro, este campo está oculto.
-
 > [!WARNING]
-> DKJFHD
+> **NO APLICA**
 
-> [!TIP]
-> **Campo de Estado (opcional en edición)**<br>
-> El campo de Estado solo es visible cuando el formulario es utilizado en modo de edición de usuario. En el modo de registro, este campo está oculto.
 
-> [!IMPORTANT]
-> DKJFHD
 
-> [!CAUTION]
-> DKJFHD
+
 
 
 
