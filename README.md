@@ -70,7 +70,8 @@ Intrucciones paso a paso para configurar y ejecutar el proyecto localmente
 
 
 ## Estructura del Proyecto<br>
-`src/
+<pre>
+src/
 ├── assets/
 │   ├── imagenes/
 │   │   ├── Redes/
@@ -99,7 +100,7 @@ Intrucciones paso a paso para configurar y ejecutar el proyecto localmente
 │   ├── Tecnicos/
 │   └── Borrador.jsx
 
-`
+</pre>
 ## Contribución <br>
 Instrucciones para colaborar en el proyecto
 Si deseas contribuir, por favor abre un issue o envia un pull request con tus cambios
