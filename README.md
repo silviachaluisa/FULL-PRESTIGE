@@ -1,12 +1,11 @@
-# GESTION DE UN TALLER AUTOMOTRIZ "FULL PRESTIGE" <br>
+# GESTIÓN DE UN TALLER AUTOMOTRIZ "FULL PRESTIGE" (FRONTEND) <br>
 
-## Estructura del Frontend <br>
-### Descripción del Proyecto
+## Descripción del Proyecto <br>
 
 Este proyecto es la interfaz web para gestionar los servicios web del taller automotriz Full Prestige. <br>
 Permite a los usuarios manejar información de clientes y vehículos de forma segura y eficiente.<br>
-  
-### Características <br>
+
+## Características <br>
 Se presenta una lista de las principales funcionalidades del frontend:
 * Inicio de sesión y autenticación
 * Gestión de perfiles de usuarios
@@ -14,62 +13,76 @@ Se presenta una lista de las principales funcionalidades del frontend:
 * Control de asistencia del personal
 * Historial de mantenimientos realizados y pagos
   
-### Tecnologías Utilizadas 
-Lista de tecnologías, frameworks y librerías utilizadas
-- **React.js:**
-- **Redux:**
-- **Axios:** Para realizar solicitudes HTTP
-- **TailwindCss:**
-- 
-### Requisitos Previos <br>
+## Tecnologías Utilizadas 
+Lista de tecnologías, frameworks y librerías utilizadas<br>
+***Herramientas y entorno***<br>
+- **npm**: Gestor de paquetes
+- **Node.js**: Entorno de ejecución de JavaScript en el servidor<br>
+
+***Frameworks y bibliotecas***<br>
+- **React:** Biblioteca para la creación de interfaces de usuario.<br>
+
+***Librerías para funcionalidades específicas***<br>
+- **axios:** Librería para realizar solicitudes HTTP.
+- **jsdpf:** Líbreria para la generación de documentos PDF.
+- **xlsl:** Librería para la manipulación de hojas de cálculo.
+
+***Lenguajes***<br>
+- **JavaScript:** Lenguaje de programación base para React.
+  
+***Hooks y Estados Principales***<br>
+* **useState:** Hook para manejar el estado en componentes funcionales.
+* **useContext:** Obtiene el contexto de HistoryContext para añadir el historial del usuario.
+* **useLocation y useNavigate:** Hook para manejar el estado en componente funcionales.
+
+***Estilo y diseño***<br>
+- **TailwindCss:** Framework de utilidades para estilos CSS.
+
+***Caraterísticas nativas
+- **Prototype:** Propiedad nativa de JavaScript para extender y modificar clases y objetos.
+
+  
+
+    
+## Requisitos Previos <br>
 Herramientras y configuraciones necesarias para trabajar en el proyecto:
-- Node js
+- Editor de código fuente **"Visual Studio Code"**
+- Git
+- Node js (v22.11.0)
 - Npm
-- Visual Studio Code
-- 
-### Instalación <br>
+  
+## Instalación <br>
 Intrucciones paso a paso para configurar y ejecutar el proyecto localmente
-1. Clonar repositorio:
+1. Clonar repositorio: `git status`  hola ``
 2. Ir al directorio del proyecto:
 3. Instalar dependencias: npm create vite@latest
 4. Iniciar el servidor de desarrollo: npm run dev
 5. Abrir el navegador en: http:localhost:3000
 
-  
-### Estructura del Proyecto <br>
-### Contribución <br>
+> [!TIP]
+> **Para clonar el repositorio se lo puede realizar mediante la terminal de windows o
+> utilizando GitHub Desktop para mayor facilidad**<br>
+
+## Contribución <br>
 Instrucciones para colaborar en el proyecto
 Si deseas contribuir, por favor abre un issue o envia un pull request con tus cambios
 
-### Estado del Proyecto <br>
-El proyecto esta en desarrollo y sujeto a cambios frecuentemente
+## Estado del Proyecto <br>
+> [!IMPORTANT]
+> **El proyecto esta en desarrollo y sujeto a cambios frecuentemente**<br>
 
-### Autores <br>
-Desarrollado por:
+## Autores <br>
+**Full Prestige (Frontend) Desarrollado por Silvia Chaluisa:**  veronica-14-1998@hotmail.com
+> [!NOTE]
+> **Full Prestige (Backend) Desarrollado por Marcelo Pinzón:** marcelo.pinzon@epn.edu.ec
 
-### Licencia <br>
+## Licencia <br>
 Este proyecto esta licenciado bajo la ...
 
-***Dependencias***<br>
-
-El componente utiliza:
-
-* **React:** Para la creación del estado y manejo de eventos.
-* **Axios:** Para realizar la solicitud HTTP al backend y registrar al usuario en la base de 
-   datos.
-* **React Router:** Para redirigir al usuario después de un registro exitoso y obtener la URL 
-  actual.
-* **TailwindCSS:** Para el diseño y estilo del componente.
-* **Mensaje de Confirmación:** Usa un componente personalizado Mensaje para mostrar mensajes de 
-  éxito o error.
-
-***Hooks y Estados Principales***<br>
-* **useState:** Almacena la información ingresada en el formulario.
-* **useContext:** Obtiene el contexto de HistoryContext para añadir el historial del usuario.
-* **useLocation y useNavigate:** Para redirigir al usuario tras completar el registro y definir la lógica condicional en el componente.
 
 
-***Estructura del Formulario***<br>
+
+
 
    
 > [!NOTE]
