@@ -388,7 +388,7 @@ export const FormularioClientes = ({clientes}) => {
       //Actualiza el estado
       setRegisclientes({
         ...regisclientes,
-        [name]: value.toUpperCase()
+        [name]: value
       }) 
      };
     //  ----------------------------------------------------------
