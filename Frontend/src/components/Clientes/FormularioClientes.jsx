@@ -75,10 +75,7 @@ export const FormularioClientes = ({clientes}) => {
       // Validaciones de cédula
       if (!regisclientes.cedula) {
         nuevosErrores.cedula = "La cédula es obligatoria.";
-      } else if (regisclientes.cedula.length !== 10) {
-        nuevosErrores.cedula = "La cédula debe tener 10 dígitos.";
-      } 
-
+      }
       // Validaciones de nombre
       if (!regisclientes.nombre) {
         nuevosErrores.nombre = "El nombre es obligatorio.";
@@ -117,11 +114,10 @@ export const FormularioClientes = ({clientes}) => {
         nuevosErrores.modelo = "El modelo es obligatorio.";
       }
 
-      // Validaciones de placa
-      if (!regisclientes.placa) {
-        nuevosErrores.placa = "La placa es obligatoria.";
-      }
-
+     // Validaciones de placa
+     if (!regisclientes.placa) {
+      nuevosErrores.placa = "La placa es obligatoria.";
+    }
       // Validacion de seleccion del técnico
       if (!regisclientes.cedula_tecnico || regisclientes.cedula_tecnico === "") {
         nuevosErrores.tecnico = "Debes seleccionar un técnico.";
@@ -333,21 +329,69 @@ export const FormularioClientes = ({clientes}) => {
      // Manejador de cambio de valores del formulario
      const handleChange = (e) => {
       const {name, value} = e.target;
+      const soloNumeros = /^[0-9]*$/; // Expresión regular para permitir solo números
 
-      //Validar entrada solo para los campos "cedula" y "teléfono"
-      if(name=== "cedula" || name === "telefono"){
-        const soloNumeros = /^[0-9]*$/; //Expresión regular para permitir solo números
-        if(!soloNumeros.test(value)){
-          return;//Ignora si se ingresan letras u otros caracteres
+      // Validar entrada solo para los campos "cedula" y "telefono"
+    
+        // Validación para cédula
+        if (name === "cedula") {
+          // Permite solo números mientras el valor esté escribiéndose
+          if (!soloNumeros.test(value)) {
+            return; // Ignora si no tiene solo números
+          }
+
         }
-
+        
+        
+      // Validación para teléfono
+      if (name === "telefono") {
+        // Permite solo números para el teléfono
+        if (!soloNumeros.test(value)) {
+          return; // Ignora si no tiene solo números
+        }
       }
+    
+      // ----------------------------------------------------------
+      //Validar entrada solo para el campo "placa"
+      if(name === "placa"){
+
+         //Convierte las letras a mayúsculas automáticamente
+         const valoMayusculas = value.toUpperCase();
+
+        //Permite solo 3 letras seguidas de 4 números
+        const formatoPlaca = /^[A-Z]{0,3}[0-9]{0,4}$/;
+        if(!formatoPlaca.test(valoMayusculas)){
+          return;//Ignora si no cumple con el formato
+        }
+       
+        setRegisclientes({
+          ...regisclientes,
+          [name]: value.toUpperCase()
+        });
+        return;
+      }
+
+      // ----------------------------------------------------------
+      //Validar entrada solo para el campo "orden"
+      if(name === "orden"){ 
+
+        //Convierte las letras a mayúsculas automáticamente
+        const valoMayusculas = value.toUpperCase();
+
+        //Permite solo 3 números hasta 5 dígitos
+        const formatoOrden = /^[A-Z]{0,2}-?[0-9]{0,4}$/;
+        if(!formatoOrden.test(valoMayusculas)){
+          return;//Ignora si no cumple con el formato
+        }
+      }
+
       //Actualiza el estado
       setRegisclientes({
         ...regisclientes,
-        [name]: value
+        [name]: value.toUpperCase()
       }) 
-    };
+     };
+    //  ----------------------------------------------------------
     return (
       <div className="w-full max-w-7xl px-10">
       {/* {mensaje && <Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} />} */}
@@ -359,11 +403,11 @@ export const FormularioClientes = ({clientes}) => {
           
           {/* Cédula */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Cédula 🪪</label>
+            <label className="block font-semibold mb-2">Cédula/RUC 🪪</label>
             <input
               id='cedula'
               type="texto"
-              maxLength="10"
+              maxLength="13"
               required= {clientes?.propietario.cedula ? false : true}
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
               placeholder='1234567890'
@@ -446,7 +490,7 @@ export const FormularioClientes = ({clientes}) => {
             <label className="block font-semibold mb-2">N° Orden 🅾️</label>
             <input
               id='orden'
-              type="number"
+              type="text"
               name="orden"
               value={regisclientes.orden}
               onChange={handleChange}
@@ -475,7 +519,7 @@ export const FormularioClientes = ({clientes}) => {
             {errores.marca && <p className="text-red-500 text-sm">{errores.marca}</p>}
           </div>
 
-          {/* Direccion */}
+          {/* Modelo */}
           <div className="mb-4">
             <label className="block font-semibold mb-2">Modelo</label>
             <input
@@ -491,7 +535,7 @@ export const FormularioClientes = ({clientes}) => {
             {errores.modelo && <p className="text-red-500 text-sm">{errores.modelo}</p>}
           </div>
 
-          {/* Direccion */}
+          {/* Placa*/}
           <div className="mb-4">
             <label className="block font-semibold mb-2">Placa</label>
             <input
