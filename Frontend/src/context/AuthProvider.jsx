@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 
 // Creación del grupo de whatsapp
 const AuthContext = createContext()
+
 // El mensaje a enviar
 const AuthProvider = ({ children }) => {
     //Cargar la info del perfil del usuario - login
@@ -15,9 +16,10 @@ const AuthProvider = ({ children }) => {
 
     // -------------------------------- Funciones de control en mensajes de validación --------------------------------
     async function mostrarErrores(errors) {
+        // Asegura que los errores se muestren de manera secuencial
         for (const error of errors) {
+            // Establece el mensaje de error
             setMessage({respuesta: error.msg,tipo:false});
-
             // Mostrar el mensaje de error en la consola
             console.error("Error al registrar pago", error.msg);
 
@@ -58,6 +60,7 @@ const AuthProvider = ({ children }) => {
                     'Authorization': `Bearer ${token}`
                 }
             })
+            // Establecer mensaje de éxito
             setMessage({respuesta: respuesta.data.message,tipo:true})
             setTimeout(() => {
                 setMessage(""); // Limpiar el mensaje después de un breve tiempo
@@ -71,7 +74,6 @@ const AuthProvider = ({ children }) => {
                 await mostrarErrores(error.response.data.errors);
             } else {
                 setMessage(error.response.data.message);
-            
                 // Limpiar el mensaje de error después de un breve tiempo
                 setTimeout(() => {
                     setMessage("");

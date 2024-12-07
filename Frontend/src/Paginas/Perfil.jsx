@@ -5,7 +5,9 @@ import logo from '../assets/imagenes/logo.jpg';
 import Mensaje from '../components/Alertas';
 
 const EditarPerfil = () => {
-  const { auth, actualizarPerfil, message } = useContext(AuthContext);
+  const { auth, actualizarPerfil} = useContext(AuthContext);
+  const [mensaje, setMensaje] = useState("");
+  const [errores, setErrores] = useState({});
   const [perfil, setPerfil] = useState({
     cedula: '',
     nombre: '',
@@ -72,7 +74,14 @@ const EditarPerfil = () => {
       </h2>
 
       <div className="w-full max-w-3xl px-10 py-6 border-2 border-red-600 rounded-lg bg-black text-white">
-        {message && <Mensaje mensaje={message.respuesta} tipo={message.tipo} />}
+        {/* {message && <Mensaje mensaje={message.respuesta} tipo={message.tipo} />} */}
+        <div className='mb-4'>
+          {/* {mensaje && <Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} />} */}
+          {mensaje && (<Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} errores={!mensaje.tipo ? errores : {}} 
+                />
+                )}
+        </div>
+         
 
         <form onSubmit={handleSave} className="grid grid-cols-2 gap-4">
           <div>

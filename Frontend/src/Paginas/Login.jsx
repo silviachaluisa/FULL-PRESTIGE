@@ -11,7 +11,8 @@ import fondo2 from '../assets/imagenes/bg2.png'
 export const Login = () => {
   const navigate = useNavigate();
   const { auth, setAuth } = useContext(AuthContext);
-  const [mensaje, setMensaje] = useState({});
+  const [mensaje, setMensaje] = useState("");
+  const [errores, setErrores] = useState({});
   const [showPassword, setShowPassword] = useState(false); // Estado para alternar visibilidad
 
   const togglePasswordVisibility = () => {
@@ -33,8 +34,14 @@ export const Login = () => {
       // Guardar token en localStorage y establecer contexto
       localStorage.setItem('token', respuesta.data.empleado.token);
       setAuth(respuesta.data.empleado);
-      navigate('/dashboard');
+      //Mensaje de exito
+      setMensaje({ respuesta: 'Inicio de sesión exitoso', tipo: true });
+      setTimeout(() => {
+        setMensaje({});
+        navigate('/dashboard');
+      }, 3000); 
     } catch (error) {
+      //Mensaje de error
       setMensaje({ respuesta: error.response.data.message, tipo: false });
 
       // Limpiar el formulario después del error
@@ -59,8 +66,14 @@ export const Login = () => {
     >
       <div className="flex flex-col items-center">
         <img src={logo} alt="Full Prestige" className="logo mb-5" style={{ width: '300px', height: 'auto' }} />
-        {Object.keys(mensaje).length > 0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
-
+        <div className='mb-4'>
+          {/* {mensaje && <Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} />} */}
+          {mensaje && (<Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} errores={!mensaje.tipo ? errores : {}} 
+                />
+                )}
+        </div>
+         
+      
         <form
           onSubmit={handleLogin}
           className="bg-black border-4 border-red-600 p-16 rounded-lg shadow-lg w-full max-w-md"
