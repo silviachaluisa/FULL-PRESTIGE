@@ -23,7 +23,7 @@ import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { FaCalendarAlt} from 'react-icons/fa';
-import { CgLaptop } from 'react-icons/cg';
+import AuthContext from '../../context/AuthProvider';
 
 export const HistorialMantenimiento = () => {
   // Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
@@ -51,22 +51,26 @@ export const HistorialMantenimiento = () => {
     fetchClientes,
     fetchMantenimientos,
     seleccionado,
-    fetchClienteByCedula,
+    fetchMantenimientosByPlaca,
     handleModal,
     setTipoModal,
     mantenimientos
   }= useContext (HistoryContext);
   
-  const [cedula, setCedula] = useState("");
+  const { auth } = useContext(AuthContext);
+
+  const [placa, setPlaca] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
 const handleChange=(e)=>{
-  const value = e.target.value
+  const value = e.target.value.toUpperCase(); // Convertir a mayúsculas
 
-  //Validación para que solo ingresen números y que no sobrepase los 10 dígitos
-  if (/^\d{0,10}$/.test(value)){
-    setCedula(value); // si es valido, actualiza el estado
+  //Validación para que solo ingresen letras(A-Z) seguidas de hasta 4 dígitos
+  const placaRegex = /^[A-Z]{0,3}\d{0,4}$/; //Permite hasta 3 letras y letras y hasta 4 números
+
+  if (placaRegex.test(value)){
+    setPlaca(value); // si es valido, actualiza el estado
   }
 };
 
@@ -103,40 +107,50 @@ const handleNewClick = (type) => {
   handleModal();
 };
 
+let encabezadoTabla = [
+  'Cédula','Nombre/Apellido', 'Marca', 'Modelo', 'Placa', 'Fecha Ingreso',
+  'Fecha Salida', 'Descripción del trabajo', 'Técnico Responsable', 'Estado'
+];
+
+if (auth?.cargo === "Administrador"){
+  // Si el usuario es un administrador, mostrar la columna de opciones
+  encabezadoTabla.push('Opciones');
+}
+
 // ------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------
 const handleSearch = async () => {
-  // Validación de la cédula
-  const cedulaRegex = /^[0-9]{10}$/;
+  // Validación de la placa (formato: ABC-1234 o similar)
+  const placaRegex = /^[A-Z]{3}-?[0-9]{3,4}$/;
 
-  if (cedula === "") {
-    await fetchClientes(); // Cargar todos los clientes si la cédula está vacía
+  if (placa === "") {
+    await fetchClientes(); // Cargar todos los clientes si la placa está vacía
     return;
   }
 
-  if (!cedulaRegex.test(cedula)) {
-    setErrorMessage("⚠️ La cédula debe contener solo 10 dígitos numéricos.");
+  if (!placaRegex.test(placa)) {
+    setErrorMessage("⚠️ La placa debe seguir el formato: ABC-1234");
     return;
   }
 
-  // Verificar que la cédula se está pasando correctamente
-  console.log("Buscando cliente con cédula:", cedula);
+  // Verificar que la placa se está pasando correctamente
+  console.log("Buscando cliente con placa:", placa);
 
-  const cliente = await fetchClienteByCedula(cedula);
+  const cliente = await fetchMantenimientosByPlaca(placa);
 
-  // Verificar que el cliente se encontró
-  console.log("Cliente encontrado:", cliente);
+  // Verificar que el vehículo se encontró
+  console.log("Vehículo encontrado:", cliente);
 
   if (!cliente) {
-    setErrorMessage("❌ Cliente no se encuentra registrado");
+    setErrorMessage("❌ Vehículo no se encuentra registrado");
   } else {
-    const mantenimientos = await fetchMantenimientos(cedula);
+    const mantenimientos = await fetchMantenimientos(placa);
     console.log("Mantenimientos encontrados:", mantenimientos);
     setErrorMessage(""); // Limpiar mensaje de error
-    setSuccessMessage("✅ Cliente encontrado con éxito");
+    setSuccessMessage("✅ Vehículo encontrado con éxito");
   }
   
-  setCedula(""); // Limpia la cédula del campo de búsqueda
+  setPlaca(""); // Limpia la placa del campo de búsqueda
 
   // Limpiar los mensajes después de 4 segundos
   setTimeout(() => {
@@ -255,7 +269,7 @@ const handleSearch = async () => {
           <input
             type="text"
             onChange={handleChange}
-            value={cedula}
+            value={placa}
             placeholder="Cedula"
             className="bg-gray-200 border border-black py-2 px-4 w-full rounded-lg focus:outline-none"
           />
@@ -273,6 +287,8 @@ const handleSearch = async () => {
           <button
             onClick={() => handleNewClick("registrar")}
             className="px-4 py-2 bg-amber-500 text-white font-semibold rounded-lg hover:bg-orange-300"
+            disabled={auth?.cargo !== "Técnico" ? true : false}
+            style={{ cursor: auth?.cargo !== "Técnico" ? "not-allowed" : "pointer" }}
           >
             Registrar Mantenimiento
           </button>
@@ -280,8 +296,8 @@ const handleSearch = async () => {
           <button
             onClick={() => handleNewClick("actualizar")}
             className="ml-4 px-4 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-500"
-            disabled={Object.keys(seleccionado?.cliente || {}).length !== 0 ? false : true}
-            style={{ cursor: Object.keys(seleccionado?.cliente || {}).length !== 0 ? "pointer" : "not-allowed" }}
+            disabled={Object.keys(seleccionado?.encargado || {}).length !== 0 ? false : true}
+            style={{ cursor: Object.keys(seleccionado?.encargado || {}).length !== 0 ? "pointer" : "not-allowed" }}
           >
             Solicitar Actualización
           </button>
@@ -296,18 +312,14 @@ const handleSearch = async () => {
     <table className="w-full text-center border-collapse border border-black">
       <thead className="bg-black text-white font-mono">
         <tr>
-          {[
-            'Cédula','Nombre/Apellido','N° Orden',
-              'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida',
-              'Descripción del trabajo', 'Técnico Responsable', 'Estado'
-          ].map((header) => (
+          {encabezadoTabla.map((header) => (
             <th key={header} className="border border-black px-4 py-2">{header}</th>
           ))}
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td colSpan="8" className="text-center py-4 text-red-700">
+          <td colSpan={encabezadoTabla.length} className="text-center py-4 text-red-700">
             { loading ? 'Cargando...' : 'No hay mantenimientos registrados'}
           </td>
         </tr>

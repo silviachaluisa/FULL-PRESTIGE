@@ -2,7 +2,7 @@ import { useState,useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { HistoryContext } from "../../context/HistoryContext";
 
-export const ModalMantenimiento = ({handleShow, usuario }) => {
+export const ModalMantenimiento = ({handleShow, cliente}) => {
   // Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
   const formatDate = (isoDate) => {
     const date = new Date(isoDate);
@@ -17,14 +17,13 @@ export const ModalMantenimiento = ({handleShow, usuario }) => {
     return `${year}-${month}-${day}`;
   };
   const [fecha, setFecha] = useState("");
-  const [horaIngreso, setHoraIngreso] = useState("");
-  const [horaSalida, setHoraSalida] = useState("");
+  const [detalle, setDetalle] = useState("");
   const [justificacion, setJustificacion] = useState(""); // Variable para la justificacion
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   
   const {
-    upDateAssistance,
-    registerAssistance,
+    upDateMaintance,
+    registerMaintance,
     tipoModal,
     errorMessage,
     setErrorMessage,
@@ -33,17 +32,17 @@ export const ModalMantenimiento = ({handleShow, usuario }) => {
   }=useContext(HistoryContext);
 
   useEffect(() => {
-    const obtenerAsistencia = async () => {
-      if (usuario) {
-        setFecha(usuario?.asistencia.fecha.split("T")[0]);
-        setHoraIngreso(usuario?.asistencia.hora_ingreso);
-        setHoraSalida(usuario?.asistencia.hora_salida);
+    const obtenerMantenimientos = async () => {
+      if (cliente) {
+        setFecha(cliente?.cliente.fecha.split("T")[0]);
+        setDetalle(cliente?.cliente.hora_ingreso);
+        
       }
     };
 
     console.log("Cargando info del modal")
-    if (usuario && tipoModal === "actualizar") {
-      obtenerAsistencia();
+    if (cliente && tipoModal === "actualizar") {
+      obtenerMantenimientos();
     } else {
       // Cargar el campo fecha con los datos actuales
       const now = new Date();
@@ -53,12 +52,12 @@ export const ModalMantenimiento = ({handleShow, usuario }) => {
       const formattedDate = `${year}-${month}-${day}`;
       setFecha(formattedDate);
     }
-  }, [usuario]);
+  }, [cliente]);
 
-  const validarAsistencia = () => {
+  const validarMantenimiento = () => {
     if (tipoModal === "actualizar") {
       if (!justificacion) {
-        return "Debes proporcionar una justifiacion para actualizar la informacion";
+        return "Debes proporcionar una justifiación para actualizar la informacion 😉";
       }
       return null;
     }
@@ -68,7 +67,6 @@ export const ModalMantenimiento = ({handleShow, usuario }) => {
     const month = String(now.getMonth() + 1).padStart(2, '0'); // Mes en formato 2 dígitos
     const day = String(now.getDate()).padStart(2, '0'); // Día en formato 2 dígitos
     const fechaActual = `${year}-${month}-${day}`; // Fecha en formato YYYY-MM-DD
-    const horaActual = String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0") // Hora en formato HH:MM
     // Validar que la fecha no sea menor a la actual
     if (fecha < fechaActual) {
       return "La fecha no puede ser menor a la fecha actual.";
@@ -77,22 +75,12 @@ export const ModalMantenimiento = ({handleShow, usuario }) => {
     if (fecha !== fechaActual) {
       return "La fecha no puede ser distinta a la fecha actual.";
     }
-    if (!horaIngreso && !horaSalida) {
-      return null; // Si no hay hora de ingreso ni salida, no hay errores
-    }
-    if (horaIngreso && horaIngreso < horaActual) {
-      return "La hora de ingreso no puede ser menor a la hora actual.";
-    }
-    // Validar que la hora de salida sea mayor a la hora de ingreso
-    if (horaSalida && horaIngreso && horaSalida <= horaIngreso) {
-      return "La hora de salida debe ser mayor a la hora de ingreso.";
-    }
     return null; // Si todo es válido, no hay errores
   };
 
   const handleSubmit = () => {
-    const error = validarAsistencia();
-    console.log(usuario, { fecha, horaIngreso, horaSalida,justificacion });
+    const error = validarMantenimiento();
+    console.log(cliente, { fecha, detalle, justificacion });
     
     if (error) {
       setErrorMessage(error);
@@ -110,10 +98,10 @@ export const ModalMantenimiento = ({handleShow, usuario }) => {
     if (tipoModal === "actualizar") {
       // Determinar el estado de la asistencia
       const estado = !horaIngreso && !horaSalida ? "Ausente" : "Presente";
-      upDateAssistance(usuario?.asistencia._id, {fecha,hora_ingreso:horaIngreso ,hora_salida:horaSalida, estado, justificacion});
+      upDateMaintance(cliente?.cliente._id, {fecha,detalle,estado, justificacion});
     } else {
       // Enviar los datos
-      registerAssistance(usuario.cedula,{fecha,hora_ingreso:horaIngreso ,hora_salida:horaSalida});
+      registerMaintance(cliente.cedula,{fecha,detalle});
     }
   };
 
@@ -131,7 +119,7 @@ export const ModalMantenimiento = ({handleShow, usuario }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
         <h2 className="text-xl font-bold mb-4">
-          {(tipoModal === "actualizar")? "Actualizar Asistencia" : "Registrar Asistencia"}
+          {(tipoModal === "actualizar")? "Solicitar Actualización de Mantenimiento" : "Registrar Mantenimento"}
         </h2>
 
         {/* Mensaje de error */}
@@ -149,39 +137,28 @@ export const ModalMantenimiento = ({handleShow, usuario }) => {
           required
         />
 
-        {/* Campos de Hora */}
+        {/* Campos de Mantenimiento*/}
         <div className="flex gap-4">
-          {/* Hora de Ingreso */}
+          {/* Detalle de mantenimiento */}
           <div className="flex-1">
             <label className="block text-gray-700 font-semibold mb-2">
-              Hora de Ingreso:
+              Detalle de mantenimiento: 🪛⚙️
             </label>
             <input
-              type="time"
-              value={horaIngreso}
-              onChange={(e) => setHoraIngreso(e.target.value)}
+              type="text"
+              value={detalle}
+              onChange={(e) => setDetalle(e.target.value)}
               className="w-full border rounded-lg p-2"
             />
           </div>
 
-          {/* Hora de Salida */}
-          <div className="flex-1">
-            <label className="block text-gray-700 font-semibold mb-2">
-              Hora de Salida:
-            </label>
-            <input
-              type="time"
-              value={horaSalida}
-              onChange={(e) => setHoraSalida(e.target.value)}
-              className="w-full border rounded-lg p-2"
-            />
-          </div>
+         
         </div>
 
         {/* Campo Justificación solo para Actualizar */}
         {tipoModal === "actualizar" && (
           <div className="mt-4">
-            <label className="block text-gray-700 font-semibold mb-2">Justificación:</label>
+            <label className="block text-gray-700 font-semibold mb-2">Motivo de actualización:</label>
             <textarea
               value={justificacion}
               onChange={(e) => setJustificacion(e.target.value)}

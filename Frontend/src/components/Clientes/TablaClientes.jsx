@@ -1,16 +1,10 @@
 import PropTypes from 'prop-types';
-import { useContext, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Tooltip as ReactTooltip } from 'react-tooltip'
-import { IoPersonAddSharp } from "react-icons/io5";
 import { FaPencilAlt } from "react-icons/fa";
-import ModalAsignacionTecnico from "../Modals/ModalAsignacionTecnico";
-import { HistoryContext } from '../../context/HistoryContext';
 
 export const TablaClientes = ({clientes}) => {
   const navigate = useNavigate();
-  const { showModal, handleModal } = useContext(HistoryContext);
-  const [ infoVehiculo, setInfoVehiculo ] = useState({});
   console.log(clientes);
   // Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
   const formatDate = (isoDate) => {
@@ -29,11 +23,6 @@ export const TablaClientes = ({clientes}) => {
       return 'Fecha inválida';
     }
   };
-
-  const handleClick = (datos) => {
-    setInfoVehiculo(datos);
-    handleModal();
-  }
 
     return (
       <div className="overflow-x-auto">
@@ -77,28 +66,13 @@ export const TablaClientes = ({clientes}) => {
                       data-tooltip-id="edit_client"
                       data-tooltip-content="Editar cliente"
                     />
-                    {/* <IoPersonAddSharp
-                      onClick={() => handleClick(item)}
-                      className="text-black hover:text-blue-700 cursor-pointer"
-                      data-tooltip-id="add_tech"
-                      data-tooltip-content="Asignar un mantenimiento"
-                    /> */}
                     <ReactTooltip id='edit_client' place='bottom'/>
-                    {/* <ReactTooltip id='add_tech' place='bottom'/> */}
                   </div>
                 </td>
                 </tr>
             ))} 
           </tbody>
         </table>
-        {
-          showModal && (
-            <ModalAsignacionTecnico
-              infoVehiculo={infoVehiculo}
-              handleShow={handleModal}
-            />
-          )
-        }
       </div>
     );
   };
