@@ -126,7 +126,6 @@ const handleSearch = async () => {
   // Verificar que el usuario se encontró
   console.log("Usuario encontrado:", usuario);
   
-
   if (!usuario) {
     setErrorMessage("❌ Usuario no se encuentra registrado");
   } else {
