@@ -52,7 +52,9 @@ const EditarPerfil = () => {
         estado: perfil.estado === 'Activo' ? true : false
       }
       await actualizarPerfil(updateProfile);
+      setMensaje({ respuesta: 'Perfil actualizado correctamente', tipo: true });
     } catch (error) {
+      setMensaje({ respuesta: "Error al actualizar el perfil", tipo: "error" });
       console.error("Error al actualizar el perfil:", error);
     }
   };
@@ -77,8 +79,8 @@ const EditarPerfil = () => {
         {/* {message && <Mensaje mensaje={message.respuesta} tipo={message.tipo} />} */}
         <div className='mb-4'>
           {/* {mensaje && <Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} />} */}
-          {mensaje && (<Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} errores={!mensaje.tipo ? errores : {}} 
-                />
+          
+          {mensaje && (<Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} errores={!mensaje.tipo ? errores : {}} />
                 )}
         </div>
          

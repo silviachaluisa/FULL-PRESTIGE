@@ -12,7 +12,7 @@ export const Login = () => {
   const navigate = useNavigate();
   const { auth, setAuth } = useContext(AuthContext);
   const [mensaje, setMensaje] = useState("");
-  const [errores, setErrores] = useState({});
+  const [errores, setErrores] = useState("");
   const [showPassword, setShowPassword] = useState(false); // Estado para alternar visibilidad
 
   const togglePasswordVisibility = () => {
@@ -45,9 +45,9 @@ export const Login = () => {
       setMensaje({ respuesta: error.response.data.message, tipo: false });
 
       // Limpiar el formulario después del error
-      setLoginForm({ correo: '', contrasena: '' });
+      //setLoginForm({ correo: '', contrasena: '' });
       setTimeout(() => {
-        setMensaje({});
+        setMensaje("");
       }, 3000);
     }
   };
