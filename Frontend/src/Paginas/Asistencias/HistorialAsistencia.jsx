@@ -16,6 +16,7 @@ import renaultLogo from '../../assets/LogosAutos/Renault.png'
 import susukiLogo from '../../assets/LogosAutos/Susuki.png'
 import toyotaLogo from '../../assets/LogosAutos/Toyota.png'
 import { HistoryContext } from '../../context/HistoryContext';
+import AuthContext from '../../context/AuthProvider';
 import { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import { TablaAsistencia } from '../../components/Asistencia/TablaAsistencia';
@@ -55,6 +56,7 @@ export const Asistencia = () => {
     setTipoModal,
     asistencias
   }= useContext (HistoryContext);
+  const { auth } = useContext(AuthContext);
   
   const [cedula, setCedula] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -73,8 +75,8 @@ const handleChange=(e)=>{
     const confirmLogout = window.confirm ("¿Deseas abandonar la página?")
     
     if(confirmLogout===true){
-        navigate('/dashboard');
-    }  
+      navigate('/dashboard');
+    }
 };
  // Llamar a fetchUsuarios una vez cuando el componente carga
  useEffect(() => {
