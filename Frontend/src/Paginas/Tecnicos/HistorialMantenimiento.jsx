@@ -15,6 +15,7 @@ import renaultLogo from '../../assets/LogosAutos/Renault.png'
 import susukiLogo from '../../assets/LogosAutos/Susuki.png'
 import toyotaLogo from '../../assets/LogosAutos/Toyota.png'
 import { HistoryContext } from '../../context/HistoryContext';
+import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import { TablaMantenimiento } from '../../components/Tecnicos/TablaMantenimientos';
@@ -287,21 +288,26 @@ const handleSearch = async () => {
           {
             // Si el usuario no es técnico o administrador, no puede registrar mantenimientos
             (auth?.cargo === "Técnico" || auth?.cargo === "Administrador") && (
-              <button
-                onClick={() => handleNewClick("registrar")}
-                className="px-4 py-2 bg-amber-600 text-white font-semibold rounded-lg hover:bg-amber-500"
-                disabled={
-                  (auth?.cargo !== "Técnico") || // Si el usuario no es técnico deshabilitar el botón o
-                  (seleccionado?.estado === "Finalizado") ? true : false // Si ya se finalizó el mantenimiento deshabilitar el botón
-                }
-                style={{
-                  cursor: 
-                    (auth?.cargo !== "Técnico") || // Si el usuario no es técnico mostrar cursor de no permitido
-                    (seleccionado?.estado === "Finalizado") ? "not-allowed" : "pointer" // Si ya se finalizó el mantenimiento mostrar cursor de no permitido
-                }}
-              >
-                Registrar Mantenimiento
-              </button>
+              <>
+                <button
+                  onClick={() => handleNewClick("registrar")}
+                  className="px-4 py-2 bg-amber-600 text-white font-semibold rounded-lg hover:bg-amber-500"
+                  disabled={
+                    (auth?.cargo !== "Técnico") || // Si el usuario no es técnico deshabilitar el botón o
+                    (seleccionado?.estado === "Finalizado") ? true : false // Si ya se finalizó el mantenimiento deshabilitar el botón
+                  }
+                  style={{
+                    cursor: 
+                      (auth?.cargo !== "Técnico") || // Si el usuario no es técnico mostrar cursor de no permitido
+                      (seleccionado?.estado === "Finalizado") ? "not-allowed" : "pointer" // Si ya se finalizó el mantenimiento mostrar cursor de no permitido
+                  }}
+                  data-tooltip-id='registrar'
+                  data-tooltip-content={(auth?.cargo !== "Técnico") ? "Solo los técnicos pueden registrar mantenimientos" : (seleccionado?.estado === "Finalizado") ? "No se puede registrar un mantenimiento finalizado" : "Registrar Mantenimiento"}
+                >
+                  Registrar Mantenimiento
+                </button>
+                <ReactTooltip id='registrar' place='bottom'/>
+              </>
             )
           }
 
@@ -350,7 +356,7 @@ const handleSearch = async () => {
        {/* BOTONES------------------------------------------------------------- */}
        {
         // Si el usuario es un administrador o gerente, mostrar los botones de descarga
-        auth?.cargo === "Administrador" || auth?.cargo === "Gerente" && (
+        (auth?.cargo === "Administrador" || auth?.cargo === "Gerente") && (
           <div className="flex space-x-4 justify-center mt-20">
             <button
               onClick={handleDownloadPDF}

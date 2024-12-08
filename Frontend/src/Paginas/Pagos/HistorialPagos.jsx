@@ -272,51 +272,52 @@ const handleDownloadExcel = () => {
    {/* Significa que esta esperando una lista, de lo contrario solo muestra el encabezado, esto se modifica del lado del backend */}
    {Array.isArray(usuarios) && usuarios.length !== 0 ? (
   <TablaPago usuarios={usuarios} />
-) : (
+    ) : (
 
-  <div className="overflow-x-auto">
-    <table className="w-full text-center border-collapse border border-black">
-      <thead className="bg-black text-white font-mono">
-        <tr>
-          {[
-            'Cédula', 'Nombre y Apellido', 'Fecha', 'Adelantos', 'Permisos', 'Multas', 'Atrasos', 'Subtotal'
-          ].map((header) => (
-            <th key={header} className="border border-black px-4 py-2">{header}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td colSpan="8" className="text-center py-4 text-red-700">
-            { loading ? 'Cargando...' : 'No existen usuarios registrados'}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-)}
-
-
+      <div className="overflow-x-auto">
+        <table className="w-full text-center border-collapse border border-black">
+          <thead className="bg-black text-white font-mono">
+            <tr>
+              {[
+                'Cédula', 'Nombre y Apellido', 'Fecha', 'Adelantos', 'Permisos', 'Multas', 'Atrasos', 'Subtotal'
+              ].map((header) => (
+                <th key={header} className="border border-black px-4 py-2">{header}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colSpan="8" className="text-center py-4 text-red-700">
+                { loading ? 'Cargando...' : 'No existen usuarios registrados'}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    )}
 
        {/* BOTONES------------------------------------------------------------- */}
        {
         // Si el usuario es un administrador o gerente, mostrar los botones de descarga
-        auth?.cargo === "Administrador" || auth?.cargo === "Gerente" && (
-          <div className="flex justify-center items-center bg-gray-300 p-4 rounded-lg mb-6">
+        (auth?.cargo === "Administrador" || auth?.cargo === "Gerente") && (
+          <div className="flex space-x-4 justify-center mt-20">
             <button
               onClick={handleDownloadPDF}
-              className="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-300"
+              className="bg-red-400 text-black font-bold px-3 py-2 rounded flex items-center space-x-5"
             >
+              <img src={pdf} alt="pdf" className="h-6" />
               Descargar PDF
             </button>
+
             <button
               onClick={handleDownloadExcel}
-              className="ml-4 px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-300"
+              className="bg-green-300 text-black font-bold px-3 py-2 rounded flex item-center space-x-5"
             >
+              <img src={excel} alt="excel" className="h-6" />
               Descargar Excel
             </button>
           </div>
-        ) 
+        )
        }
       </main>
 
