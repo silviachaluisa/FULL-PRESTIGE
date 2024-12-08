@@ -1,4 +1,3 @@
-import React from 'react';
 import logo from '../assets/imagenes/logo.jpg'; // Asegúrate de que la ruta sea correcta
 import { Link } from 'react-router-dom';
 import { FaUserAlt, FaCog, FaCalendarAlt, FaCar, FaWallet, FaTools } from 'react-icons/fa';
@@ -28,7 +27,7 @@ export const Dashboard = () => {
                 <div className="flex items-center">
                     <img src={logo} alt="Full Prestige" className="h-14" />
                     <p className="ml-4 text-white italic font-semibold text-sm">
-                        "Que tu auto refleje lo mejor de ti"
+                        &quot;Que tu auto refleje lo mejor de ti&quot;
                     </p>
                 </div>
 
@@ -44,7 +43,6 @@ export const Dashboard = () => {
                     </div>
                    <Link to="/dashboard/perfil" className='flex items-center justify-center'>
                         <FaCog data-tooltip-id="profile" data-tooltip-content="Edita tu perfil " className='text-white text-2xl ml-20'/>
-
                         <ReactTooltip id='profile' place='bottom'/>
                    </Link>
                 </div>
@@ -57,34 +55,43 @@ export const Dashboard = () => {
             >   <div>
                 <h1 className="text-3xl font-bold text-gray-900"> MENU PRINCIPAL</h1> 
                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-                  
-                    <Link to="/dashboard/historial-usuarios" className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition">
-                        <FaUserAlt className="text-red-600 mx-auto text-5xl mb-4" />
-                        <p className="text-white font-semibold">Gestionar Usuarios</p>
-                    </Link>
-                    <Link to="/dashboard/historial-asistencia" className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition">
-                        <FaCalendarAlt className="text-red-600 mx-auto text-5xl mb-4" />
-                        <p className="text-white font-semibold">Control de Asistencia</p>
-                    </Link>
+               <div className={`grid gap-8 ${auth?.cargo === 'Técnico' ? 'grid-cols-1 place-items-center' : 'grid-cols-1 sm:grid-cols-3'}`}>
+                    {
+                        // Los usuarios con roles distintos a Técnicos pueden ver todos los botones
+                        auth?.cargo !== 'Técnico' && (
+                            <>
+                                <Link
+                                    to="/dashboard/historial-usuarios"
+                                    className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition">
+                                    <FaUserAlt className="text-red-600 mx-auto text-5xl mb-4" />
+                                    <p className="text-white font-semibold">Gestionar Usuarios</p>
+                                </Link>
+                                <Link to="/dashboard/historial-asistencia" className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition">
+                                    <FaCalendarAlt className="text-red-600 mx-auto text-5xl mb-4" />
+                                    <p className="text-white font-semibold">Control de Asistencia</p>
+                                </Link>
+                                
+                                <Link to="/dashboard/historial-clientes" className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition">
+                                    <FaCar className="text-red-600 mx-auto text-5xl mb-4" />
+                                    <p className="text-white font-semibold">Historial de Clientes</p>
+                                </Link>
+                            
+                                <Link to="/dashboard/historial-pagos" className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition">
+                                    <FaWallet className="text-red-600 mx-auto text-5xl mb-4" />
+                                    <p className="text-white font-semibold">Control de Pagos</p>
+                                </Link>
+                            </>
+                        )
+                    }
                     
-                    <Link to="/dashboard/historial-clientes" className="bg-black border border-white-600 p-9 rounded-lg text-center hover:bg-gray-800 transition">
-                        <FaCar className="text-red-600 mx-auto text-5xl mb-4" />
-                        <p className="text-white font-semibold">Historial de Clientes</p>
-                    </Link>
-                 
-                    <Link to="/dashboard/historial-pagos" className="bg-black border border-white-600 p-9 rounded-lg text-center hover:bg-gray-800 transition">
-                        <FaWallet className="text-red-600 mx-auto text-5xl mb-4" />
-                        <p className="text-white font-semibold">Control de Pagos</p>
-                    </Link>
-                    <Link to="/dashboard/historial-mantenimiento" className="bg-black border border-white-600 p-9 rounded-lg text-center hover:bg-gray-800 transition">
+                    <Link
+                        to="/dashboard/historial-mantenimiento"
+                        className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition">
                         <FaTools className="text-red-600 mx-auto text-5xl mb-4" />
                         <p className="text-white font-semibold">Registro de mantenimiento vehicular</p>
                     </Link>
                 </div>
 
-                
-                
                 <div className="mt-auto">
                     <button 
                         onClick={handleLogout} 
@@ -94,7 +101,6 @@ export const Dashboard = () => {
                 </div>
             </main>
 
-        
             <footer className="bg-black py-4">
                 <p className="text-center text-white text-sm">
                 2024 Full Prestige. Todos los derechos reservados.

@@ -14,6 +14,7 @@ import peugeotLogo from '../../assets/LogosAutos/Peugeot.png'
 import renaultLogo from '../../assets/LogosAutos/Renault.png'
 import susukiLogo from '../../assets/LogosAutos/Susuki.png'
 import { HistoryContext } from '../../context/HistoryContext';
+import AuthContext from '../../context/AuthProvider';
 import { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import toyotaLogo from '../../assets/LogosAutos/Toyota.png'
@@ -34,6 +35,7 @@ export const ClientesVehiculos = () => {
     fetchClienteByCedula,
     loading
   }= useContext (HistoryContext);
+  const { auth }= useContext(AuthContext);
 
   const [cedula, setCedula] = useState("");
   const [startDate, setStartDate] = useState('');
@@ -139,8 +141,7 @@ const handleSearch = async () => {
     
     doc.autoTable({
       head: [['Cédula','Nombre/Apellido', 'Contacto', 'Email', 'Dirección', 'N° Orden',
-              'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida',
-              'Descripción del trabajo', 'Técnico Responsable', 'Estado']],
+              'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida', 'Técnico Responsable', 'Estado']],
       body: filteredData.map((cliente) => [
         cliente.propietario.cedula,
         cliente.propietario.nombre,
@@ -153,7 +154,6 @@ const handleSearch = async () => {
         cliente.placa,
         formatDate(cliente.fecha_ingreso),
         formatDate(cliente.fecha_salida),
-        cliente.detalles,
         cliente.encargado.nombre,
         cliente.estado,
       ]),
@@ -176,7 +176,6 @@ const handleSearch = async () => {
       Placa: cliente.placa,
       FechaIngreso: formatDate(cliente.fecha_ingreso),
       FechaSalida: formatDate(cliente.fecha_salida),
-      Descripción:cliente.detalles,
       Técnico: cliente.encargado.nombre,
       Estado: cliente.estado,
     }));
@@ -263,11 +262,18 @@ const handleSearch = async () => {
             className="ml-2 px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-800">
               Buscar
             </button>
-            <button 
-            onClick={handleNewClick}
-            className="ml-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-800">
-              Nuevo
-            </button>
+
+            {
+              // Si el usuario es un administrador, mostrar el botón de nuevo cliente
+              auth?.cargo === 'Administrador' && (
+                <button 
+                onClick={handleNewClick}
+                className="ml-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-800">
+                  Nuevo
+                </button>
+              )
+            }
+
         </div>
         {/* ------------------------------FILTRADO DE FECHAS-------------------- */}
          <div className="flex items-center justify-between bg-gray-300 p-4 rounded-lg mb-6">
@@ -313,24 +319,31 @@ const handleSearch = async () => {
           </tbody>
         </table>
       </div>
- )}
+    )}
 
-
-   {/* BOTONES------------------------------------------------------------- */}
-        <div className='flex space-x-4 justify-center mt-20'>
-
-          <button  onClick={handleDownloadPDF} className="bg-red-400 text-black font-bold px-3 py-2 rounded flex items-center space-x-5"> 
-            <img src={pdf} alt="pdf" className='h-6' />
+    {/* BOTONES------------------------------------------------------------- */}
+    {
+      // Si el usuario es un administrador o gerente, mostrar los botones de descarga
+      (auth?.cargo === "Administrador" || auth?.cargo === "Gerente") && (
+        <div className="flex space-x-4 justify-center mt-20">
+          <button
+            onClick={handleDownloadPDF}
+            className="bg-red-400 text-black font-bold px-3 py-2 rounded flex items-center space-x-5"
+          >
+            <img src={pdf} alt="pdf" className="h-6" />
             Descargar PDF
           </button>
 
-
-          <button onClick={handleDownloadExcel} className="bg-green-300 text-black font-bold px-3 py-2 rounded flex item-center space-x-5">
-          <img src={excel} alt="excel" className='h-6' />
+          <button
+            onClick={handleDownloadExcel}
+            className="bg-green-300 text-black font-bold px-3 py-2 rounded flex item-center space-x-5"
+          >
+            <img src={excel} alt="excel" className="h-6" />
             Descargar Excel
           </button>
         </div>
-
+        )
+       }
       </main>
 
        {/* Footer------------------------------------------------------------------- */}

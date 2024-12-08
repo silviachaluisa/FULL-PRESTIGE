@@ -1,4 +1,3 @@
-import React from 'react';
 import logo from '../../assets/imagenes/logo.jpg';
 import pdf from '../../assets/imagenes/pdf.png'
 import excel from '../../assets/imagenes/excel.png'
@@ -16,6 +15,7 @@ import renaultLogo from '../../assets/LogosAutos/Renault.png'
 import susukiLogo from '../../assets/LogosAutos/Susuki.png'
 import toyotaLogo from '../../assets/LogosAutos/Toyota.png'
 import { HistoryContext } from '../../context/HistoryContext';
+import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import { TablaMantenimiento } from '../../components/Tecnicos/TablaMantenimientos';
@@ -46,12 +46,11 @@ export const HistorialMantenimiento = () => {
 
   const navigate= useNavigate();
   const {
-    clientes,
-    loading ,
-    fetchClientes,
+    loading,
     fetchMantenimientos,
     seleccionado,
     fetchMantenimientosByPlaca,
+    fetchMantenimientosByEmpleado,
     handleModal,
     setTipoModal,
     mantenimientos
@@ -63,16 +62,16 @@ export const HistorialMantenimiento = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-const handleChange=(e)=>{
-  const value = e.target.value.toUpperCase(); // Convertir a mayúsculas
+  const handleChange=(e)=>{
+    const value = e.target.value.toUpperCase(); // Convertir a mayúsculas
 
-  //Validación para que solo ingresen letras(A-Z) seguidas de hasta 4 dígitos
-  const placaRegex = /^[A-Z]{0,3}\d{0,4}$/; //Permite hasta 3 letras y letras y hasta 4 números
+    //Validación para que solo ingresen letras(A-Z) seguidas de hasta 4 dígitos
+    const placaRegex = /^[A-Z]{0,3}\d{0,4}$/; //Permite hasta 3 letras y letras y hasta 4 números
 
-  if (placaRegex.test(value)){
-    setPlaca(value); // si es valido, actualiza el estado
-  }
-};
+    if (placaRegex.test(value)){
+      setPlaca(value); // si es valido, actualiza el estado
+    }
+  };
 
   const handleLogout=()=>{
     const confirmLogout = window.confirm ("¿Deseas abandonar la página?")
@@ -83,7 +82,8 @@ const handleChange=(e)=>{
 };
  // Llamar a fetchClientes una vez cuando el componente carga
  useEffect(() => {
-  fetchClientes();
+  
+  fetchMantenimientos();
 }, []);
 
 
@@ -124,7 +124,12 @@ const handleSearch = async () => {
   const placaRegex = /^[A-Z]{3}-?[0-9]{3,4}$/;
 
   if (placa === "") {
-    await fetchClientes(); // Cargar todos los clientes si la placa está vacía
+    if (auth?.cargo === "Administrador") {
+      await fetchMantenimientos();
+    } else if (auth?.cargo === "Técnico") {
+      await fetchMantenimientosByEmpleado(auth?.cedula);
+    }
+    console.log("Buscando todos los mantenimientos", mantenimientos);
     return;
   }
 
@@ -223,9 +228,8 @@ const handleSearch = async () => {
       
       <header className="w-full bg-black shadow p-4 flex justify-between items-center">
         <div className='flex items-center'>
-            <img src={logo} alt="Full Prestige" className='h-14' />
-            <p className='ml-4 text-white italic font-semibold text-sm' >"Que tu auto refleje lo mejor de ti"</p>
-
+          <img src={logo} alt="Full Prestige" className='h-14' />
+          <p className='ml-4 text-white italic font-semibold text-sm'>&quot;Que tu auto refleje lo mejor de ti&quot;</p>
         </div>
         <button 
         onClick={handleLogout}
@@ -233,7 +237,6 @@ const handleSearch = async () => {
         VOLVER</button>
       </header>
       
-
       <div className="w-full bg-black p-4 grid grid-cols-3 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-4 items-center justify-items-center">
         {['BMW','Chevrolet','Ford','Honda','Hunday','Kia','Mazda','Mercedes', 'Peugeot','Renault' ,'Susuki','Toyota'].map((brand) => (
           <div key={brand} className="text-white text-sm text-center mx-2">
@@ -247,12 +250,10 @@ const handleSearch = async () => {
             <p>{brand}</p>
           </div>
         ))}
-      </div>
-      
+      </div>  
 
       <div>
         <h2 className=" bg-black px-4 py-2  border-2 border-white text-red-600 text-center text-2xl font-semibold mb-4">HISTORIAL DE REPARACIONES <FaCalendarAlt className="text-red-600 mx-auto text-5xl mb-4" /></h2>
-      
       </div>
 
       {/* Historial de Mantenimientos */}
@@ -284,65 +285,102 @@ const handleSearch = async () => {
 
         {/* ------------------------------------------------------------------------------------------------------------------------ */}
         <div className="flex justify-center items-center bg-gray-300 p-4 rounded-lg mb-6">
-          <button
-            onClick={() => handleNewClick("registrar")}
-            className="px-4 py-2 bg-amber-500 text-white font-semibold rounded-lg hover:bg-orange-300"
-            disabled={auth?.cargo !== "Técnico" ? true : false}
-            style={{ cursor: auth?.cargo !== "Técnico" ? "not-allowed" : "pointer" }}
-          >
-            Registrar Mantenimiento
-          </button>
+          {
+            // Si el usuario no es técnico o administrador, no puede registrar mantenimientos
+            (auth?.cargo === "Técnico" || auth?.cargo === "Administrador") && (
+              <>
+                <button
+                  onClick={() => handleNewClick("registrar")}
+                  className="px-4 py-2 bg-amber-600 text-white font-semibold rounded-lg hover:bg-amber-500"
+                  disabled={
+                    (auth?.cargo !== "Técnico") || // Si el usuario no es técnico deshabilitar el botón o
+                    (seleccionado?.estado === "Finalizado") ? true : false // Si ya se finalizó el mantenimiento deshabilitar el botón
+                  }
+                  style={{
+                    cursor: 
+                      (auth?.cargo !== "Técnico") || // Si el usuario no es técnico mostrar cursor de no permitido
+                      (seleccionado?.estado === "Finalizado") ? "not-allowed" : "pointer" // Si ya se finalizó el mantenimiento mostrar cursor de no permitido
+                  }}
+                  data-tooltip-id='registrar'
+                  data-tooltip-content={(auth?.cargo !== "Técnico") ? "Solo los técnicos pueden registrar mantenimientos" : (seleccionado?.estado === "Finalizado") ? "No se puede registrar un mantenimiento finalizado" : "Registrar Mantenimiento"}
+                >
+                  Registrar Mantenimiento
+                </button>
+                <ReactTooltip id='registrar' place='bottom'/>
+              </>
+            )
+          }
 
-          <button
-            onClick={() => handleNewClick("actualizar")}
-            className="ml-4 px-4 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-500"
-            disabled={Object.keys(seleccionado?.encargado || {}).length !== 0 ? false : true}
-            style={{ cursor: Object.keys(seleccionado?.encargado || {}).length !== 0 ? "pointer" : "not-allowed" }}
-          >
-            Solicitar Actualización
-          </button>
+          {
+            // Si el usuario es un tecnico o gerente, puede solicitar actualizaciones
+            (auth?.cargo === "Técnico" || auth?.cargo === "Gerente") && (
+              <>
+                <button
+                  onClick={() => handleNewClick("soli-actualizacion")}
+                  className="ml-4 px-4 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-500"
+                  disabled={!(seleccionado?.estado === "Finalizado")} // Si no hay descripción o costo deshabilitar el botón
+                  style={{
+                    cursor: (seleccionado?.estado === "Finalizado") ? "pointer" : "not-allowed" // Si hay descripción y costo mostrar cursor de permitido
+                  }}
+                  data-tooltip-id='soli-actualizacion'
+                  data-tooltip-content={(seleccionado?.estado === "Finalizado") ? "Solicitar Actualización" : "No se puede solicitar actualización de un mantenimiento no finalizado"}
+                >
+                  Solicitar Actualización
+                </button>
+                <ReactTooltip id='soli-actualizacion' place='bottom'/>
+              </>
+            )
+          }
         </div>
         {/* ---------------------------------------------------------------------------------------------------------------------------- */}
-   {/* TABLA DEL HISTORIAL */}
-   {/* Significa que esta esperando una lista, de lo contrario solo muestra el encabezado, esto se modifica del lado del backend */}
-   {Array.isArray(clientes) && clientes.length !== 0 ? (
-  <TablaMantenimiento clientes={clientes} />
-) : (
-  <div className="overflow-x-auto">
-    <table className="w-full text-center border-collapse border border-black">
-      <thead className="bg-black text-white font-mono">
-        <tr>
-          {encabezadoTabla.map((header) => (
-            <th key={header} className="border border-black px-4 py-2">{header}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td colSpan={encabezadoTabla.length} className="text-center py-4 text-red-700">
-            { loading ? 'Cargando...' : 'No hay mantenimientos registrados'}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-)}
-
-
+      {/* TABLA DEL HISTORIAL */}
+      {/* Significa que esta esperando una lista, de lo contrario solo muestra el encabezado, esto se modifica del lado del backend */}
+      {Array.isArray(mantenimientos) && mantenimientos.length !== 0 ? (
+        <TablaMantenimiento mantenimientos={mantenimientos} />
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-center border-collapse border border-black">
+              <thead className="bg-black text-white font-mono">
+                <tr>
+                  {encabezadoTabla.map((header) => (
+                    <th key={header} className="border border-black px-4 py-2">{header}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colSpan={encabezadoTabla.length} className="text-center py-4 text-red-700">
+                    { loading ? 'Cargando...' : 'No hay mantenimientos registrados'}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+      )}
 
        {/* BOTONES------------------------------------------------------------- */}
-       <div className='flex space-x-4 justify-center mt-20'>
-        <button  onClick={handleDownloadPDF} className="bg-red-400 text-black font-bold px-3 py-2 rounded flex items-center space-x-5"> 
-          <img src={pdf} alt="pdf" className='h-6' />
-          Descargar PDF
-        </button>
+       {
+        // Si el usuario es un administrador o gerente, mostrar los botones de descarga
+        (auth?.cargo === "Administrador" || auth?.cargo === "Gerente") && (
+          <div className="flex space-x-4 justify-center mt-20">
+            <button
+              onClick={handleDownloadPDF}
+              className="bg-red-400 text-black font-bold px-3 py-2 rounded flex items-center space-x-5"
+            >
+              <img src={pdf} alt="pdf" className="h-6" />
+              Descargar PDF
+            </button>
 
-        <button onClick={handleDownloadExcel} className="bg-green-300 text-black font-bold px-3 py-2 rounded flex item-center space-x-5">
-        <img src={excel} alt="excel" className='h-6' />
-          Descargar Excel
-        </button>
-      </div>
-
+            <button
+              onClick={handleDownloadExcel}
+              className="bg-green-300 text-black font-bold px-3 py-2 rounded flex item-center space-x-5"
+            >
+              <img src={excel} alt="excel" className="h-6" />
+              Descargar Excel
+            </button>
+          </div>
+        )
+       }
       </main>
 
         {/* Footer------------------------------------------------------------------- */}
