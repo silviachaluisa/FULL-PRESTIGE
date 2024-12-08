@@ -55,7 +55,7 @@ export const Dashboard = () => {
             >   <div>
                 <h1 className="text-3xl font-bold text-gray-900"> MENU PRINCIPAL</h1> 
                </div>
-               <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+               <div className={`grid gap-8 ${auth?.cargo === 'Técnico' ? 'grid-cols-1 place-items-center' : 'grid-cols-1 sm:grid-cols-3'}`}>
                     {
                         // Los usuarios con roles distintos a Técnicos pueden ver todos los botones
                         auth?.cargo !== 'Técnico' && (
@@ -83,7 +83,7 @@ export const Dashboard = () => {
                             </>
                         )
                     }
-                
+                    
                     <Link
                         to="/dashboard/historial-mantenimiento"
                         className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition">
@@ -91,7 +91,6 @@ export const Dashboard = () => {
                         <p className="text-white font-semibold">Registro de mantenimiento vehicular</p>
                     </Link>
                 </div>
-
 
                 <div className="mt-auto">
                     <button 
