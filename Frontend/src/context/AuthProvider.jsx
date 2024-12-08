@@ -41,7 +41,6 @@ const AuthProvider = ({ children }) => {
                 }
             }
             const respuesta= await axios.get(url,options)
-            console.log(respuesta.data)
             setAuth(respuesta.data.empleado)
         } catch (error) {
             console.log(error);
@@ -49,7 +48,6 @@ const AuthProvider = ({ children }) => {
     }
 
     const actualizarPerfil = async (form) => {
-        console.log(form);
         const token = localStorage.getItem("token")
         try {
             const url= `${import.meta.env.VITE_BACKEND_URL}/profile`

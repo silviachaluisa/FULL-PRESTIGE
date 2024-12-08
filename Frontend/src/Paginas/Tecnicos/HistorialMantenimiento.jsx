@@ -1,4 +1,3 @@
-import React from 'react';
 import logo from '../../assets/imagenes/logo.jpg';
 import pdf from '../../assets/imagenes/pdf.png'
 import excel from '../../assets/imagenes/excel.png'
@@ -46,12 +45,11 @@ export const HistorialMantenimiento = () => {
 
   const navigate= useNavigate();
   const {
-    clientes,
-    loading ,
-    fetchClientes,
+    loading,
     fetchMantenimientos,
     seleccionado,
     fetchMantenimientosByPlaca,
+    fetchMantenimientosByEmpleado,
     handleModal,
     setTipoModal,
     mantenimientos
@@ -59,21 +57,20 @@ export const HistorialMantenimiento = () => {
   
   const { auth } = useContext(AuthContext);
 
-  console.log("Auth ->", auth);
   const [placa, setPlaca] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-const handleChange=(e)=>{
-  const value = e.target.value.toUpperCase(); // Convertir a mayúsculas
+  const handleChange=(e)=>{
+    const value = e.target.value.toUpperCase(); // Convertir a mayúsculas
 
-  //Validación para que solo ingresen letras(A-Z) seguidas de hasta 4 dígitos
-  const placaRegex = /^[A-Z]{0,3}\d{0,4}$/; //Permite hasta 3 letras y letras y hasta 4 números
+    //Validación para que solo ingresen letras(A-Z) seguidas de hasta 4 dígitos
+    const placaRegex = /^[A-Z]{0,3}\d{0,4}$/; //Permite hasta 3 letras y letras y hasta 4 números
 
-  if (placaRegex.test(value)){
-    setPlaca(value); // si es valido, actualiza el estado
-  }
-};
+    if (placaRegex.test(value)){
+      setPlaca(value); // si es valido, actualiza el estado
+    }
+  };
 
   const handleLogout=()=>{
     const confirmLogout = window.confirm ("¿Deseas abandonar la página?")
@@ -84,7 +81,8 @@ const handleChange=(e)=>{
 };
  // Llamar a fetchClientes una vez cuando el componente carga
  useEffect(() => {
-  fetchClientes();
+  
+  fetchMantenimientos();
 }, []);
 
 
@@ -125,7 +123,12 @@ const handleSearch = async () => {
   const placaRegex = /^[A-Z]{3}-?[0-9]{3,4}$/;
 
   if (placa === "") {
-    await fetchClientes(); // Cargar todos los clientes si la placa está vacía
+    if (auth?.cargo === "Administrador") {
+      await fetchMantenimientos();
+    } else if (auth?.cargo === "Técnico") {
+      await fetchMantenimientosByEmpleado(auth?.cedula);
+    }
+    console.log("Buscando todos los mantenimientos", mantenimientos);
     return;
   }
 
@@ -224,9 +227,8 @@ const handleSearch = async () => {
       
       <header className="w-full bg-black shadow p-4 flex justify-between items-center">
         <div className='flex items-center'>
-            <img src={logo} alt="Full Prestige" className='h-14' />
-            <p className='ml-4 text-white italic font-semibold text-sm' >"Que tu auto refleje lo mejor de ti"</p>
-
+          <img src={logo} alt="Full Prestige" className='h-14' />
+          <p className='ml-4 text-white italic font-semibold text-sm'>&quot;Que tu auto refleje lo mejor de ti&quot;</p>
         </div>
         <button 
         onClick={handleLogout}
@@ -234,7 +236,6 @@ const handleSearch = async () => {
         VOLVER</button>
       </header>
       
-
       <div className="w-full bg-black p-4 grid grid-cols-3 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-4 items-center justify-items-center">
         {['BMW','Chevrolet','Ford','Honda','Hunday','Kia','Mazda','Mercedes', 'Peugeot','Renault' ,'Susuki','Toyota'].map((brand) => (
           <div key={brand} className="text-white text-sm text-center mx-2">
@@ -248,12 +249,10 @@ const handleSearch = async () => {
             <p>{brand}</p>
           </div>
         ))}
-      </div>
-      
+      </div>  
 
       <div>
         <h2 className=" bg-black px-4 py-2  border-2 border-white text-red-600 text-center text-2xl font-semibold mb-4">HISTORIAL DE REPARACIONES <FaCalendarAlt className="text-red-600 mx-auto text-5xl mb-4" /></h2>
-      
       </div>
 
       {/* Historial de Mantenimientos */}
@@ -325,28 +324,28 @@ const handleSearch = async () => {
         {/* ---------------------------------------------------------------------------------------------------------------------------- */}
    {/* TABLA DEL HISTORIAL */}
    {/* Significa que esta esperando una lista, de lo contrario solo muestra el encabezado, esto se modifica del lado del backend */}
-   {Array.isArray(clientes) && clientes.length !== 0 ? (
-  <TablaMantenimiento clientes={clientes} />
-) : (
-  <div className="overflow-x-auto">
-    <table className="w-full text-center border-collapse border border-black">
-      <thead className="bg-black text-white font-mono">
-        <tr>
-          {encabezadoTabla.map((header) => (
-            <th key={header} className="border border-black px-4 py-2">{header}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td colSpan={encabezadoTabla.length} className="text-center py-4 text-red-700">
-            { loading ? 'Cargando...' : 'No hay mantenimientos registrados'}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-)}
+   {Array.isArray(mantenimientos) && mantenimientos.length !== 0 ? (
+      <TablaMantenimiento mantenimientos={mantenimientos} />
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full text-center border-collapse border border-black">
+            <thead className="bg-black text-white font-mono">
+              <tr>
+                {encabezadoTabla.map((header) => (
+                  <th key={header} className="border border-black px-4 py-2">{header}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colSpan={encabezadoTabla.length} className="text-center py-4 text-red-700">
+                  { loading ? 'Cargando...' : 'No hay mantenimientos registrados'}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
 
 
 

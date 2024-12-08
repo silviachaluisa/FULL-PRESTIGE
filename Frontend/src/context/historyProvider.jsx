@@ -467,6 +467,7 @@ export const HistoryProvider = ({ children }) => {
     const token = localStorage.getItem('token');
     if (!token) return;
     try {
+      setLoading(true); // Activar el estado de carga
       const options = {
         headers: {
           'Content-Type': 'application/json',
@@ -474,17 +475,21 @@ export const HistoryProvider = ({ children }) => {
         },
       }
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/maintenances`, options);
-      
+      setMantenimientos(response.data);
       return response.data;
     } catch (error) {
-        console.error("Error al obtener mantenimientos", error);
-    };
+      console.error("Error al obtener mantenimientos", error);
+      setMantenimientos([]);
+    } finally {
+      setLoading(false); // Establecer la carga en falso
+    }
   }
 
   const fetchMantenimientosByPlaca = async (placa) => {
     const token = localStorage.getItem('token');
     if (!token) return;
     try {
+      setLoading(true); // Activar el estado de carga
       const options = {
         headers: {
           'Content-Type': 'application/json',
@@ -492,17 +497,21 @@ export const HistoryProvider = ({ children }) => {
         },
       }
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/maintenance/vehicle/${placa}`, options);
-      
+      setMantenimientos(response.data);
       return response.data;
     } catch (error) {
-        console.error("Error al obtener mantenimientos", error);
-    };
+      console.error("Error al obtener mantenimientos", error);
+      setMantenimientos([]);
+    } finally {
+      setLoading(false); // Establecer la carga en falso
+    }
   }
 
   const fetchMantenimientosByID = async (id) => {
     const token = localStorage.getItem('token');
     if (!token) return;
     try {
+      setLoading(true); // Activar el estado de carga
       const options = {
         headers: {
           'Content-Type': 'application/json',
@@ -510,9 +519,36 @@ export const HistoryProvider = ({ children }) => {
         },
       }
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/maintenance/${id}`, options);
+      setMantenimientos(response.data);
       return response.data;
     } catch (error) {
       console.error("Error al obtener mantenimientos", error);
+      setMantenimientos([]);
+    } finally {
+      setLoading(false); // Establecer la carga en falso
+    }
+  };
+
+  const fetchMantenimientosByEmpleado = async (cedula) => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      setLoading(true); // Activar el estado de carga
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/maintenance/employee/${cedula}`, options);
+      setMantenimientos(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error al obtener mantenimientos", error);
+      setMantenimientos([]);
+      return [];
+    } finally {
+      setLoading(false); // Establecer la carga en falso
     }
   };
 
@@ -535,7 +571,7 @@ export const HistoryProvider = ({ children }) => {
         setSuccessMessage("");
         setErrorMessage("");
         handleModal();
-        fetchClientes();
+        fetchMantenimientos();
       }, 2000); // Cierra el modal después de 2 segundos
     }catch (error) {
       console.error("Error al actualizar mantenimiento", error);
@@ -572,7 +608,7 @@ export const HistoryProvider = ({ children }) => {
         setSuccessMessage("");
         setErrorMessage("");
         handleModal();
-        fetchClientes();
+        fetchMantenimientos();
       }, 2000); // Cierra el modal después de 2 segundos
       return { success: true, message: "Mantenimiento registrado correctamente" };
     } catch (error) {
@@ -635,6 +671,7 @@ export const HistoryProvider = ({ children }) => {
       mantenimientos,
       setMantenimientos,
       fetchMantenimientos,
+      fetchMantenimientosByEmpleado,
       fetchMantenimientosByPlaca,
       fetchMantenimientosByID,
       upDateMaintance,
