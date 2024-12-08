@@ -289,15 +289,15 @@ const handleSearch = async () => {
             (auth?.cargo === "Técnico" || auth?.cargo === "Administrador") && (
               <button
                 onClick={() => handleNewClick("registrar")}
-                className="px-4 py-2 bg-amber-500 text-white font-semibold rounded-lg hover:bg-orange-300"
+                className="px-4 py-2 bg-amber-600 text-white font-semibold rounded-lg hover:bg-amber-500"
                 disabled={
                   (auth?.cargo !== "Técnico") || // Si el usuario no es técnico deshabilitar el botón o
-                  (seleccionado?.descripcion && seleccionado?.costo) ? true : false // Si ya hay una descripción y costo deshabilitar el botón
+                  (seleccionado?.estado === "Finalizado") ? true : false // Si ya se finalizó el mantenimiento deshabilitar el botón
                 }
                 style={{
                   cursor: 
                     (auth?.cargo !== "Técnico") || // Si el usuario no es técnico mostrar cursor de no permitido
-                    (seleccionado?.descripcion && seleccionado?.costo) ? "not-allowed" : "pointer" // Si ya hay una descripción y costo mostrar cursor de no permitido
+                    (seleccionado?.estado === "Finalizado") ? "not-allowed" : "pointer" // Si ya se finalizó el mantenimiento mostrar cursor de no permitido
                 }}
               >
                 Registrar Mantenimiento
@@ -311,9 +311,9 @@ const handleSearch = async () => {
               <button
                 onClick={() => handleNewClick("soli-actualizacion")}
                 className="ml-4 px-4 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-500"
-                disabled={!(seleccionado?.descripcion && seleccionado?.costo)} // Si no hay descripción o costo deshabilitar el botón
+                disabled={!(seleccionado?.estado === "Finalizado")} // Si no hay descripción o costo deshabilitar el botón
                 style={{
-                  cursor: seleccionado?.descripcion && seleccionado?.costo ? "pointer" : "not-allowed" // Si hay descripción y costo mostrar cursor de permitido
+                  cursor: (seleccionado?.estado === "Finalizado") ? "pointer" : "not-allowed" // Si hay descripción y costo mostrar cursor de permitido
                 }}
               >
                 Solicitar Actualización
@@ -322,32 +322,30 @@ const handleSearch = async () => {
           }
         </div>
         {/* ---------------------------------------------------------------------------------------------------------------------------- */}
-   {/* TABLA DEL HISTORIAL */}
-   {/* Significa que esta esperando una lista, de lo contrario solo muestra el encabezado, esto se modifica del lado del backend */}
-   {Array.isArray(mantenimientos) && mantenimientos.length !== 0 ? (
-      <TablaMantenimiento mantenimientos={mantenimientos} />
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-center border-collapse border border-black">
-            <thead className="bg-black text-white font-mono">
-              <tr>
-                {encabezadoTabla.map((header) => (
-                  <th key={header} className="border border-black px-4 py-2">{header}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colSpan={encabezadoTabla.length} className="text-center py-4 text-red-700">
-                  { loading ? 'Cargando...' : 'No hay mantenimientos registrados'}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      {/* TABLA DEL HISTORIAL */}
+      {/* Significa que esta esperando una lista, de lo contrario solo muestra el encabezado, esto se modifica del lado del backend */}
+      {Array.isArray(mantenimientos) && mantenimientos.length !== 0 ? (
+        <TablaMantenimiento mantenimientos={mantenimientos} />
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-center border-collapse border border-black">
+              <thead className="bg-black text-white font-mono">
+                <tr>
+                  {encabezadoTabla.map((header) => (
+                    <th key={header} className="border border-black px-4 py-2">{header}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colSpan={encabezadoTabla.length} className="text-center py-4 text-red-700">
+                    { loading ? 'Cargando...' : 'No hay mantenimientos registrados'}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
       )}
-
-
 
        {/* BOTONES------------------------------------------------------------- */}
        {

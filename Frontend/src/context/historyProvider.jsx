@@ -590,8 +590,8 @@ export const HistoryProvider = ({ children }) => {
     }
   };
 
-  const registerMaintance = async (infoMantenimiento) => {
-    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/maintenance/register`;
+  const registerMaintance = async (id, infoMantenimiento) => {
+    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/maintenance/register/${id}`;
     const token = localStorage.getItem("token");
     const options = {
       headers: {

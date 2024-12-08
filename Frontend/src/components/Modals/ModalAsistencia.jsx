@@ -125,7 +125,7 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
   const handleSave = () => {
     //Muestra el modal de confirmación
     setShowConfirmModal(true);
-  };  
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

@@ -10,17 +10,18 @@ const ModalMantenimiento = ({info, handleShow}) => {
         errorMessage,
         setErrorMessage,
         tipoModal,
-        setSuccessMessage,
         upDateMaintance,
     } = useContext(HistoryContext);
     const [ tecnicos, setTecnicos ] = useState([]);
     const [ cargando, setCargando ] = useState(false);
     const [ justificacion, setJustificacion ] = useState(""); // Variable para la justificacion
+    const [ showConfirmModal, setShowConfirmModal ] = useState(false);
     const [ infoMantenimiento, setInfoMantenimiento ] = useState({
         placa: info?.vehiculo?.placa || "",
         encargado: info?.encargado?.cedula || "Seleccionar Técnico",
         costo: info?.costo || 0,
         descripcion: info?.descripcion || "",
+        estado: info?.estado || "Pendiente",
     });
 
     const handleChange = (e) => {
@@ -28,6 +29,52 @@ const ModalMantenimiento = ({info, handleShow}) => {
             ...infoMantenimiento,
             [e.target.name]: e.target.value}
         );
+    }
+
+    const handleConfirmSave = () => {
+        setShowConfirmModal(false); //Cierra el modal de confirmación
+        handleSubmit(); //Ejecuta la logica de guardar
+    };
+
+    const validateEntries = () => {
+        if (tipoModal === "actualizar") {
+            if (!justificacion) {
+                setErrorMessage("Debes escribir una justificación para la actualización");
+                setTimeout(() => setErrorMessage(""), 5000);
+                return;
+            }
+
+            if (infoMantenimiento.encargado === "") {
+                setErrorMessage("Debes seleccionar un técnico");
+                setTimeout(() => setErrorMessage(""), 5000);
+                return;
+            }
+        }
+
+        if (infoMantenimiento.costo === 0) {
+            setErrorMessage("Debes ingresar un costo para el mantenimiento");
+            setTimeout(() => setErrorMessage(""), 5000);
+            return;
+        }
+
+        if (infoMantenimiento.descripcion === "") {
+            setErrorMessage("Debes ingresar una descripción para el mantenimiento");
+            setTimeout(() => setErrorMessage(""), 5000);
+            return;
+        }
+
+        if (infoMantenimiento.estado === "") {
+            setErrorMessage("Debes seleccionar un estado para el mantenimiento");
+            setTimeout(() => setErrorMessage(""), 5000);
+            return;
+        }
+
+        if (infoMantenimiento.estado === "Finalizado"){
+            setShowConfirmModal(true);
+            return;
+        } else {
+            handleSubmit();
+        }
     }
 
     const handleSubmit = async () => {
@@ -51,12 +98,11 @@ const ModalMantenimiento = ({info, handleShow}) => {
                     cedula_encargado: infoMantenimiento.encargado,
                     costo: infoMantenimiento.costo,
                     descripcion: infoMantenimiento.descripcion,
+                    estado: infoMantenimiento.estado,
                 });
                 console.log("Mantenimiento actualizado:", infoMantenimiento.id);
             } catch (error) {
                 console.error("Error al actualizar:", error);
-                setErrorMessage("Error al procesar la solicitud");
-                setTimeout(() => setErrorMessage(""), 5000); 
             } finally {
                 setCargando(false);
             }
@@ -68,23 +114,18 @@ const ModalMantenimiento = ({info, handleShow}) => {
             }
     
             setCargando(true);
-    
             try {
                 // Registrar nuevo mantenimiento
-                await registerMaintance({
+                await registerMaintance(info?._id,{
                     placa: info?.vehiculo?.placa,
                     cedula_encargado: infoMantenimiento.encargado,
                     costo: infoMantenimiento.costo,
                     descripcion: infoMantenimiento.descripcion,
+                    estado: infoMantenimiento.estado,
                 });
                 console.log("Nuevo mantenimiento registrado");
-    
-                setSuccessMessage("Operación realizada con éxito");
-                setTimeout(() => setSuccessMessage(""), 5000);
             } catch (error) {
                 console.error("Error al registrar:", error);
-                setErrorMessage("Error al procesar la solicitud");
-                setTimeout(() => setErrorMessage(""), 5000);
             } finally {
                 setCargando(false);
             }
@@ -99,11 +140,17 @@ const ModalMantenimiento = ({info, handleShow}) => {
             );
             setTecnicos(ltecnicos);
         };
-    
-        setCargando(true);
-        Promise.all([filtrarTecnicos()])
-            .catch(() => setErrorMessage("Error al cargar datos iniciales"))
-            .finally(() => setCargando(false));
+        if (tipoModal === "actualizar") {
+            setCargando(true);
+            Promise.all([filtrarTecnicos()])
+                .catch(() => setErrorMessage("Error al cargar datos iniciales"))
+                .finally(() => {
+                    setCargando(false);
+                    setTimeout(() => {
+                        setErrorMessage("");
+                    }, 5000);
+                });
+        }
     }, []);
 
     return (
@@ -159,7 +206,7 @@ const ModalMantenimiento = ({info, handleShow}) => {
                     type="number"
                     id="costo"
                     name="costo"
-                    value={cargando ? "cargando ..." : infoMantenimiento.costo}
+                    value={cargando ? "0" : infoMantenimiento.costo}
                     onChange={handleChange}
                     className="w-full border rounded-lg p-2"
                     placeholder="Ingrese el costo del mantenimiento"
@@ -182,6 +229,31 @@ const ModalMantenimiento = ({info, handleShow}) => {
                     rows={3}
                     required
                 />
+                </div>
+
+                {/* Estado del mantenimiento */}
+                <div className="mb-4">
+                <label htmlFor="estado" className="block text-gray-700 font-semibold mb-2">
+                    Estado:
+                </label>
+                <select
+                    id="estado"
+                    name="estado"
+                    autoComplete="estado"
+                    className="w-full border rounded-lg p-2"
+                    value={infoMantenimiento.estado}
+                    onChange={handleChange}
+                >
+                    {
+                        (tipoModal === "actualizar" || tipoModal ==="soli-actualizacion") && (
+                            <>
+                                <option value="Pendiente">Pendiente</option> 
+                            </>
+                        )
+                    }
+                    <option value="En Proceso">En Proceso</option>
+                    <option value="Finalizado">Finalizado</option>
+                </select>
                 </div>
 
                 {/* Campo Justificación solo para Actualizar */}
@@ -211,7 +283,7 @@ const ModalMantenimiento = ({info, handleShow}) => {
                         <button
                             className="px-4 py-2 bg-yellow-600 text-white font-semibold rounded-lg hover:bg-yellow-800"
                             disabled={cargando}
-                            onClick={handleSubmit}
+                            onClick={validateEntries}
                         >
                             Actualizar
                         </button>
@@ -221,8 +293,11 @@ const ModalMantenimiento = ({info, handleShow}) => {
                     tipoModal === "registrar" && (
                         <button
                             className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-800"
+                            style={{
+                                cursor: cargando ? "not-allowed" : "pointer",
+                            }}
                             disabled={cargando}
-                            onClick={handleSubmit}
+                            onClick={validateEntries}
                         >
                             Guardar
                         </button>
@@ -241,6 +316,32 @@ const ModalMantenimiento = ({info, handleShow}) => {
                 }
                 </div>
             </div>
+            {/* Modal de confirmación */}
+            {showConfirmModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                        <h2 className="text-xl font-bold mb-4">Confirmar Acción</h2>
+                        <p>¿Estás segur@ que deseas finalizar el mantenimiento?</p>
+                        <p><strong>
+                            No podras realizar cambios una vez finalizado
+                        </strong></p>
+                        <div className="mt-6 flex justify-end gap-4">
+                            <button
+                            onClick={() => setShowConfirmModal(false)} // Cerrar el sub-modal
+                            className="px-4 py-2 bg-gray-300 text-black font-semibold rounded-lg hover:bg-gray-600"
+                            >
+                                No
+                            </button>
+                            <button
+                            onClick={handleConfirmSave} // Confirmar y ejecutar guardar
+                            className="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-800"
+                            >
+                                Sí
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}  
         </div>
     )
 }
