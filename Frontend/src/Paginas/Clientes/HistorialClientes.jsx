@@ -141,8 +141,7 @@ const handleSearch = async () => {
     
     doc.autoTable({
       head: [['Cédula','Nombre/Apellido', 'Contacto', 'Email', 'Dirección', 'N° Orden',
-              'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida',
-              'Descripción del trabajo', 'Técnico Responsable', 'Estado']],
+              'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida', 'Técnico Responsable', 'Estado']],
       body: filteredData.map((cliente) => [
         cliente.propietario.cedula,
         cliente.propietario.nombre,
@@ -155,7 +154,6 @@ const handleSearch = async () => {
         cliente.placa,
         formatDate(cliente.fecha_ingreso),
         formatDate(cliente.fecha_salida),
-        cliente.detalles,
         cliente.encargado.nombre,
         cliente.estado,
       ]),
@@ -178,7 +176,6 @@ const handleSearch = async () => {
       Placa: cliente.placa,
       FechaIngreso: formatDate(cliente.fecha_ingreso),
       FechaSalida: formatDate(cliente.fecha_salida),
-      Descripción:cliente.detalles,
       Técnico: cliente.encargado.nombre,
       Estado: cliente.estado,
     }));
