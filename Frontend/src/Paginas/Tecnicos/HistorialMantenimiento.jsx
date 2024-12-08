@@ -314,16 +314,21 @@ const handleSearch = async () => {
           {
             // Si el usuario es un tecnico o gerente, puede solicitar actualizaciones
             (auth?.cargo === "Técnico" || auth?.cargo === "Gerente") && (
-              <button
-                onClick={() => handleNewClick("soli-actualizacion")}
-                className="ml-4 px-4 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-500"
-                disabled={!(seleccionado?.estado === "Finalizado")} // Si no hay descripción o costo deshabilitar el botón
-                style={{
-                  cursor: (seleccionado?.estado === "Finalizado") ? "pointer" : "not-allowed" // Si hay descripción y costo mostrar cursor de permitido
-                }}
-              >
-                Solicitar Actualización
-              </button>
+              <>
+                <button
+                  onClick={() => handleNewClick("soli-actualizacion")}
+                  className="ml-4 px-4 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-500"
+                  disabled={!(seleccionado?.estado === "Finalizado")} // Si no hay descripción o costo deshabilitar el botón
+                  style={{
+                    cursor: (seleccionado?.estado === "Finalizado") ? "pointer" : "not-allowed" // Si hay descripción y costo mostrar cursor de permitido
+                  }}
+                  data-tooltip-id='soli-actualizacion'
+                  data-tooltip-content={(seleccionado?.estado === "Finalizado") ? "Solicitar Actualización" : "No se puede solicitar actualización de un mantenimiento no finalizado"}
+                >
+                  Solicitar Actualización
+                </button>
+                <ReactTooltip id='soli-actualizacion' place='bottom'/>
+              </>
             )
           }
         </div>
