@@ -13,6 +13,7 @@ import renaultLogo from '../../assets/LogosAutos/Renault.png';
 import susukiLogo from '../../assets/LogosAutos/Susuki.png';
 import toyotaLogo from '../../assets/LogosAutos/Toyota.png';
 import { HistoryContext } from '../../context/HistoryContext';
+import { Tooltip as ReactTooltip } from 'react-tooltip';
 import AuthContext from '../../context/AuthProvider';
 import { useContext,useState} from 'react';
 import { useEffect } from 'react';
@@ -251,6 +252,8 @@ const handleDownloadExcel = () => {
               <button
                 onClick={() => handleNewClick("registrar")}
                 className="px-4 py-2 bg-amber-500 text-white font-semibold rounded-lg hover:bg-orange-300"
+                data-tooltip-id='registrar'
+                data-tooltip-content="Registra un nuevo pago para el usuario seleccionado"
               >
                 Registrar Pago
               </button>
@@ -260,9 +263,14 @@ const handleDownloadExcel = () => {
                 className="ml-4 px-4 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-500"
                 disabled={Object.keys(seleccionado?.pago || {}).length !== 0 ? false : true}
                 style={{ cursor: Object.keys(seleccionado?.pago || {}).length !== 0 ? "pointer" : "not-allowed" }}
+                data-tooltip-id='actualizar'
+                data-tooltip-content={(Object.keys(seleccionado?.pago || {}).length !== 0) ? "Actualiza el pago del usuario seleccionado" : "No se puede actualizar el pago"}
               >
                 Actualizar Pago
               </button>
+
+              <ReactTooltip id='registrar' place='bottom' />
+              <ReactTooltip id='actualizar' place='bottom' />
             </div>
           )
         }
