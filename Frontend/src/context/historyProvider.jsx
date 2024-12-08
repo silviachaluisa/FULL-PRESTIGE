@@ -628,7 +628,47 @@ export const HistoryProvider = ({ children }) => {
       return { success: false, message: error.response.data.message
     };
   };
-};
+  };
+
+  const requestUpdateMaintenance = async (id, infoMantenimiento) => {
+    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/maintenance/request/${id}`;
+    const token = localStorage.getItem("token");
+    const options = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    try{
+      const respuesta = await axios.put(URLActualizar, infoMantenimiento, options);
+      console.log(respuesta);
+      setSuccessMessage("Solicitud enviada correctamente");
+      //Cerrar el modal automáticamente después de un breve tiempo
+      setTimeout(() => {
+        setSuccessMessage("");
+        setErrorMessage("");
+        handleModal();
+        fetchMantenimientos();
+      }, 2000); // Cierra el modal después de 2 segundos
+      return { success: true, message: "Mantenimiento actualizado correctamente" };
+    } catch (error) {
+      console.error("Error al solicitar la actualizacion", error);
+      if (error.response.data?.errors && error.response.data.errors.length > 0) {
+        // Mostrar errores de validación uno por uno
+        await mostrarErrores(error.response.data.errors);
+      } else {
+        setErrorMessage(error.response.data.message);
+    
+        // Limpiar el mensaje de error después de un breve tiempo
+        setTimeout(() => {
+          setErrorMessage("");
+          setSuccessMessage("");
+        }, 5000);
+      }
+      return { success: false, message: error.response.data.message
+    };
+  };
+  };
 
   
 
@@ -675,7 +715,8 @@ export const HistoryProvider = ({ children }) => {
       fetchMantenimientosByPlaca,
       fetchMantenimientosByID,
       upDateMaintance,
-      registerMaintance
+      registerMaintance,
+      requestUpdateMaintenance
        }}>
       {children}
     </HistoryContext.Provider>

@@ -11,6 +11,7 @@ const ModalMantenimiento = ({info, handleShow}) => {
         setErrorMessage,
         tipoModal,
         upDateMaintance,
+        requestUpdateMaintenance
     } = useContext(HistoryContext);
     const [ tecnicos, setTecnicos ] = useState([]);
     const [ cargando, setCargando ] = useState(false);
@@ -106,7 +107,22 @@ const ModalMantenimiento = ({info, handleShow}) => {
             } finally {
                 setCargando(false);
             }
-        } else {
+        } else if (tipoModal === "soli-actualizacion"){
+            setCargando(true);
+            try {
+                // Solicitar actualización de mantenimiento
+                await requestUpdateMaintenance(info?._id, {
+                    nueva_descripcion: infoMantenimiento.descripcion,
+                    nuevo_costo: infoMantenimiento.costo,
+                    nuevo_estado: infoMantenimiento.estado,
+                });
+                console.log("Solicitud de actualización enviada");
+            } catch (error) {
+                console.error("Error al solicitar actualización:", error);
+            } finally {
+                setCargando(false);
+            }
+        }else {
             if (infoMantenimiento.encargado === "") {
                 setErrorMessage("Debes seleccionar un técnico");
                 setTimeout(() => setErrorMessage(""), 5000);
