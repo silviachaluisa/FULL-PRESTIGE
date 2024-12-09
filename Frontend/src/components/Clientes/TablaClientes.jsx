@@ -105,7 +105,7 @@ TablaClientes.propTypes = {
     modelo: PropTypes.string.isRequired,
     placa: PropTypes.string.isRequired,
     fecha_ingreso: PropTypes.string.isRequired,
-    fecha_salida: PropTypes.string.isRequired,
+    fecha_salida: PropTypes.string,
     estado: PropTypes.string.isRequired,
   })).isRequired,
 };
