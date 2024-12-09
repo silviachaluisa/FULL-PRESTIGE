@@ -48,8 +48,8 @@ export const FormularioClientes = ({clientes}) => {
             marca:clientes.marca ?? '',
             modelo: clientes.modelo ?? '',
             placa: clientes.placa ?? '',
-            fecha_ingreso: clientes.fecha_ingreso.split("T")[0] ?? '',
-            fecha_salida: clientes.fecha_salida.split("T")[0] ?? '',
+            fecha_ingreso: clientes?.fecha_ingreso.split("T")[0] ?? '',
+            fecha_salida: clientes?.fecha_salida.split("T")[0] ?? '',
             cedula_tecnico: clientes?.encargado?.cedula ?? '',
             estado: clientes.estado ?? '',
           });
@@ -162,47 +162,47 @@ export const FormularioClientes = ({clientes}) => {
       estado: updateinfo.estado
     };
      if (clientes?.propietario.cedula) {
-      console.log("Actualizando cliente...");
-      console.log(clientes);
-      console.log(clientInfo);
-      vehicleInfo.cedula_cliente = clientes.propietario.cedula;
-      console.log(vehicleInfo);
+        console.log("Actualizando cliente...");
+        console.log(clientes);
+        console.log(clientInfo);
+        vehicleInfo.cedula_cliente = clientes.propietario.cedula;
+        console.log(vehicleInfo);
 
-      // Llamar a la función para actualizar el usuario
-      const res1 = await upDateClient(clientes?.propietario.cedula, clientInfo);
-      if (res1.success){
-        setMensaje({ respuesta: res1.message, tipo: true });
-      }else{
-        setMensaje({ respuesta: res1.message, tipo: false });
-      }
+        // Llamar a la función para actualizar el usuario
+        const res1 = await upDateClient(clientes?.propietario.cedula, clientInfo);
+        if (res1.success){
+          setMensaje({ respuesta: res1.message, tipo: true });
+        }else{
+          setMensaje({ respuesta: res1.message, tipo: false });
+        }
 
-      const res2 = await updateClientVehicle(clientes.placa, vehicleInfo);
-      if (res2.success){
-        setMensaje({ respuesta: res2.message, tipo: true });
-        // Limpiar el mensaje después de 3 segundos
-        setTimeout(() => {
-          setMensaje(null);
-        }, 3000);
-      }else{
-        setMensaje({ respuesta: res2.message, tipo: false });
-        // Limpiar el mensaje después de 3 segundos
-        setTimeout(() => {
-          setMensaje(null);
-        }, 3000);
-      }
-      let res3 = {
-        success: true,
-      };
-      console.log("Actualizacion tecnico encargado ->", clientes)
-      // Comprobar si se selecciono un nuevo tecnico
-      if (clientes?.encargado?.cedula !== regisclientes.cedula_tecnico) {
-        res3 = await asignarVehiculo({placa: vehicleInfo.placa, cedula_tecnico: vehicleInfo.cedula_tecnico});
-        if (res3.success){
-          setMensaje({ respuesta: res3.message, tipo: true });
+        const res2 = await updateClientVehicle(clientes.placa, vehicleInfo);
+        if (res2.success){
+          setMensaje({ respuesta: res2.message, tipo: true });
           // Limpiar el mensaje después de 3 segundos
           setTimeout(() => {
             setMensaje(null);
           }, 3000);
+        }else{
+          setMensaje({ respuesta: res2.message, tipo: false });
+          // Limpiar el mensaje después de 3 segundos
+          setTimeout(() => {
+            setMensaje(null);
+          }, 3000);
+        }
+        let res3 = {
+          success: true,
+        };
+        console.log("Actualizacion tecnico encargado ->", clientes)
+        // Comprobar si se selecciono un nuevo tecnico
+        if (clientes?.encargado?.cedula !== regisclientes.cedula_tecnico) {
+          res3 = await asignarVehiculo({placa: vehicleInfo.placa, cedula_tecnico: vehicleInfo.cedula_tecnico});
+          if (res3.success){
+            setMensaje({ respuesta: res3.message, tipo: true });
+            // Limpiar el mensaje después de 3 segundos
+            setTimeout(() => {
+              setMensaje(null);
+            }, 3000);
         }else{
           setMensaje({ respuesta: res3.message, tipo: false });
           // Limpiar el mensaje después de 3 segundos

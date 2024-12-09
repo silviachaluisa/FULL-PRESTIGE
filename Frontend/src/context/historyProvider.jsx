@@ -23,13 +23,21 @@ export const HistoryProvider = ({ children }) => {
       setErrorMessage(error.msg);
   
       // Mostrar el mensaje de error en la consola
-      console.error("Error al registrar pago", error.msg);
+      console.error("Error: ", error.msg);
   
       // Esperar 5 segundos antes de pasar al siguiente error
       await new Promise((resolve) => setTimeout(resolve, 5000));
   
       // Limpiar el mensaje de error antes de mostrar el siguiente
       setErrorMessage("");
+    }
+  }
+
+  async function retornarErrores(errors){
+    for (const error of errors) {
+      new Promise((resolve) => setTimeout(resolve, 5000));
+      console.error("Error: ", error.msg);
+      return error.msg;
     }
   }
 
@@ -222,8 +230,13 @@ export const HistoryProvider = ({ children }) => {
 
       return { success: true, message: "Cliente registrado correctamente" };
     } catch (error) {
-      console.error("Error al registrar cliente", error);
-      return { success: false, message: error.response.data.message };
+      console.error("Error al actualizar asistencia", error);
+      if (error.response.data?.errors && error.response.data.errors.length > 0) {
+        // Mostrar errores de validación uno por uno
+        return { success: false, message: error.response.data.errors[0] };
+      } else {
+        return { success: false, message: error.response.data.message };
+      }
     }
   }
 
@@ -243,7 +256,14 @@ export const HistoryProvider = ({ children }) => {
       return { success: true, message: "Vehículo registrado correctamente" };
     } catch (error) {
       console.error("Error al registrar vehículo", error);
-      return { success: false, message: error.response.data.message };
+      console.error("Error al actualizar asistencia", error);
+      if (error.response.data?.errors && error.response.data.errors.length > 0) {
+        // Mostrar errores de validación uno por uno
+        await mostrarErrores(error.response.data.errors);
+        return { success: false, message: error.response.data.errors[0] };
+      } else {
+        return { success: false, message: error.response.data.message };
+      }
     }
   };
 
