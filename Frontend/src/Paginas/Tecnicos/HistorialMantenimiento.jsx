@@ -145,7 +145,7 @@ const handleSearch = async () => {
   // Verificar que el vehículo se encontró
   console.log("Vehículo encontrado:", cliente);
 
-  if (!cliente) {
+  if (cliente.length === 0) {
     setErrorMessage("❌ Vehículo no se encuentra registrado");
   } else {
     setErrorMessage(""); // Limpiar mensaje de error
