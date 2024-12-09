@@ -87,13 +87,13 @@ const handleSearch = async () => {
   // Validación de la cédula
   const cedulaRegex = /^[0-9]{10}$/;
 
-  if (!cedulaRegex.test(cedula)) {
-    setErrorMessage("⚠️ La cédula debe contener solo 10 dígitos numéricos.");
+  if (cedula === "") {
+    await fetchClientes(); // Cargar todos los clientes si la cédula está vacía
     return;
   }
 
-  if (cedula === "") {
-    await fetchClientes(); // Cargar todos los clientes si la cédula está vacía
+  if (!cedulaRegex.test(cedula)) {
+    setErrorMessage("⚠️ La cédula debe contener solo 10 dígitos numéricos.");
     return;
   }
 
