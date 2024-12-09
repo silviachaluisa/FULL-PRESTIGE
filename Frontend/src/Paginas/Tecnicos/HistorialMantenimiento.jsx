@@ -149,8 +149,6 @@ const handleSearch = async () => {
   if (!cliente) {
     setErrorMessage("❌ Vehículo no se encuentra registrado");
   } else {
-    const mantenimientos = await fetchMantenimientos(placa);
-    console.log("Mantenimientos encontrados:", mantenimientos);
     setErrorMessage(""); // Limpiar mensaje de error
     setSuccessMessage("✅ Vehículo encontrado con éxito");
   }
