@@ -78,17 +78,15 @@ export const Usuarios = () => {
   const handleSearch = async () => {
     // Validación de la cédula
     const cedulaRegex = /^[0-9]{10}$/;
-
-    if (!cedulaRegex.test(cedula)) {
-      setErrorMessage("⚠️La cédula debe contener solo 10 dígitos numéricos.");
-      return;
-    }
-
     if (cedula === "") {
       await fetchUsuarios(); // Cargar todos los usuarios si la cédula está vacía
       return;
     }
 
+    if (!cedulaRegex.test(cedula)) {
+      setErrorMessage("⚠️La cédula debe contener solo 10 dígitos numéricos.");
+      return;
+    }
     // Verificar que la cédula se está pasando correctamente
     console.log("Buscando usuario con cédula:", cedula);
 
