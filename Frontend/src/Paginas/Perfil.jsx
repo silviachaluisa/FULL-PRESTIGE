@@ -5,7 +5,7 @@ import logo from '../assets/imagenes/logo.jpg';
 import Mensaje from '../components/Alertas';
 
 const EditarPerfil = () => {
-  const { auth, actualizarPerfil} = useContext(AuthContext);
+  const { auth, actualizarPerfil, message} = useContext(AuthContext);
   const [mensaje, setMensaje] = useState("");
   const [errores, setErrores] = useState({});
   const [perfil, setPerfil] = useState({
@@ -51,11 +51,21 @@ const EditarPerfil = () => {
         ...perfil,
         estado: perfil.estado === 'Activo' ? true : false
       }
-      await actualizarPerfil(updateProfile);
-      setMensaje({ respuesta: 'Perfil actualizado correctamente', tipo: true });
+
+      // Validar si el usuario se cambio el cargo
+      if (updateProfile.cargo === auth.cargo) {
+        delete updateProfile.cargo;
+      }
+
+      const response = await actualizarPerfil(updateProfile);
+      setMensaje({ respuesta: response.respuesta, tipo: response.tipo });
     } catch (error) {
-      setMensaje({ respuesta: "Error al actualizar el perfil", tipo: "error" });
+      setMensaje({ respuesta: error.message, tipo: false });
       console.error("Error al actualizar el perfil:", error);
+    } finally {
+      setTimeout(() => {
+        setMensaje("");
+      }, 5000);
     }
   };
 

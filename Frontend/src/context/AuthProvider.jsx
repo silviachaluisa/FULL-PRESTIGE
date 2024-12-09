@@ -59,25 +59,21 @@ const AuthProvider = ({ children }) => {
                 }
             })
             // Establecer mensaje de éxito
-            setMessage({respuesta: respuesta.data.message,tipo:true})
-            setTimeout(() => {
-                setMessage(""); // Limpiar el mensaje después de un breve tiempo
-                perfil(token); /*Sirve para que cuando se actualice el perfil, se cambie a la nueva actualizacion*/
-                navigate('/dashboard')
-            }, 5000);
+            return {respuesta: respuesta.data.message,tipo:true}
         } catch (error) {
             console.log(error)
             if (error.response.data?.errors && error.response.data.errors.length > 0) {
                 // Mostrar errores de validación uno por uno
                 await mostrarErrores(error.response.data.errors);
+                return {respuesta: error.response.data.errors[0],tipo:false}
             } else {
                 setMessage(error.response.data.message);
                 // Limpiar el mensaje de error después de un breve tiempo
                 setTimeout(() => {
                     setMessage("");
                 }, 5000);
+                return { respuesta: error.response.data.message, tipo: false}
             }
-            return {respuesta: error.data,tipo:false}
         }
     };
     useEffect(() => {
