@@ -48,8 +48,8 @@ export const FormularioClientes = ({clientes}) => {
             marca:clientes.marca ?? '',
             modelo: clientes.modelo ?? '',
             placa: clientes.placa ?? '',
-            fecha_ingreso: clientes?.fecha_ingreso.split("T")[0] ?? '',
-            fecha_salida: clientes?.fecha_salida.split("T")[0] ?? '',
+            fecha_ingreso: clientes?.fecha_ingreso?.split("T")[0] ?? '',
+            fecha_salida: clientes?.fecha_salida?.split("T")[0] ?? '',
             cedula_tecnico: clientes?.encargado?.cedula ?? '',
             estado: clientes.estado ?? '',
           });
