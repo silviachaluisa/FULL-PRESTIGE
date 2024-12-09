@@ -271,7 +271,7 @@ const handleSearch = async () => {
             type="text"
             onChange={handleChange}
             value={placa}
-            placeholder="Cedula"
+            placeholder="Placa del vehículo"
             className="bg-gray-200 border border-black py-2 px-4 w-full rounded-lg focus:outline-none"
           />
           <button 

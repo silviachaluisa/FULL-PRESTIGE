@@ -74,7 +74,7 @@ const EditarPerfil = () => {
       <div className="w-full flex justify-between items-center p-4">
         <img src={logo} alt="Full Prestige" style={{ width: '150px', height: 'auto' }} />
         <button
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/Dashboard')}
           className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
         >
           VOLVER
