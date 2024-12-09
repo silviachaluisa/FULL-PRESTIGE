@@ -82,7 +82,6 @@ export const HistorialMantenimiento = () => {
 };
  // Llamar a fetchClientes una vez cuando el componente carga
  useEffect(() => {
-  
   fetchMantenimientos();
 }, []);
 
@@ -124,7 +123,7 @@ const handleSearch = async () => {
   const placaRegex = /^[A-Z]{3}-?[0-9]{3,4}$/;
 
   if (placa === "") {
-    if (auth?.cargo === "Administrador") {
+    if (auth?.cargo === "Administrador" || auth?.cargo === "Gerente") {
       await fetchMantenimientos();
     } else if (auth?.cargo === "Técnico") {
       await fetchMantenimientosByEmpleado(auth?.cedula);
