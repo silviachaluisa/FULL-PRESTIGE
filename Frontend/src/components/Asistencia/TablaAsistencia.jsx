@@ -104,7 +104,7 @@ export const TablaAsistencia = ({ usuarios }) => {
             <tr
               key={index}
               onClick={() => handleRowClick(item)} // Cambiar la fila seleccionada
-              className={`cursor-pointer ${seleccionado?.indice === item?.indice ? 'bg-red-200' : ''}`} // Marcar la fila seleccionada con color
+              className={`cursor-pointer ${seleccionado?.indice === item?.indice ? 'bg-gray-300' : ''}`} // Marcar la fila seleccionada con color
             >
               <td className="border border-black px-4 py-2">{item.cedula}</td>
               <td className="border border-black px-4 py-2">{item.nombre}</td>

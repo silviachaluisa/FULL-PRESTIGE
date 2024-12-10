@@ -77,7 +77,7 @@ export const TablaMantenimiento = ({ mantenimientos }) => {
               key={item._id} // Usa el _id como clave única
               onClick={() => handleRowClick(item)} // Cambiar la fila seleccionada
               className={`cursor-pointer ${
-                seleccionado?._id === item._id ? "bg-red-200" : ""
+                seleccionado?._id === item._id ? "bg-gray-300" : ""
               }`} // Marcar la fila seleccionada con color
             >
               <td className="border border-black px-4 py-2">{item?.vehiculo?.propietario?.cedula || 'N/A'} </td>
