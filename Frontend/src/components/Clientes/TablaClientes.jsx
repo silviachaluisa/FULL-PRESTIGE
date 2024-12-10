@@ -4,11 +4,14 @@ import { Tooltip as ReactTooltip } from 'react-tooltip'
 import { FaPencilAlt } from "react-icons/fa";
 import AuthContext from '../../context/AuthProvider';
 import { useContext } from 'react';
+import { HistoryContext } from '../../context/HistoryContext';
 
 export const TablaClientes = ({clientes}) => {
   const navigate = useNavigate();
+  const {seleccionado, setSeleccionado} = useContext(HistoryContext);
   const { auth } = useContext(AuthContext);
   console.log(clientes);
+
   // Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
   const formatDate = (isoDate) => {
     try {
@@ -26,6 +29,13 @@ export const TablaClientes = ({clientes}) => {
       return 'Fecha inválida';
     }
   };
+
+   //Función para manejar el click en una fila
+   const handleRowClick = (cliente) => {
+    //Al seleccionar el cliente, se completan los campos automáticamente
+    setSeleccionado(cliente); //Actualizar el cliente seleccionado en el contexto
+    console.log("Cliente seleccionado:", cliente);
+}
 
   const encabezadoTabla = [
     'Cédula','Nombre/Apellido', 'Contacto', 'Email', 'Dirección', 'N° Orden',
@@ -49,8 +59,14 @@ export const TablaClientes = ({clientes}) => {
           </tr>
         </thead>
         <tbody>
-          {clientes.map ((item, index)=> (
-              <tr key={index}>
+          {clientes.map ((item)=> (
+              <tr 
+              key={`${item.propietario.cedula}-${item.n_orden}`}
+              onClick={() => handleRowClick(item)}
+              className={`cursor-pointer ${seleccionado && seleccionado?.propietario?.cedula === item?.propietario?.cedula ? 'bg-gray-300' : ''}`}
+
+              >
+                
               <td className="border border-black px-4 py-2">{item?.propietario.cedula} </td>
               <td className="border border-black px-4 py-2">{item?.propietario.nombre} </td>
               <td className="border border-black px-4 py-2">{item?.propietario.telefono} </td>
