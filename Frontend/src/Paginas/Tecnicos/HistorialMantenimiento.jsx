@@ -310,7 +310,7 @@ const handleSearch = async () => {
 
           {
             // Si el usuario es un tecnico o gerente, puede solicitar actualizaciones
-            (auth?.cargo === "Técnico" || auth?.cargo === "Gerente") && (
+            (auth?.cargo === "Técnico" ) && (
               <>
                 <button
                   onClick={() => handleNewClick("soli-actualizacion")}

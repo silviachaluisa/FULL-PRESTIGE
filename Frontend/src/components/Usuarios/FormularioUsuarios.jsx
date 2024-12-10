@@ -22,9 +22,9 @@ export const FormularioUsuarios = ({ usuarios }) => {
         cedula: '',
         nombre: '',
         telefono: '',
+        direccion: '',
         correo: '',
         contrasena: '',
-        direccion: '',
         cargo: '',
         estado: '',
       });
@@ -35,9 +35,9 @@ export const FormularioUsuarios = ({ usuarios }) => {
             cedula: usuarios.cedula ?? '',
             nombre: usuarios.nombre ?? '',
             telefono: usuarios.telefono ?? '',
+            direccion: usuarios.direccion ?? '',
             correo: usuarios.correo ?? '',
             contrasena: usuarios.contrasena ?? '',
-            direccion: usuarios.direccion ?? '',
             cargo: usuarios.cargo ?? '',
             estado: usuarios.estado ?? '',
           });
@@ -47,9 +47,9 @@ export const FormularioUsuarios = ({ usuarios }) => {
             cedula: '',
             nombre: '',
             telefono: '',
+            direccion: '',
             correo: '',
             contrasena: '',
-            direccion: '',
             cargo: '',
             estado: '',
           });
@@ -95,7 +95,7 @@ export const FormularioUsuarios = ({ usuarios }) => {
                 !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/.test(registro.contrasena)
               ){
                 nuevosErrores.contrasena =
-                "La contraseña debe tener al menos una mayúscula, una minúscula, un carácter especial y 8 caracteres.";
+                "La contraseña debe tener al menos una mayúscula, una minúscula,un número, un carácter especial y 8 caracteres.";
               }
             }
             
@@ -206,7 +206,7 @@ export const FormularioUsuarios = ({ usuarios }) => {
       <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-6 border-2 border-red-600 p-6 rounded-lg bg-black mb-7">
           
           {/* Cédula */}
-          <div className="mb-4">
+           <div className="mb-4">
             <label className="block font-semibold mb-2">Cédula</label>
             <input
               id='cedula'
@@ -237,11 +237,11 @@ export const FormularioUsuarios = ({ usuarios }) => {
               placeholder='Juan Perez'
             />
             {errores.nombre && <p className="text-red-500 text-sm">{errores.nombre}</p>}
-          </div>
+          </div> 
           
           {/* Teléfono */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">Celular</label>
+           <div className="mb-4">
+            <label className="block font-semibold mb-2">Contacto</label>
             <input
               id='telefono'
               type="text"
@@ -257,25 +257,25 @@ export const FormularioUsuarios = ({ usuarios }) => {
             {errores.telefono && <p className="text-red-500 text-sm">{errores.telefono}</p>}
           </div>
 
-          {/* Correo */}
+          {/* Dirección */}
           <div className="mb-4">
             <label className="block font-semibold mb-2">Direccion</label>
             <input
               id='direccion'
-              type="texto"
+              type="text"
               name="direccion"
               value={registro.direccion}
               onChange={handleChange}
               required
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
               placeholder='Direccion'
-              autoComplete="off" // Aquí se desactiva la auto-completación para este campo
+
             />
             {errores.direccion && <p className="text-red-500 text-sm">{errores.direccion}</p>}
-          </div>
-
+          </div> 
+          
           {/* Correo*/}
-          <div>
+            <div>
             <label className="block font-semibold mb-2">Correo</label>
             <input
             id='correo'
@@ -285,13 +285,10 @@ export const FormularioUsuarios = ({ usuarios }) => {
               onChange={handleChange}
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
               placeholder='Correo'
-              required
-              
-              
+              required          
             />
             {errores.correo && <p className="text-red-500 text-sm">{errores.correo}</p>}
-          </div>
-          
+          </div>  
 
           {/* Cargo */}
           <div className="mb-4">

@@ -67,7 +67,6 @@ export const Login = () => {
       <div className="flex flex-col items-center">
         <img src={logo} alt="Full Prestige" className="logo mb-5" style={{ width: '300px', height: 'auto' }} />
         <div className='mb-4'>
-          {/* {mensaje && <Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} />} */}
           {mensaje && (<Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} errores={!mensaje.tipo ? errores : {}} 
                 />
                 )}
