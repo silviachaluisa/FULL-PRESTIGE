@@ -3,10 +3,19 @@ import PropTypes from 'prop-types'
 import { FaPencilAlt } from "react-icons/fa";
 import AuthContext from "../../context/AuthProvider";
 import { useContext } from "react";
+import { HistoryContext } from "../../context/HistoryContext";
 
 export const TablaUsuarios = ({usuarios}) => {
     const navigate = useNavigate();
     const {auth} = useContext(AuthContext);
+    const {seleccionado, setSeleccionado} = useContext(HistoryContext);
+
+    //Función para manejar el click en una fila
+    const handleRowClick = (usuario) => {
+        //Al seleccionar el usuario, se completan los campos automáticamente
+        setSeleccionado(usuario); //Actualizar el usuario seleccionado en el contexto
+        console.log("Usuario seleccionado:", usuario);
+    }
 
     const encabezadoTabla = [
         'Cédula','Nombre y Apellido','Telefono', 'Email', 'Dirección', 
@@ -29,8 +38,12 @@ export const TablaUsuarios = ({usuarios}) => {
                 </tr>
             </thead>
             <tbody>
-                {usuarios.map((item, index) => (
-                    <tr key={index}>
+                {usuarios.map((item) => (
+                    <tr 
+                    key={item.cedula}
+                    onClick={() => handleRowClick(item)}
+                    className={`cursor-pointer ${seleccionado?.cedula === item?.cedula ? 'bg-gray-300' : ''}`} // Marcar la fila seleccionada con color
+                    >
                     <td className="border border-black px-4 py-2">{item.cedula}</td>
                     <td className="border border-black px-4 py-2">{item.nombre}</td>
                     <td className="border border-black px-4 py-2">{item.telefono}</td>

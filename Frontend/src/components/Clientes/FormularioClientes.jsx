@@ -394,10 +394,17 @@ export const FormularioClientes = ({clientes}) => {
     //  ----------------------------------------------------------
     return (
       <div className="w-full max-w-7xl px-10">
-      {/* {mensaje && <Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} />} */}
-      {mensaje && (<Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} errores={!mensaje.tipo ? errores : {}} 
-      />
-      )}
+      <div className="mb-7 flex justify-center">
+          {mensaje && (
+            <div className="max-w-md w-full text-center">
+              <Mensaje
+                mensaje={mensaje.respuesta}
+                tipo={mensaje.tipo}
+                errores={!mensaje.tipo ? errores : {}}
+              />
+            </div>
+          )}
+        </div>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-6 border-2 border-red-600 p-6 rounded-lg bg-black mb-7">
           

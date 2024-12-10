@@ -220,6 +220,7 @@ export const Usuarios = () => {
          {errorMessage && <div className="text-red-500">{errorMessage}</div>}
           {successMessage && <div className="text-green-500">{successMessage}</div>}
           {/* --------------------------------------------------------------------------------- */}
+          
         <div className="flex items-center justify-between bg-gray-300 p-4 rounded-lg mb-6">
           <input
             type="text"
