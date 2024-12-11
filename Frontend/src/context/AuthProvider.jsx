@@ -67,7 +67,7 @@ const AuthProvider = ({ children }) => {
             if (error.response.data?.errors && error.response.data.errors.length > 0) {
                 // Mostrar errores de validación uno por uno
                 await mostrarErrores(error.response.data.errors);
-                return {respuesta: error.response.data.errors[0],tipo:false}
+                return {respuesta: error.response.data.errors[0].msg,tipo:false}
             } else {
                 setMessage(error.response.data.message);
                 // Limpiar el mensaje de error después de un breve tiempo
