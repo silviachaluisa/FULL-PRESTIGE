@@ -59,6 +59,11 @@ const EditarPerfil = () => {
 
       const response = await actualizarPerfil(updateProfile);
       setMensaje({ respuesta: response.respuesta, tipo: response.tipo });
+      setTimeout(() => {
+        setMensaje("");
+        // Redirigir al dashboard si la actualización fue exitosa
+        if (response.tipo) navigate('/dashboard');
+      }, 5000);
     } catch (error) {
       setMensaje({ respuesta: error.message, tipo: false });
       console.error("Error al actualizar el perfil:", error);
