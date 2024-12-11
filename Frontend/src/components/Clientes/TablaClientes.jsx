@@ -1,15 +1,17 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from "react-router-dom";
-import { Tooltip as ReactTooltip } from 'react-tooltip'
+import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { FaPencilAlt } from "react-icons/fa";
 import AuthContext from '../../context/AuthProvider';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { HistoryContext } from '../../context/HistoryContext';
 
 export const TablaClientes = ({clientes}) => {
   const navigate = useNavigate();
   const {seleccionado, setSeleccionado} = useContext(HistoryContext);
   const { auth } = useContext(AuthContext);
+  const [mesSeleccionado, setMesSeleccionado] = useState(''); // Estado para el mes seleccionado
+
   console.log(clientes);
 
   // Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
@@ -30,12 +32,26 @@ export const TablaClientes = ({clientes}) => {
     }
   };
 
-   //Función para manejar el click en una fila
-   const handleRowClick = (cliente) => {
-    //Al seleccionar el cliente, se completan los campos automáticamente
+  // Función para manejar el click en una fila
+  const handleRowClick = (cliente) => {
     setSeleccionado(cliente); //Actualizar el cliente seleccionado en el contexto
     console.log("Cliente seleccionado:", cliente);
-}
+  };
+
+// Función para filtrar por mes
+const filtrarPorMes = (clientes) => {
+  if (!mesSeleccionado) return clientes; // Si no se selecciona mes, mostrar todos los clientes
+  // Usamos split('-')[1] para obtener el mes del valor mesSeleccionado (por ejemplo, de 2024-12 obtenemos 12).
+  // Usamos parseInt() para convertirlo en un número entero.
+  // Restamos 1 a mesSeleccionadoInt para que coincida con el formato 0-11 de getMonth().
+    const mesSeleccionadoInt = parseInt(mesSeleccionado.split('-')[1], 10); // Extraemos el mes del valor "YYYY-MM"
+  
+    return clientes.filter((item) => {
+      const fechaIngreso = new Date(item.fecha_ingreso);
+      return fechaIngreso.getMonth() === mesSeleccionadoInt - 1; // Filtrar por el mes (0-11)
+    });
+  };
+  
 
   const encabezadoTabla = [
     'Cédula','Nombre/Apellido', 'Contacto', 'Email', 'Dirección', 'N° Orden',
@@ -49,64 +65,83 @@ export const TablaClientes = ({clientes}) => {
 
   return (
     <div className="overflow-x-auto">
-      {/* Tabla de Historial */}
-      <table className="w-full text-center border-collapse borde">
-        <thead className="bg-black text-white">
-          <tr>
-            {encabezadoTabla.map((header) => (
-              <th key={header} className="border border-white px-4 py-2">{header}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {clientes.map ((item)=> (
-              <tr 
-              key={`${item.propietario.cedula}-${item.n_orden}`}
-              onClick={() => handleRowClick(item)}
-              className={`cursor-pointer ${seleccionado && seleccionado?.propietario?.cedula === item?.propietario?.cedula ? 'bg-gray-300' : ''}`}
+      {/* Filtro de mes */}
+      <div className="flex gap-4 mb-4">
+        <div className='flex items-center gap-2'>
+          <label htmlFor="mes" className="mr-2 font-bold ">Seleccionar mes:</label>
+          <input 
+            type="month"  
+            id="mes"
+            value={mesSeleccionado}
+            onChange={(e) => setMesSeleccionado(e.target.value)}
+            className="border px-4 py-2"
+          />
+        </div>
+        <button
+          onClick={() => setMesSeleccionado('')} // Limpiar el filtro de mes
+          className="bg-gray-500 text-white px-4 py-2 rounded font-bold hover:bg-gray-700"
+        >
+          Todos los meses
+        </button>
+      </div>
 
-              >
-                
-              <td className="border border-black px-4 py-2">{item?.propietario.cedula} </td>
-              <td className="border border-black px-4 py-2">{item?.propietario.nombre} </td>
-              <td className="border border-black px-4 py-2">{item?.propietario.telefono} </td>
-              <td className="border border-black px-4 py-2">{item?.propietario.correo} </td>
-              <td className="border border-black px-4 py-2">{item?.propietario.direccion} </td>
-              <td className="border border-black px-4 py-2">{item?.n_orden} </td>
-              <td className="border border-black px-4 py-2">{item?.marca} </td>
-              <td className="border border-black px-4 py-2">{item?.modelo} </td>
-              <td className="border border-black px-4 py-2">{item?.placa} </td>
-              <td className="border border-black px-4 py-2">{formatDate(item.fecha_ingreso) } </td>
-              <td className="border border-black px-4 py-2">{formatDate(item.fecha_salida)} </td>
-              {/* <td className="border border-black px-4 py-2">{item?.detalles} </td> */}
-              <td className="border border-black px-4 py-2">{item?.encargado?.nombre} </td>
-              <td className="border border-black px-4 py-2">{item?.estado} </td>
-              {
-                // Si el usuario autenticado es un administrador, mostrar opciones de edición
-                auth?.cargo === 'Administrador' && (
-                  <td className="border border-black px-4 py-2">
-                    <div
-                      className="flex justify-around"
-                    >
-                      <FaPencilAlt
-                        onClick={() => navigate(`/dashboard/actualizar-clientes/${item.propietario.cedula}`)}
-                        className="text-black hover:text-blue-700 cursor-pointer"
-                        data-tooltip-id="edit_client"
-                        data-tooltip-content="Editar cliente"
-                      />
-                      <ReactTooltip id='edit_client' place='bottom'/>
-                    </div>
-                  </td>
-                )
-              } 
+      {/* Mostrar mensaje si no hay registros con el filtro de mes */}
+      {filtrarPorMes(clientes).length === 0 ? (
+        <div className="text-center text-red-500 font-bold">No existen registros para los filtros seleccionados.</div>
+      ) : (
+        <div>
+          {/* Tabla de Historial de Clientes */}
+          <table className="w-full text-center border-collapse borde">
+            <thead className="bg-black text-white">
+              <tr>
+                {encabezadoTabla.map((header) => (
+                  <th key={header} className="border border-white px-4 py-2">{header}</th>
+                ))}
               </tr>
-          ))} 
-        </tbody>
-      </table>
+            </thead>
+            <tbody>
+              {filtrarPorMes(clientes).map((item) => (
+                <tr 
+                  key={`${item.propietario.cedula}-${item.n_orden}`}
+                  onClick={() => handleRowClick(item)}
+                  className={`cursor-pointer ${seleccionado && seleccionado?.propietario?.cedula === item?.propietario?.cedula ? 'bg-gray-300' : ''}`}
+                >
+                  <td className="border border-black px-4 py-2">{item?.propietario.cedula} </td>
+                  <td className="border border-black px-4 py-2">{item?.propietario.nombre} </td>
+                  <td className="border border-black px-4 py-2">{item?.propietario.telefono} </td>
+                  <td className="border border-black px-4 py-2">{item?.propietario.correo} </td>
+                  <td className="border border-black px-4 py-2">{item?.propietario.direccion} </td>
+                  <td className="border border-black px-4 py-2">{item?.n_orden} </td>
+                  <td className="border border-black px-4 py-2">{item?.marca} </td>
+                  <td className="border border-black px-4 py-2">{item?.modelo} </td>
+                  <td className="border border-black px-4 py-2">{item?.placa} </td>
+                  <td className="border border-black px-4 py-2">{formatDate(item.fecha_ingreso)} </td>
+                  <td className="border border-black px-4 py-2">{formatDate(item.fecha_salida)} </td>
+                  <td className="border border-black px-4 py-2">{item?.encargado?.nombre} </td>
+                  <td className="border border-black px-4 py-2">{item?.estado} </td>
+                  {auth?.cargo === 'Administrador' && (
+                    <td className="border border-black px-4 py-2">
+                      <div className="flex justify-around">
+                        <FaPencilAlt
+                          onClick={() => navigate(`/dashboard/actualizar-clientes/${item.propietario.cedula}`)}
+                          className="text-black hover:text-blue-700 cursor-pointer"
+                          data-tooltip-id="edit_client"
+                          data-tooltip-content="Editar cliente"
+                        />
+                        <ReactTooltip id='edit_client' place='bottom'/>
+                      </div>
+                    </td>
+                  )}
+                </tr>
+              ))} 
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
-  
+
 TablaClientes.propTypes = {
   clientes: PropTypes.arrayOf(PropTypes.shape({
     propietario: PropTypes.shape({
@@ -125,4 +160,3 @@ TablaClientes.propTypes = {
     estado: PropTypes.string.isRequired,
   })).isRequired,
 };
-  

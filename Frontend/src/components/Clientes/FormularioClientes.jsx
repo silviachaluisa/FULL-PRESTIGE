@@ -503,7 +503,7 @@ export const FormularioClientes = ({clientes}) => {
               onChange={handleChange}
               required
               className="w-full px-3 py-2 bg-white text-black border border-red-600 rounded focus:outline-none"
-              placeholder='564'
+              placeholder='FP-001'
               
             />
             {errores.direccion && <p className="text-red-500 text-sm">{errores.direccion}</p>}

@@ -275,22 +275,7 @@ const handleSearch = async () => {
             }
 
         </div>
-        {/* ------------------------------FILTRADO DE FECHAS-------------------- */}
-         <div className="flex items-center justify-between bg-gray-300 p-4 rounded-lg mb-6">
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="bg-gray-200 border border-black py-2 px-4 rounded-lg"
-          />
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="bg-gray-200 border border-black py-2 px-4 rounded-lg"
-          />
-        </div>  
-        {/* --------------------------------------------------------------------- */}
+
 
         {/* TABLA DEL HISTORIAL DE CLIENTES------------------------------------------ */}
         {Array.isArray(clientes) && clientes.length !== 0 ? (
