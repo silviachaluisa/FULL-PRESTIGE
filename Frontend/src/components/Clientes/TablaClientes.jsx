@@ -67,7 +67,7 @@ const filtrarPorMes = (clientes) => {
     <div className="overflow-x-auto">
       {/* Filtro de mes */}
       <div className="flex gap-4 mb-4">
-        <div className='flex items-center gap-2'>
+        <div className='flex items-center gap-2 px-2 border border-orange-500'>
           <label htmlFor="mes" className="mr-2 font-bold ">Seleccionar mes:</label>
           <input 
             type="month"  
@@ -79,7 +79,7 @@ const filtrarPorMes = (clientes) => {
         </div>
         <button
           onClick={() => setMesSeleccionado('')} // Limpiar el filtro de mes
-          className="bg-gray-500 text-white px-4 py-2 rounded font-bold hover:bg-gray-700"
+          className="bg-orange-400 text-white px-4 py-2 rounded font-bold hover:bg-gray-700"
         >
           Todos los meses
         </button>
