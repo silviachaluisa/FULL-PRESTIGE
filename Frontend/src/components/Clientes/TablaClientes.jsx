@@ -38,10 +38,12 @@ export const TablaClientes = ({clientes}) => {
     console.log("Cliente seleccionado:", cliente);
   };
 
-  // Función para filtrar por mes
-  const filtrarPorMes = (clientes) => {
-    if (!mesSeleccionado) return clientes; // Si no se selecciona mes, mostrar todos los clientes
-  
+// Función para filtrar por mes
+const filtrarPorMes = (clientes) => {
+  if (!mesSeleccionado) return clientes; // Si no se selecciona mes, mostrar todos los clientes
+  // Usamos split('-')[1] para obtener el mes del valor mesSeleccionado (por ejemplo, de 2024-12 obtenemos 12).
+  // Usamos parseInt() para convertirlo en un número entero.
+  // Restamos 1 a mesSeleccionadoInt para que coincida con el formato 0-11 de getMonth().
     const mesSeleccionadoInt = parseInt(mesSeleccionado.split('-')[1], 10); // Extraemos el mes del valor "YYYY-MM"
   
     return clientes.filter((item) => {
