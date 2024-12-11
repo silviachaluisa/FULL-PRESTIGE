@@ -33,6 +33,8 @@ export const ClientesVehiculos = () => {
     clientes,
     fetchClientes,
     fetchClienteByCedula,
+    mantenimientos,
+    fetchMantenimientos,
     loading
   }= useContext (HistoryContext);
   const { auth }= useContext(AuthContext);
@@ -43,6 +45,7 @@ export const ClientesVehiculos = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [info, setInfo] = useState([]);
 
   const handleChange=(e)=>{
     const value = e.target.value
@@ -79,7 +82,24 @@ export const ClientesVehiculos = () => {
   }
  // Llamar a fetchUsuarios una vez cuando el componente carga, muestra a todos los clientes en la base de datos
  useEffect(() => {
-  fetchClientes();
+
+  Promise.all([fetchClientes(), fetchMantenimientos()])
+    .then(([clientes, mantenimientos]) => {
+      console.log("Clientes cargados:", clientes);
+      console.log("Mantenimientos cargados:", mantenimientos);
+
+      clientes.forEach((cliente) => {
+        const mantenimientosCliente = mantenimientos.filter(
+          (mantenimiento) => mantenimiento?.vehiculo?.propietario?._id === cliente?.propietario?._id
+        );
+        cliente.mantenimientos = mantenimientosCliente;
+      });
+      setInfo(clientes);
+    })
+    .catch((error) => {
+      console.error("Error al cargar datos:", error);
+    })
+
 }, []); // Se quito la dependencia ya que se busca cargarla unicamente cuando el componente de monta
 
 // ------------------------------------------------------------------------------------------
@@ -293,8 +313,8 @@ const handleSearch = async () => {
         {/* --------------------------------------------------------------------- */}
 
         {/* TABLA DEL HISTORIAL DE CLIENTES------------------------------------------ */}
-        {Array.isArray(clientes) && clientes.length !== 0 ? (
-        <TablaClientes clientes={clientes} />
+        {Array.isArray(info) && info.length !== 0 ? (
+        <TablaClientes clientes={info} />
         ) : (
         <div className="overflow-x-auto">
         {/* Tabla de Historial */}

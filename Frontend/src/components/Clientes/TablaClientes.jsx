@@ -39,7 +39,7 @@ export const TablaClientes = ({clientes}) => {
 
   const encabezadoTabla = [
     'Cédula','Nombre/Apellido', 'Contacto', 'Email', 'Dirección', 'N° Orden',
-    'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida',
+    'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida', 'Descripcion',
     'Técnico Responsable', 'Estado'
   ];
 
@@ -64,7 +64,6 @@ export const TablaClientes = ({clientes}) => {
               key={`${item.propietario.cedula}-${item.n_orden}`}
               onClick={() => handleRowClick(item)}
               className={`cursor-pointer ${seleccionado && seleccionado?.propietario?.cedula === item?.propietario?.cedula ? 'bg-gray-300' : ''}`}
-
               >
                 
               <td className="border border-black px-4 py-2">{item?.propietario.cedula} </td>
@@ -78,7 +77,12 @@ export const TablaClientes = ({clientes}) => {
               <td className="border border-black px-4 py-2">{item?.placa} </td>
               <td className="border border-black px-4 py-2">{formatDate(item.fecha_ingreso) } </td>
               <td className="border border-black px-4 py-2">{formatDate(item.fecha_salida)} </td>
-              {/* <td className="border border-black px-4 py-2">{item?.detalles} </td> */}
+              {
+                // Iterar sobre el erreglo de mantenimientos y obtener la descripcion
+                item?.mantenimientos?.map((mantenimiento) => (
+                  <td key={mantenimiento._id} className="border border-black px-4 py-2">{mantenimiento.descripcion} </td>
+                ))
+              }
               <td className="border border-black px-4 py-2">{item?.encargado?.nombre} </td>
               <td className="border border-black px-4 py-2">{item?.estado} </td>
               {

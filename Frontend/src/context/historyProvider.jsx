@@ -137,8 +137,10 @@ export const HistoryProvider = ({ children }) => {
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/vehicles`, options);
       setClientes(response.data); // Suponiendo que la API retorna un array de clientes
       console.log("Clientes ->",response.data)
+      return response.data;
     } catch (error) {
       console.error("Error al obtener clientes", error);
+      setClientes([]);
     } finally {
       setLoading(false); // Desactivar el estado de carga
     }
