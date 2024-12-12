@@ -21,7 +21,7 @@ const AuthProvider = ({ children }) => {
             // Establece el mensaje de error
             setMessage({respuesta: error.msg,tipo:false});
             // Mostrar el mensaje de error en la consola
-            console.error("Error al registrar pago", error.msg);
+            console.error("Error:", error.msg);
 
             // Esperar 5 segundos antes de pasar al siguiente error
             await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -58,6 +58,8 @@ const AuthProvider = ({ children }) => {
                     'Authorization': `Bearer ${token}`
                 }
             })
+            // Actualizar la información del usuario en el contexto
+            perfil(token);
             // Establecer mensaje de éxito
             return {respuesta: respuesta.data.message,tipo:true}
         } catch (error) {
@@ -65,7 +67,7 @@ const AuthProvider = ({ children }) => {
             if (error.response.data?.errors && error.response.data.errors.length > 0) {
                 // Mostrar errores de validación uno por uno
                 await mostrarErrores(error.response.data.errors);
-                return {respuesta: error.response.data.errors[0],tipo:false}
+                return {respuesta: error.response.data.errors[0].msg,tipo:false}
             } else {
                 setMessage(error.response.data.message);
                 // Limpiar el mensaje de error después de un breve tiempo
