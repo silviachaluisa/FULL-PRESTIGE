@@ -1,10 +1,12 @@
-import logo from '../assets/imagenes/logo.jpg'; // Asegúrate de que la ruta sea correcta
+import logo from '../assets/imagenes/logo.jpg'; 
+import users from '../assets/imagenes/DashboardImage/users.png';
 import { Link } from 'react-router-dom';
 import { FaUserAlt, FaCog, FaCalendarAlt, FaCar, FaWallet, FaTools } from 'react-icons/fa';
 import { Tooltip as ReactTooltip } from 'react-tooltip'
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthProvider';
 import { useContext } from 'react';
+
 
 export const Dashboard = () => {
     const navigate = useNavigate(); //Para inicializar useNavigate
@@ -62,8 +64,8 @@ export const Dashboard = () => {
                             <>
                                 <Link
                                     to="/dashboard/historial-usuarios"
-                                    className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition">
-                                    <FaUserAlt className="text-red-600 mx-auto text-5xl mb-4" />
+                                    className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition max-w-xs mx-auto">
+                                    <img src={users} alt="user" className="mx-auto w-40 h-30" />
                                     <p className="text-white font-semibold">Gestionar Usuarios</p>
                                 </Link>
                                 <Link to="/dashboard/historial-asistencia" className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition">

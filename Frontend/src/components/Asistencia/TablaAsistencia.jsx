@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { HistoryContext } from '../../context/HistoryContext';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ModalAsistencia } from '../Modals/ModalAsistencia';
 
 export const TablaAsistencia = ({ usuarios }) => {
@@ -32,16 +32,45 @@ export const TablaAsistencia = ({ usuarios }) => {
     setAsistencias
   } = useContext(HistoryContext);
 
+  const [mesSeleccionado, setMesSeleccionado] = useState(''); // Estado para el mes seleccionado
+  const [asistenciasFiltradas, setAsistenciasFiltradas] = useState([]);
+
   // Función para manejar el clic en una fila
   const handleRowClick = (usuario) => {
-    // Al seleccionar el usuario, se completan los campos automáticamente
     setSeleccionado(usuario); // Actualizar el usuario seleccionado en el contexto
     console.log("Usuario seleccionado:", usuario);
   };
 
   const encabezadoTabla = [
     'Cédula', 'Nombre y Apellido', 'Telefono', 'Cargo', 'Fecha', 'Hora de Ingreso', 'Hora de Salida', 'Estado'
-  ]
+  ];
+
+  // Filtrar asistencias por el mes seleccionado
+  useEffect(() => {
+    const filtrarPorMes = () => {
+      if (!mesSeleccionado) {
+        setAsistenciasFiltradas(asistencias);
+        return;
+      }
+
+      const [anioSeleccionado, mesSeleccionadoStr] = mesSeleccionado.split('-');
+      const mesSeleccionadoInt = parseInt(mesSeleccionadoStr, 10);
+
+      const filtradas = asistencias.filter((item) => {
+        if (!item.asistencia?.fecha) return false;
+
+        const fecha = new Date(item.asistencia.fecha);
+        const mesFecha = fecha.getMonth() + 1; // Los meses en JS son 0 indexados
+        const anioFecha = fecha.getFullYear();
+
+        return mesFecha === mesSeleccionadoInt && anioFecha === parseInt(anioSeleccionado, 10);
+      });
+
+      setAsistenciasFiltradas(filtradas);
+    };
+
+    filtrarPorMes();
+  }, [mesSeleccionado, asistencias]);
 
   // Cargar las asistencias de los usuarios
   useEffect(() => {
@@ -77,6 +106,7 @@ export const TablaAsistencia = ({ usuarios }) => {
         });
   
         setAsistencias(nuevasAsistencias);
+        setAsistenciasFiltradas(nuevasAsistencias); // Inicialmente todas las asistencias están filtradas
         console.log("Nuevas asistencias ->", nuevasAsistencias);
       } catch (error) {
         console.error("Error general al obtener las asistencias:", error);
@@ -88,6 +118,26 @@ export const TablaAsistencia = ({ usuarios }) => {
 
   return (
     <div className="overflow-x-auto">
+      {/* Selector de Mes */}
+      <div className="flex gap-2 mb-4">
+      <div className='flex items-center gap-2 px-2 border border-orange-500'>
+        <label htmlFor="mesSeleccionado" className="block font-bold mb-2">Buscar por Mes:</label>
+        <input
+          type="month"
+          id="mesSeleccionado"
+          value={mesSeleccionado}
+          onChange={(e) => setMesSeleccionado(e.target.value)}
+          className="border border-gray-300 rounded px-2 py-1"
+        />
+      </div>
+      <button
+          onClick={() => setMesSeleccionado('')} // Limpiar el filtro de mes
+          className="bg-orange-400 text-white px-4 py-2 rounded font-bold hover:bg-gray-700"
+        >
+          Todos los meses
+        </button>
+      </div>
+
       {/* Tabla de Historial */}
       <table className="w-full text-center border-collapse border border-black">
         <thead className="bg-black text-white font-mono">
@@ -100,7 +150,7 @@ export const TablaAsistencia = ({ usuarios }) => {
           </tr>
         </thead>
         <tbody>
-          {asistencias.map((item, index) => (
+          {asistenciasFiltradas.map((item, index) => (
             <tr
               key={index}
               onClick={() => handleRowClick(item)} // Cambiar la fila seleccionada
