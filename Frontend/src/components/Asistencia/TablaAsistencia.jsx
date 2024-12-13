@@ -4,10 +4,11 @@ import { HistoryContext } from '../../context/HistoryContext';
 import { ModalAsistencia } from '../Modals/ModalAsistencia';
 
 export const TablaAsistencia = ({ usuarios }) => {
+
   const { fetchAsistencias, seleccionado, setSeleccionado, showModal, handleModal, asistencias, setAsistencias } = useContext(HistoryContext);
 
   const [mesSeleccionado, setMesSeleccionado] = useState('');
-  const [asistenciasFiltradas, setAsistenciasFiltradas] = useState([]);
+
 
   // Formatear fechas en formato 'YYYY-MM-DD'
   const formatDate = (isoDate) => {
@@ -21,66 +22,60 @@ export const TablaAsistencia = ({ usuarios }) => {
     setSeleccionado(usuario);
     console.log('Usuario seleccionado:', usuario);
   };
+  // Filtrar asistencias por el mes seleccionado
+  const filtrarPorMes = (asistencias) => {
+    if (!mesSeleccionado) return asistencias; // Si no se selecciona mes, mostrar todas las asistencias
+    const mesSeleccionadoInt = parseInt(mesSeleccionado.split('-')[1], 10); // Extraemos el mes del valor "YYYY-MM"
+    
+    return asistencias.filter((item) => {
+      const fecha = new Date(item.asistencia.fecha);
+      return fecha.getMonth() === mesSeleccionadoInt - 1; // Filtrar por el mes (0-11)
+    });
+  };
 
   const encabezadoTabla = ['Cédula', 'Nombre y Apellido', 'Teléfono', 'Cargo', 'Fecha', 'Hora de Ingreso', 'Hora de Salida', 'Estado'];
 
-  // Filtrar asistencias por el mes seleccionado
-  useEffect(() => {
-    if (!mesSeleccionado) {
-      setAsistenciasFiltradas(asistencias);
-      return;
-    }
-
-    const [anioSeleccionado, mesSeleccionadoStr] = mesSeleccionado.split('-');
-    const mesSeleccionadoInt = parseInt(mesSeleccionadoStr, 10);
-
-    const filtradas = asistencias.filter(({ asistencia }) => {
-      if (!asistencia?.fecha) return false;
-
-      const fecha = new Date(asistencia.fecha);
-      return (
-        fecha.getFullYear() === parseInt(anioSeleccionado, 10) &&
-        fecha.getMonth() + 1 === mesSeleccionadoInt
-      );
-    });
-
-    setAsistenciasFiltradas(filtradas);
-  }, [mesSeleccionado, asistencias]);
-
   // Cargar asistencias de usuarios
+
   useEffect(() => {
     const obtenerAsistencias = async () => {
+      let indice = 0;
+      const nuevasAsistencias = [];
+  
       try {
-        const nuevasAsistencias = [];
+        // Realizar las solicitudes en paralelo con manejo de errores individuales
         const respuestas = await Promise.all(
-          usuarios.map(async (usuario) => {
+          usuarios.map(async usuario => {
             try {
               const asistencias = await fetchAsistencias(usuario.cedula);
               return { usuario, asistencias };
             } catch (error) {
               console.error(`Error al obtener asistencias para ${usuario.cedula}:`, error);
-              return { usuario, asistencias: [] };
+              return { usuario, asistencias: [] }; // Retornar vacío en caso de error
             }
           })
         );
-
+  
+        // Procesar las respuestas
         respuestas.forEach(({ usuario, asistencias }) => {
           if (asistencias.length === 0) {
-            nuevasAsistencias.push({ ...usuario, asistencia: {} });
+            nuevasAsistencias.push({ ...usuario, asistencia: {}, indice });
+            indice++;
           } else {
-            asistencias.forEach((asistencia) => {
-              nuevasAsistencias.push({ ...usuario, asistencia });
+            asistencias.forEach(asistencia => {
+              nuevasAsistencias.push({ ...usuario, asistencia, indice });
+              indice++;
             });
           }
         });
-
+  
         setAsistencias(nuevasAsistencias);
-        setAsistenciasFiltradas(nuevasAsistencias);
+        console.log("Nuevas asistencias ->", nuevasAsistencias);
       } catch (error) {
-        console.error('Error general al obtener las asistencias:', error);
+        console.error("Error general al obtener las asistencias:", error);
       }
     };
-
+  
     obtenerAsistencias();
   }, [usuarios]);
 
@@ -104,9 +99,10 @@ export const TablaAsistencia = ({ usuarios }) => {
           Todos los meses
         </button>
       </div>
-      {asistenciasFiltradas.length === 0 ? (
+      {filtrarPorMes(asistencias).length === 0 ? (
         <div className="text-center text-red-500 font-bold">No existen registros para el mes seleccionado.</div>
       ) : (
+
         <table className="w-full text-center border-collapse border border-black">
           <thead className="bg-black text-white font-mono">
             <tr>
@@ -116,7 +112,7 @@ export const TablaAsistencia = ({ usuarios }) => {
             </tr>
           </thead>
           <tbody>
-            {asistenciasFiltradas.map((item, index) => (
+            {filtrarPorMes(asistencias).map((item, index) => (
               <tr
                 key={index}
                 onClick={() => handleRowClick(item)}
