@@ -3,8 +3,9 @@ import users from '../assets/imagenes/DashboardImage/users.png';
 import assistant from '../assets/imagenes/DashboardImage/assistant.png';
 import clients from '../assets/imagenes/DashboardImage/clients.png';
 import pay from '../assets/imagenes/DashboardImage/pay.png';
+import tools from '../assets/imagenes/DashboardImage/tools.png';
 import { Link } from 'react-router-dom';
-import { FaUserAlt, FaCog, FaCalendarAlt, FaCar, FaWallet, FaTools } from 'react-icons/fa';
+import { FaUserAlt, FaCog} from 'react-icons/fa';
 import { Tooltip as ReactTooltip } from 'react-tooltip'
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthProvider';
@@ -39,26 +40,31 @@ export const Dashboard = () => {
                 <div className="flex flex-col space-y-4 text-white items-start">
                     <div className="flex items-center space-x-2">
                         <span className='w-3 h-3 bg-green-500 rounded-full inline-block'></span>
-                        <span>{auth.nombre}</span>
+                        <span>Bienvenido/a: {auth.nombre}</span>
                     </div>
 
                     <div className="flex flex-row items-center space-x-2">
                         <FaUserAlt className='text-white'/>
-                        <span>{auth.cargo}</span>  
+                        <span>Modo: {auth.cargo}</span>  
                     </div>
                    <Link to="/dashboard/perfil" className='flex items-center justify-center'>
                         <FaCog data-tooltip-id="profile" data-tooltip-content="Edita tu perfil " className='text-white text-2xl ml-20'/>
                         <ReactTooltip id='profile' place='bottom'/>
                    </Link>
                 </div>
+            <div className="mt-auto">
+                <button 
+                    onClick={handleLogout} 
+                    className="bg-green-600 text-white font-bold px-6 py-2 rounded-md hover:bg-green-700 transition mt-10">
+                    Cerrar Sesión
+                </button>
+            </div>
             </header>
             <main className="bg-white flex-grow flex flex-col items-center justify-center space-y-8 py-8" style={{
-                background: '#bdc3c7',  /* Fallback for old browsers */
-                background: '-webkit-linear-gradient(to right, #2c3e50, #bdc3c7)',  /* Chrome 10-25, Safari 5.1-6 */
-                background: 'linear-gradient(to right, #2c3e50, #bdc3c7)'  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+                background: 'linear-gradient(to right, #1F1C20, #8E0E01)',
             }}
             >   <div>
-                <h1 className="text-3xl font-bold text-gray-900"> MENU PRINCIPAL</h1> 
+                <h1 className="text-3xl font-bold text-white"> MENU PRINCIPAL</h1> 
                </div>
                <div className={`grid gap-8 ${auth?.cargo === 'Técnico' ? 'grid-cols-1 place-items-center' : 'grid-cols-1 sm:grid-cols-3'}`}>
                     {
@@ -98,19 +104,12 @@ export const Dashboard = () => {
                     
                     <Link
                         to="/dashboard/historial-mantenimiento"
-                        className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition">
-                        <FaTools className="text-red-600 mx-auto text-5xl mb-4" />
+                        className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition max-w-xs mx-auto">
+                        <img src={tools} alt="tools" className='mx-auto w-40 h-30' />
                         <p className="text-white font-semibold">Registro de mantenimiento vehicular</p>
                     </Link>
                 </div>
 
-                <div className="mt-auto">
-                    <button 
-                        onClick={handleLogout} 
-                        className="bg-green-600 text-white font-bold px-6 py-2 rounded-md hover:bg-green-700 transition mt-10">
-                        Cerrar Sesión
-                    </button>
-                </div>
             </main>
 
             <footer className="bg-black py-4">
