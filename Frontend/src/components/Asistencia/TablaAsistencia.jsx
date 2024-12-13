@@ -4,9 +4,7 @@ import { HistoryContext } from '../../context/HistoryContext';
 import { ModalAsistencia } from '../Modals/ModalAsistencia';
 
 export const TablaAsistencia = ({ usuarios }) => {
-
   const { fetchAsistencias, seleccionado, setSeleccionado, showModal, handleModal, asistencias, setAsistencias } = useContext(HistoryContext);
-
   const [mesSeleccionado, setMesSeleccionado] = useState('');
 
 
