@@ -1,6 +1,7 @@
 import logo from '../assets/imagenes/logo.jpg'; 
 import users from '../assets/imagenes/DashboardImage/users.png';
 import assistant from '../assets/imagenes/DashboardImage/assistant.png';
+import clients from '../assets/imagenes/DashboardImage/clients.png';
 import { Link } from 'react-router-dom';
 import { FaUserAlt, FaCog, FaCalendarAlt, FaCar, FaWallet, FaTools } from 'react-icons/fa';
 import { Tooltip as ReactTooltip } from 'react-tooltip'
@@ -77,8 +78,10 @@ export const Dashboard = () => {
                                     <p className="text-white font-semibold">Control de Asistencia</p>
                                 </Link>
                                 
-                                <Link to="/dashboard/historial-clientes" className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition">
-                                    <FaCar className="text-red-600 mx-auto text-5xl mb-4" />
+                                <Link 
+                                    to="/dashboard/historial-clientes" 
+                                    className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition max-w-xs mx-auto">
+                                    <img src={clients} alt="clients" className='mx-auto w-40 h-30' />
                                     <p className="text-white font-semibold">Historial de Clientes</p>
                                 </Link>
                             
