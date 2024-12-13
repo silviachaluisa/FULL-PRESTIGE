@@ -87,7 +87,7 @@ const filtrarPorMes = (clientes) => {
 
       {/* Mostrar mensaje si no hay registros con el filtro de mes */}
       {filtrarPorMes(clientes).length === 0 ? (
-        <div className="text-center text-red-500 font-bold">No existen registros para los filtros seleccionados.</div>
+        <div className="text-center text-red-500 font-bold">No existen registros para el mes seleccionado.</div>
       ) : (
         <div>
           {/* Tabla de Historial de Clientes */}
