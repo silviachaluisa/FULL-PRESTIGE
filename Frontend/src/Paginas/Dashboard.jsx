@@ -1,5 +1,6 @@
 import logo from '../assets/imagenes/logo.jpg'; 
 import users from '../assets/imagenes/DashboardImage/users.png';
+import assistant from '../assets/imagenes/DashboardImage/assistant.png';
 import { Link } from 'react-router-dom';
 import { FaUserAlt, FaCog, FaCalendarAlt, FaCar, FaWallet, FaTools } from 'react-icons/fa';
 import { Tooltip as ReactTooltip } from 'react-tooltip'
@@ -64,12 +65,15 @@ export const Dashboard = () => {
                             <>
                                 <Link
                                     to="/dashboard/historial-usuarios"
-                                    className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition max-w-xs mx-auto">
+                                    className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition max-w-xs mx-auto ">
                                     <img src={users} alt="user" className="mx-auto w-40 h-30" />
                                     <p className="text-white font-semibold">Gestionar Usuarios</p>
                                 </Link>
-                                <Link to="/dashboard/historial-asistencia" className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition">
-                                    <FaCalendarAlt className="text-red-600 mx-auto text-5xl mb-4" />
+
+                                <Link 
+                                    to="/dashboard/historial-asistencia" 
+                                    className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition max-w-xs mx-auto">
+                                    <img src={assistant} alt="assitant" className='mx-auto w-40 h-30' />
                                     <p className="text-white font-semibold">Control de Asistencia</p>
                                 </Link>
                                 
@@ -97,7 +101,7 @@ export const Dashboard = () => {
                 <div className="mt-auto">
                     <button 
                         onClick={handleLogout} 
-                        className="bg-green-500 text-black font-bold px-6 py-2 rounded-md hover:bg-green-700 transition mt-10">
+                        className="bg-green-600 text-white font-bold px-6 py-2 rounded-md hover:bg-green-700 transition mt-10">
                         Cerrar Sesión
                     </button>
                 </div>
