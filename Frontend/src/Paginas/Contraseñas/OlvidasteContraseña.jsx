@@ -2,7 +2,7 @@ import logo from '../assets/imagenes/logo.jpg'; // Reemplaza con la ruta del log
 import { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom'; // Asegúrate de tener Link y useNavigate importados
-import Mensaje from '../components/Alertas.jsx';
+import Mensaje from '../../components/Alertas.jsx';
 
 const RecuperarContraseña = () => {
   const navigate = useNavigate();

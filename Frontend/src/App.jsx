@@ -15,9 +15,9 @@ import RegistrarUsuarios from './Paginas/Usuarios/RegistrarUsuarios.jsx';
 import VisualizarPerfil from './Paginas/Perfil.jsx';
 import ActualizarUsuarios from './Paginas/Usuarios/ActualizarUsuarios.jsx';
 import { HistoryProvider } from './context/historyProvider.jsx';
-import RecuperarContrasena from './Paginas/RecuperarContraseña.jsx';
 import ActualizarClientes from './Paginas/Clientes/ActualizarClientes.jsx';
 import HistorialMantenimiento from './Paginas/Tecnicos/HistorialMantenimiento.jsx';
+import Reestablecer from './Paginas/Contraseñas/Reestablecer.jsx';
 
 function App() {
     return (
@@ -30,9 +30,10 @@ function App() {
 
                         {/* Ruta de autenticación */}
                         <Route path="/login" element={<Login />} />
-
+                    
+                
                         {/* Ruta para recuperación de contraseña */}
-                        <Route path="/recuperar-contrasena" element={<RecuperarContrasena />} />
+                        <Route path="/recuperar-contrasena/" element={<Reestablecer />} />
 
                         {/* Rutas privadas dentro de /dashboard */}
                         <Route
