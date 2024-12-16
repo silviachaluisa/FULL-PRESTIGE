@@ -122,7 +122,7 @@ export const Login = () => {
               {showPassword ? <FaEyeSlash size={24} /> : <FaEye size={24} />} {/* Cambia el ícono */}
             </button>
           </div>
-          <a href="/recuperar-contrasena" className=' no-underline hover:underline flex text-blue-50 justify-center  mb-2'>
+          <a href="/olvidaste-contrasena" className=' no-underline hover:underline flex text-blue-50 justify-center  mb-2'>
             ¿Olvidaste tu contraseña?
 
           </a>

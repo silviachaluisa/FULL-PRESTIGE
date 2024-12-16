@@ -1,4 +1,5 @@
 import logo from '../assets/imagenes/logo.jpg'; 
+import bg from '../assets/imagenes/DashboardImage/Bg.png';
 import users from '../assets/imagenes/DashboardImage/users.png';
 import assistant from '../assets/imagenes/DashboardImage/assistant.png';
 import clients from '../assets/imagenes/DashboardImage/clients.png';
@@ -60,10 +61,16 @@ export const Dashboard = () => {
                 </button>
             </div>
             </header>
-            <main className="bg-white flex-grow flex flex-col items-center justify-center space-y-8 py-8" style={{
-                background: 'linear-gradient(to right, #1F1C20, #8E0E01)',
-            }}
-            >   <div>
+            <main
+                className="bg-white flex-grow flex flex-col items-center justify-center space-y-8 py-8"
+                style={{
+                    backgroundImage: 'url(src/assets/imagenes/DashboardImage/Bg.png)', // Establece la imagen de fondo
+                    backgroundSize: 'cover', // Ajusta la imagen para cubrir toda el área
+                    backgroundPosition: 'center', // Centra la imagen
+                    backgroundRepeat: 'no-repeat', // Evita que la imagen se repita
+                }}
+            > 
+            <div>
                 <h1 className="text-3xl font-bold text-white"> MENU PRINCIPAL</h1> 
                </div>
                <div className={`grid gap-8 ${auth?.cargo === 'Técnico' ? 'grid-cols-1 place-items-center' : 'grid-cols-1 sm:grid-cols-3'}`}>
@@ -73,28 +80,28 @@ export const Dashboard = () => {
                             <>
                                 <Link
                                     to="/dashboard/historial-usuarios"
-                                    className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition max-w-xs mx-auto ">
+                                    className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-800 transition max-w-xs mx-auto ">
                                     <img src={users} alt="user" className="mx-auto w-40 h-30" />
                                     <p className="text-white font-semibold">Gestionar Usuarios</p>
                                 </Link>
 
                                 <Link 
                                     to="/dashboard/historial-asistencia" 
-                                    className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition max-w-xs mx-auto">
+                                    className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-800 transition max-w-xs mx-auto">
                                     <img src={assistant} alt="assitant" className='mx-auto w-40 h-30' />
                                     <p className="text-white font-semibold">Control de Asistencia</p>
                                 </Link>
                                 
                                 <Link 
                                     to="/dashboard/historial-clientes" 
-                                    className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition max-w-xs mx-auto">
+                                    className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-800 transition max-w-xs mx-auto">
                                     <img src={clients} alt="clients" className='mx-auto w-40 h-30' />
                                     <p className="text-white font-semibold">Historial de Clientes</p>
                                 </Link>
                             
                                 <Link 
                                     to="/dashboard/historial-pagos" 
-                                    className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition max-w-xs mx-auto">
+                                    className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-800 transition max-w-xs mx-auto">
                                     <img src={pay} alt="pay" className='mx-auto w-40 h-30' />
                                     <p className="text-white font-semibold">Control de Pagos</p>
                                 </Link>
@@ -104,7 +111,7 @@ export const Dashboard = () => {
                     
                     <Link
                         to="/dashboard/historial-mantenimiento"
-                        className="bg-black border border-white-500 p-9 rounded-lg text-center hover:bg-gray-800 transition max-w-xs mx-auto">
+                        className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-800 transition max-w-xs mx-auto">
                         <img src={tools} alt="tools" className='mx-auto w-40 h-30' />
                         <p className="text-white font-semibold">Registro de mantenimiento vehicular</p>
                     </Link>

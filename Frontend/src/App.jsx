@@ -18,6 +18,7 @@ import { HistoryProvider } from './context/historyProvider.jsx';
 import ActualizarClientes from './Paginas/Clientes/ActualizarClientes.jsx';
 import HistorialMantenimiento from './Paginas/Tecnicos/HistorialMantenimiento.jsx';
 import Reestablecer from './Paginas/Contraseñas/Reestablecer.jsx';
+import RecuperarContraseña from './Paginas/Contraseñas/OlvidasteContraseña.jsx';
 
 function App() {
     return (
@@ -30,10 +31,16 @@ function App() {
 
                         {/* Ruta de autenticación */}
                         <Route path="/login" element={<Login />} />
-                    
-                
                         {/* Ruta para recuperación de contraseña */}
                         <Route path="/recuperar-contrasena/" element={<Reestablecer />} />
+                        {/* Ruta para olvido de contraseña */}
+                        <Route path="/olvidaste-contrasena/" element={<RecuperarContraseña />} />
+
+
+                        {/* <Route path='forgot/:id' element={<Forgot/>}/>
+                        <Route path='confirmar/:token' element={<Confirmar/>}/>
+                        <Route path='recuperar-password/:token' element={<Restablecer/>}/>
+                        */}
 
                         {/* Rutas privadas dentro de /dashboard */}
                         <Route
