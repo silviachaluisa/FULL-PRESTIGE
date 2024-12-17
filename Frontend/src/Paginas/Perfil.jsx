@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthProvider';
 import logo from '../assets/imagenes/logo.jpg';
 import Mensaje from '../components/Alertas';
+import CambiarContraseña from '../components/Modals/CambiarContraseña';
 
 const EditarPerfil = () => {
   const { auth, actualizarPerfil, message} = useContext(AuthContext);
   const [mensaje, setMensaje] = useState("");
   const [errores, setErrores] = useState({});
   const [perfil, setPerfil] = useState({
+
     cedula: '',
     nombre: '',
     telefono: '',
@@ -17,6 +19,7 @@ const EditarPerfil = () => {
     cargo: '',
     estado: 'Activo'
   });
+  const [showModal, setShowModal] = useState(false); //Estado para controlar la visibilidad del modal
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,6 +37,8 @@ const EditarPerfil = () => {
       estado: auth?.estado || 'Activo'
     });
   }, [auth]);
+
+  const toggleModal = () => {setShowModal(!showModal)}; //Manejador para abrir y cerrar el modal
 
   // Manejador de cambios en el formulario
   const handleChange = (e) => {
@@ -91,16 +96,15 @@ const EditarPerfil = () => {
       </h2>
 
       <div className="w-full max-w-3xl px-10 py-6 border-2 border-red-600 rounded-lg bg-black text-white">
-        {/* {message && <Mensaje mensaje={message.respuesta} tipo={message.tipo} />} */}
-        <div className='mb-4'>
-          {/* {mensaje && <Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} />} */}
-          
-          {mensaje && (<Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} errores={!mensaje.tipo ? errores : {}} />
-                )}
-        </div>
+        <div className='mb-4'>    
+          {mensaje && (<Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} errores={!mensaje.tipo ? errores : {}} 
+          />
+        )}
+      </div>
          
 
         <form onSubmit={handleSave} className="grid grid-cols-2 gap-4">
+          {/* Otros campos del formulario */}
           <div>
             <label className="block font-semibold mb-2">Cédula</label>
             <input
@@ -200,8 +204,19 @@ const EditarPerfil = () => {
             </button>
           </div>
         </form>
+        {/* Boton para cambiar la contraseña */}
+        <div className="text-left">
+          <button
+            onClick={() => setShowModal(true)} // Actualiza el estado para mostrar el modal
+            className="bg-orange-600 text-white px-6 py-2 rounded hover:bg-red-800"
+          >
+            Cambiar Contraseña
+          </button>
       </div>
     </div>
+    {/* Modal para cambiar la contraseña */}
+    {showModal && <CambiarContraseña onClose={() => setShowModal(false)} />}
+  </div>
   );
 };
 

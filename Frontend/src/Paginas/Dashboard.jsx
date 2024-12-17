@@ -80,28 +80,28 @@ export const Dashboard = () => {
                             <>
                                 <Link
                                     to="/dashboard/historial-usuarios"
-                                    className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-800 transition max-w-xs mx-auto ">
+                                    className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-500 transition max-w-xs mx-auto ">
                                     <img src={users} alt="user" className="mx-auto w-40 h-30" />
                                     <p className="text-white font-semibold">Gestionar Usuarios</p>
                                 </Link>
 
                                 <Link 
                                     to="/dashboard/historial-asistencia" 
-                                    className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-800 transition max-w-xs mx-auto">
+                                    className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-500 transition max-w-xs mx-auto">
                                     <img src={assistant} alt="assitant" className='mx-auto w-40 h-30' />
                                     <p className="text-white font-semibold">Control de Asistencia</p>
                                 </Link>
                                 
                                 <Link 
                                     to="/dashboard/historial-clientes" 
-                                    className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-800 transition max-w-xs mx-auto">
+                                    className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-500 transition max-w-xs mx-auto">
                                     <img src={clients} alt="clients" className='mx-auto w-40 h-30' />
                                     <p className="text-white font-semibold">Historial de Clientes</p>
                                 </Link>
                             
                                 <Link 
                                     to="/dashboard/historial-pagos" 
-                                    className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-800 transition max-w-xs mx-auto">
+                                    className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-500 transition max-w-xs mx-auto">
                                     <img src={pay} alt="pay" className='mx-auto w-40 h-30' />
                                     <p className="text-white font-semibold">Control de Pagos</p>
                                 </Link>
@@ -111,7 +111,7 @@ export const Dashboard = () => {
                     
                     <Link
                         to="/dashboard/historial-mantenimiento"
-                        className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-800 transition max-w-xs mx-auto">
+                        className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-500 transition max-w-xs mx-auto">
                         <img src={tools} alt="tools" className='mx-auto w-40 h-30' />
                         <p className="text-white font-semibold">Registro de mantenimiento vehicular</p>
                     </Link>
