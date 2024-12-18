@@ -19,6 +19,7 @@ import ActualizarClientes from './Paginas/Clientes/ActualizarClientes.jsx';
 import HistorialMantenimiento from './Paginas/Tecnicos/HistorialMantenimiento.jsx';
 import Reestablecer from './Paginas/Contraseñas/Reestablecer.jsx';
 import RecuperarContraseña from './Paginas/Contraseñas/OlvidasteContraseña.jsx';
+import { Confirmar } from './Paginas/Contraseñas/Confirmar.jsx';
 
 function App() {
     return (
@@ -35,6 +36,8 @@ function App() {
                         <Route path="/recuperar-contrasena/" element={<Reestablecer />} />
                         {/* Ruta para olvido de contraseña */}
                         <Route path="/olvidaste-contrasena/" element={<RecuperarContraseña />} />
+                        {/* Ruta para confirmar inicio de sesion */}
+                        <Route path="/confirmar/" element={<Confirmar />} />
 
 
                         {/* <Route path='forgot/:id' element={<Forgot/>}/>

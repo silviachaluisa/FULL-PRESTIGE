@@ -45,9 +45,9 @@ const RecuperarContraseña = () => {
         background: 'linear-gradient(to right, #2c3e50, #bdc3c7)',
       }}
     >
-      <header className="w-full bg-White shadow p-4 flex justify-between items-center">
+      <header className="w-full bg-black shadow p-4 flex justify-between items-center">
         <div className="flex items-center">
-          <img src={logo} alt="Full Prestige" className="h-14" />
+          <img src={logo} alt="Full Prestige" className="h-20" />
           <p className="ml-4 text-white italic font-semibold text-sm">
             Que tu auto refleje lo mejor de ti
           </p>

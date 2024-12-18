@@ -32,7 +32,7 @@ export const Dashboard = () => {
             {/* Encabezado */}
             <header className="flex items-center justify-between bg-black py-4 px-6 border-b border-white-500">
                 <div className="flex items-center">
-                    <img src={logo} alt="Full Prestige" className="h-14" />
+                    <img src={logo} alt="Full Prestige" className="h-20" />
                     <p className="ml-4 text-white italic font-semibold text-sm">
                         &quot;Que tu auto refleje lo mejor de ti&quot;
                     </p>
@@ -62,7 +62,7 @@ export const Dashboard = () => {
             </div>
             </header>
             <main
-                className="bg-white flex-grow flex flex-col items-center justify-center space-y-8 py-8"
+                className="bg-white flex-grow flex flex-col items-center justify-center space-y-4 py-8"
                 style={{
                     backgroundImage: 'url(src/assets/imagenes/DashboardImage/Bg.png)', // Establece la imagen de fondo
                     backgroundSize: 'cover', // Ajusta la imagen para cubrir toda el área
@@ -71,7 +71,7 @@ export const Dashboard = () => {
                 }}
             > 
             <div>
-                <h1 className="text-3xl font-bold text-white"> MENU PRINCIPAL</h1> 
+                <h1 className="text-3xl font-bold text-black  "> MENU PRINCIPAL</h1> 
                </div>
                <div className={`grid gap-8 ${auth?.cargo === 'Técnico' ? 'grid-cols-1 place-items-center' : 'grid-cols-1 sm:grid-cols-3'}`}>
                     {
