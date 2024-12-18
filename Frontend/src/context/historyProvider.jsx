@@ -692,10 +692,23 @@ export const HistoryProvider = ({ children }) => {
   }; 
 
   // -----------------FUNCION PARA CAMBIAR CONTRASEÑA-----------------------------------
-  const changePassword = async (cedula, password) => {
-    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/employee/change-password/${token}`;
+  const changePassword = async (cedula, password, newPassword, confirmPassword) => {
+    const token = localStorage.getItem("token");
+
+    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/profile/update-password`;
     try {
-      const respuesta = await axios.put(URLActualizar, { password });
+      const respuesta = await axios.put(URLActualizar, { 
+          contrasena: password,
+          nuevaContrasena: newPassword,
+          confirmarContrasena: confirmPassword
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log(respuesta);
       return { success: true, message: "Contraseña actualizada correctamente" };
     }catch (error) {

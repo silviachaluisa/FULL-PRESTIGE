@@ -40,7 +40,7 @@ const CambiarContraseña = ({ onClose, userId }) => {
     }
 
     try {
-      const result = await changePassword(userId, currentPassword, newPassword);
+      const result = await changePassword(userId, currentPassword, newPassword, confirmPassword);
       if (result.success) {
         setSuccess(result.message);
         setTimeout(() => {
