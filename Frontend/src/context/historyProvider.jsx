@@ -16,6 +16,7 @@ export const HistoryProvider = ({ children }) => {
   const [tipoModal, setTipoModal] = useState(''); // Tipo de modal: 'registrar' o 'actualizar'
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [contrasenas, setContrasenas] = useState([]);
 
   // -------------------------------- Funciones de control en mensajes de validación --------------------------------
   async function mostrarErrores(errors) {
@@ -688,8 +689,20 @@ export const HistoryProvider = ({ children }) => {
       return { success: false, message: error.response.data.message
     };
   };
-  };
+  }; 
 
+  // -----------------FUNCION PARA CAMBIAR CONTRASEÑA-----------------------------------
+  const changePassword = async (cedula, password) => {
+    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/employee/change-password/${token}`;
+    try {
+      const respuesta = await axios.put(URLActualizar, { password });
+      console.log(respuesta);
+      return { success: true, message: "Contraseña actualizada correctamente" };
+    }catch (error) {
+      console.error("Error al actualizar contraseña", error);
+      return { success: false, message: error.response.data.message };
+    }
+  };
   
 
   return (
@@ -736,7 +749,10 @@ export const HistoryProvider = ({ children }) => {
       fetchMantenimientosByID,
       upDateMaintance,
       registerMaintance,
-      requestUpdateMaintenance
+      requestUpdateMaintenance,
+      contrasenas,
+      setContrasenas,
+      changePassword,
        }}>
       {children}
     </HistoryContext.Provider>
