@@ -33,11 +33,11 @@ function App() {
                         {/* Ruta de autenticación */}
                         <Route path="/login" element={<Login />} />
                         {/* Ruta para recuperación de contraseña */}
-                        <Route path="/recuperar-contrasena/" element={<Reestablecer />} />
+                        <Route path="/restablecer-contrasena/:token" element={<Reestablecer />} />
                         {/* Ruta para olvido de contraseña */}
-                        <Route path="/olvidaste-contrasena/" element={<RecuperarContraseña />} />
+                        <Route path="/olvidaste-contrasena/id" element={<RecuperarContraseña />} />
                         {/* Ruta para confirmar inicio de sesion */}
-                        <Route path="/confirmar/" element={<Confirmar />} />
+                        <Route path="/confirmar/:token" element={<Confirmar />} />
 
 
                         {/* <Route path='forgot/:id' element={<Forgot/>}/>
