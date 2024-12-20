@@ -145,7 +145,7 @@ const handleSearch = async () => {
   // Verificar que el vehículo se encontró
   console.log("Vehículo encontrado:", cliente);
 
-  if (!cliente) {
+  if (cliente.length === 0) {
     setErrorMessage("❌ Vehículo no se encuentra registrado");
   } else {
     setErrorMessage(""); // Limpiar mensaje de error
@@ -170,10 +170,11 @@ const handleSearch = async () => {
                 'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida',
                 'Descripción del trabajo', 'Técnico Responsable']],
         body: mantenimientos.map((cliente) => [
-          cliente.propietario?.cedula || 'N/A',
-          cliente.propietario?.nombre || 'N/A',
+          cliente.vehiculo.propietario?.cedula || 'N/A',
+          cliente.vehiculo.propietario?.nombre || 'N/A',
+          cliente.vehiculo?.n_orden || 'N/A',
           cliente.vehiculo?.marca || 'N/A',
-          cliente.modelo?.modelo || 'N/A',
+          cliente.vehiculo?.modelo || 'N/A',
           cliente.vehiculo?.placa || 'N/A',
           formatDate(cliente.vehiculo?.fecha_ingreso || 'N/A'),
           formatDate(cliente.vehiculo?.fecha_salida || 'N/A'),
@@ -192,8 +193,9 @@ const handleSearch = async () => {
   const handleDownloadExcel = () => {
     try{
       const data= mantenimientos.map((cliente) => ({
-        Cédula: cliente.propietario?.cedula || 'N/A',
-        Nombre: cliente.propietario?.nombre || 'N/A',
+        Cédula: cliente.vehiculo.propietario?.cedula || 'N/A',
+        Nombre: cliente.vehiculo.propietario?.nombre || 'N/A',
+        N_Orden: cliente.vehiculo?.n_orden || 'N/A',
         Marca: cliente.vehiculo?.marca || 'N/A',
         Modelo: cliente.vehiculo?.modelo || 'N/A',
         Placa: cliente.vehiculo?.placa|| 'N/A',

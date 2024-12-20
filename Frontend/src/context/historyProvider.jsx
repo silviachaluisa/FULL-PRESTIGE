@@ -518,11 +518,19 @@ export const HistoryProvider = ({ children }) => {
         },
       }
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/maintenance/vehicle/${placa}`, options);
+      //Para busqueda de una placa que no ha sido asiganada al tecnico
+      if (response.data.length === 0) {
+        setTimeout(async ()=>{await fetchMantenimientos()} ,3000)//Para que los datos de la tabla regresen despues de no encontrar el vehiculo}
+
+      }
       setMantenimientos(response.data);
       return response.data;
     } catch (error) {
       console.error("Error al obtener mantenimientos", error);
       setMantenimientos([]);
+      //Para busqueda de una placa que no existe
+      setTimeout(async ()=>{await fetchMantenimientos()} ,3000)//Para que los datos de la tabla regresen despues de no encontrar el vehiculo
+      return []; //Para que retorne un objeto vacio
     } finally {
       setLoading(false); // Establecer la carga en falso
     }
