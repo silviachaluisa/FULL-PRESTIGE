@@ -7,7 +7,6 @@ import axios from 'axios';
 const Restablecer = () => {
     const { token } = useParams();
     const [mensaje, setMensaje] = useState({});
-    const [errores, setErrores] = useState({});
     const [tokenValido, setTokenValido] = useState({});
 
     const navigate = useNavigate();
