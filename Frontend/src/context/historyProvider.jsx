@@ -593,6 +593,8 @@ export const HistoryProvider = ({ children }) => {
         setErrorMessage("");
         handleModal();
         fetchMantenimientos();
+        // Actualizar el valor de seleccionado con el nuevo registro
+        setSeleccionado(mantenimiento);
       }, 2000); // Cierra el modal después de 2 segundos
     }catch (error) {
       console.error("Error al actualizar mantenimiento", error);
@@ -630,6 +632,8 @@ export const HistoryProvider = ({ children }) => {
         setErrorMessage("");
         handleModal();
         fetchMantenimientos();
+        // Actualizar el valor de seleccionado con el nuevo registro
+        setSeleccionado(infoMantenimiento);
       }, 2000); // Cierra el modal después de 2 segundos
       return { success: true, message: "Mantenimiento registrado correctamente" };
     } catch (error) {
