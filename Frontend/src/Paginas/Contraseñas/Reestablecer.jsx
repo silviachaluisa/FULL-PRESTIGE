@@ -56,7 +56,7 @@ const Restablecer = () => {
 
         try {
             const url = `${import.meta.env.VITE_BACKEND_URL}/change-password/${token}`;
-            const respuesta = await axios.post(url, { contrasena: form.password, confirmarContrasena: form.confirmar });
+            const respuesta = await axios.put(url, { contrasena: form.password, confirmarContrasena: form.confirmar });
             setMensaje({ respuesta: respuesta.data.message, tipo: true });
 
             setTimeout(() => {
