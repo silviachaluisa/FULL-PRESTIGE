@@ -55,14 +55,15 @@ const Restablecer = () => {
         }
 
         try {
-            const url = `${import.meta.env.VITE_BACKEND_URL}/recover-password/`;
-            const respuesta = await axios.post(url, { password: form.password });
+            const url = `${import.meta.env.VITE_BACKEND_URL}/change-password/${token}`;
+            const respuesta = await axios.post(url, { contrasena: form.password, confirmarContrasena: form.confirmar });
             setMensaje({ respuesta: respuesta.data.message, tipo: true });
 
             setTimeout(() => {
                 navigate('/login');
             }, 3000);
         } catch (error) {
+            console.log(error);
             const errorMessage = error.response?.data?.message || 'Error al restablecer la contraseña.';
             setMensaje({ respuesta: errorMessage, tipo: false });
         }
