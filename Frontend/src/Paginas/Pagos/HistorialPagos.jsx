@@ -145,18 +145,18 @@ export const Pago = () => {
   // ---------------------------------------------------------------------------------------------------
 const handleDownloadPDF = () => {
   const doc = new jsPDF();
-  doc.text('Historial de Usuarios Registrados', 10, 10);
+  doc.text('Historial de Pagos', 10, 10);
   doc.autoTable({
-    head: [['Cédula', 'Nombre y Apellido', 'Fecha', 'Adelantos', 'Permisos', 'Multas', 'Atrasos', 'Subtotal']],
+    head: [['Cédula', 'Nombre y Apellido', 'Fecha', 'Adelantos', 'Permisos', 'Multas', 'Atrasos','Subtotal']],
     body: pagos.map((usuario) => [
       usuario.cedula,
       usuario.nombre,
       formatDate(usuario?.pago.fecha),
-      usuario?.adelantos|| 'N/A',
-      usuario?.permisos || 'N/A',
-      usuario?.multas || 'N/A',
-      usuario?.atrasos || 'N/A',
-      usuario?.subtotal || 'N/A',
+      usuario?.pago.adelanto|| 'N/A',
+      usuario?.pago.permisos || 'N/A',
+      usuario?.pago.multas || 'N/A',
+      usuario?.pago.atrasos || 'N/A',
+      usuario?.pago.subtotal || 'N/A',
     ]),
   });
   doc.save('HistorialPagos.pdf');
@@ -166,11 +166,11 @@ const handleDownloadExcel = () => {
     Cédula: usuario.cedula,
     Nombre: usuario.nombre,
     Fecha: formatDate(usuario?.pago.fecha),
-    Adelantos:usuario?.adelantos || 'N/A',
-    Permisos:usuario?.permisos || 'N/A',
-    Multas:usuario?.multas || 'N/A',
-    Atrasos:usuario?.atrasos || 'N/A',
-    Subtotal:usuario?.subtotal || 'N/A',
+    Adelantos:usuario?.pago.adelanto || 'N/A',
+    Permisos:usuario?.pago.permisos || 'N/A',
+    Multas:usuario?.pago.multas || 'N/A',
+    Atrasos:usuario?.pago.atrasos || 'N/A',
+    Subtotal:usuario?.pago.subtotal || 'N/A',
   }));
   const worksheet = XLSX.utils.json_to_sheet(data);
   const workbook = XLSX.utils.book_new();
