@@ -54,7 +54,7 @@ const EditarPerfil = () => {
     try {
       const updateProfile = {
         ...perfil,
-        estado: perfil.estado === 'Activo' ? true : false
+        estado: perfil.estado === 'activo' ? true : false
       }
 
       // Validar si el usuario se cambio el cargo
