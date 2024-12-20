@@ -32,7 +32,7 @@ export const Dashboard = () => {
             {/* Encabezado */}
             <header className="flex items-center justify-between bg-black py-4 px-6 border-b border-white-500">
                 <div className="flex items-center">
-                    <img src={logo} alt="Full Prestige" className="h-16" />
+                    <img src={logo} alt="Full Prestige" className="h-14" />
                     <p className="ml-4 text-white italic font-semibold text-sm">
                         &quot;Que tu auto refleje lo mejor de ti&quot;
                     </p>

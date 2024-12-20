@@ -20,13 +20,19 @@ const Restablecer = () => {
     // Verificación del token al cargar el componente
     const verifyToken = async () => {
         try {
-            const url = `${import.meta.env.VITE_BACKEND_URL}/recover-password/${token}`;
+            const url = `${import.meta.env.VITE_BACKEND_URL}/verify-token/${token}`;
             const respuesta = await axios.get(url);
             setTokenValido(true);
             setMensaje({ respuesta: respuesta.data.message, tipo: true });
+
         } catch (error) {
             const errorMessage = error.response?.data?.message || 'Token inválido o expirado.';
             setMensaje({ respuesta: errorMessage, tipo: false });
+        }
+        finally {
+            setTimeout(() => {
+                setMensaje({});
+            }, 3000);
         }
     };
 
@@ -50,7 +56,7 @@ const Restablecer = () => {
         }
 
         try {
-            const url = `${import.meta.env.VITE_BACKEND_URL}/recover-password/${token}`;
+            const url = `${import.meta.env.VITE_BACKEND_URL}/recover-password/`;
             const respuesta = await axios.post(url, { password: form.password });
             setMensaje({ respuesta: respuesta.data.message, tipo: true });
 
@@ -65,15 +71,9 @@ const Restablecer = () => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-black px-4">
-   
-        <div className='mb-4'>
-                {mensaje && (<Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} errores={!mensaje.tipo ? errores : {}} 
-                        />
-                        )}
-        </div>
-
-
-
+            {Object.keys(mensaje).length > 0 && <Mensaje tipo={mensaje.tipo} mensaje={mensaje.respuesta}></Mensaje>}
+            {/* {Object.keys(mensaje).length > 0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>} */}
+    
             <h1 className="text-3xl font-semibold mb-2 text-center uppercase text-gray-500">
                 Bienvenido
             </h1>
