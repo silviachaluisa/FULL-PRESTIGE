@@ -13,7 +13,7 @@ export const Confirmar = () => {
 
     const verifyToken = async () => {
         try {
-            const url = `${import.meta.env.VITE_BACKEND_URL}/verify-token/${token}`;
+            const url = `${process.env.VITE_BACKEND_URL}/verify-token/${token}`;
             const respuesta = await axios.get(url);
             setMensaje({ respuesta: respuesta.data.message, tipo: true });
         } catch (error) {

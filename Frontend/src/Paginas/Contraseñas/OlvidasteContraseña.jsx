@@ -18,7 +18,7 @@ const RecuperarContraseña = () => {
     e.preventDefault();
   
     try {
-      const url = `${import.meta.env.VITE_BACKEND_URL}/recover-password`;
+      const url = `${process.env.VITE_BACKEND_URL}/recover-password`;
       const respuesta = await axios.post(url, { correo: email }); // Enviar con clave "correo"
       setMensaje({ respuesta: respuesta.data.message, tipo: true });
   

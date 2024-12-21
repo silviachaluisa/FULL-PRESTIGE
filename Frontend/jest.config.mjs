@@ -155,7 +155,8 @@ const config = {
   ],
   setupFilesAfterEnv: ['./jest.setup.js'], // Configuración adicional
   moduleNameMapper: {
-    '\\.(css|less|scss|sass)$': 'identity-obj-proxy', // Mock para estilos
+    '\\.(jpg|jpeg|png|gif|svg)$': '<rootDir>/__mocks__/fileMock.js',
+    '\\.(css|scss)$': 'identity-obj-proxy'
   },
   globals: {
     "import.meta.env": {}, // Mock de import.meta.env
@@ -170,8 +171,8 @@ const config = {
 
   // The glob patterns Jest uses to detect test files
   testMatch: [ // Patrones de archivos de prueba (archivos con extencion .test.mjs)
-    "**/__tests__/**/*.test.mjs", // Archivos de prueba en la carpeta __tests__
-    "**/?(*.)+(spec|test).mjs" // Archivos de prueba con extensión .spec.mjs o .test.mjs
+    "**/__tests__/**/*.test.js", // Archivos de prueba en la carpeta __tests__
+    "**/?(*.)+(spec|test).js" // Archivos de prueba con extensión .spec.mjs o .test.mjs
   ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
