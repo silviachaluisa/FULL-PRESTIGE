@@ -120,6 +120,11 @@ Correo: veronica-14-1998@hotmail.com
 > [!WARNING]
 > **NO APLICA**
 
+##Pruebas
+Para realizar las pruebas de aceptación se debe configurar el archivo
+![{12AC4363-1B9D-4442-AEAF-21CCC59A90E2}](https://github.com/user-attachments/assets/8972892c-cdc0-484d-b8b6-db0120686c7d)
+
+
 
 
 
