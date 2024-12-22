@@ -12,11 +12,12 @@ const usuarios = [
         telefono: "1234567890",
         cargo: "Técnico",
         direccion: "Calle 123 # 45-67",
-        asistencia: {
+        asistencias: [{
             fecha: "2021-10-01",
             hora_ingreso: "08:00",
-            hora_salida: "17:00"
-        }
+            hora_salida: "17:00",
+            estado: "Ausente"
+        }]
     },
     {
         cedula: "1787654321",
@@ -24,11 +25,12 @@ const usuarios = [
         telefono: "8765432167",
         cargo: "Gerente",
         direccion: "Carrera 45 # 67-89",
-        asistencia: {
+        asistencias: [{
             fecha: "2021-10-01",
             hora_ingreso: "08:00",
-            hora_salida: "17:00"
-        }
+            hora_salida: "17:00",
+            estado: "Justificado"
+        }]
     }
 ];
 
@@ -78,7 +80,7 @@ describe("TablaAsistencia", () => {
         expect(screen.getByText("María Rodríguez")).toBeInTheDocument();
     
         // Comprobar que las cédulas están en la tabla
-        expect(screen.getByText("123456789")).toBeInTheDocument();
-        expect(screen.getByText("987654321")).toBeInTheDocument();
+        expect(screen.getByText("1234567890")).toBeInTheDocument();
+        expect(screen.getByText("1787654321")).toBeInTheDocument();
     });
 });
