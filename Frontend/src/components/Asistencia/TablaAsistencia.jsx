@@ -9,8 +9,7 @@ export const TablaAsistencia = ({ usuarios }) => {
     seleccionado,
     setSeleccionado,
     showModal,
-    handleModal,
-    asistencias,
+    handleModal
   } = useContext(HistoryContext);
 
   // Formatear fechas en formato 'YYYY-MM-DD'
@@ -30,38 +29,39 @@ export const TablaAsistencia = ({ usuarios }) => {
 
   return (
     <div className="overflow-x-auto">
-      {Array.isArray(asistencias) && asistencias.length === 0 ? (
-        <div className="text-center text-red-500 font-bold">No existen registros para el mes seleccionado.</div>
-      ) : (
-
-        <table className="w-full text-center border-collapse border border-black" role="table">
-          <thead className="bg-black text-white font-mono">
-            <tr>
-              {encabezadoTabla.map((header) => (
-                <th key={header} className="border border-white px-4 py-2">{header}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {Array.isArray(asistencias) && asistencias.map((item, index) => (
-              <tr
-                key={`${item._id}_${index}`}
-                onClick={() => handleRowClick(item)}
-                className={`cursor-pointer ${seleccionado?._id === item?._id ? 'bg-gray-300' : ''}`}
-              >
-                <td className="border border-black px-4 py-2">{item.cedula}</td>
-                <td className="border border-black px-4 py-2">{item.nombre}</td>
-                <td className="border border-black px-4 py-2">{item.telefono}</td>
-                <td className="border border-black px-4 py-2">{item.cargo}</td>
-                <td className="border border-black px-4 py-2">{formatDate(item.asistencias.at(-1)?.fecha)}</td>
-                <td className="border border-black px-4 py-2">{item.asistencias.at(-1)?.hora_ingreso || 'N/A'}</td>
-                <td className="border border-black px-4 py-2">{item.asistencias.at(-1)?.hora_salida || 'N/A'}</td>
-                <td className="border border-black px-4 py-2">{item.asistencias.at(-1)?.estado || 'N/A'}</td>
+      {
+        Array.isArray(usuarios) && usuarios.length === 0 ? (
+          <div className="text-center text-red-500 font-bold">No existen registros para el mes seleccionado.</div>
+        ) : (
+          <table className="w-full text-center border-collapse border border-black" role="table">
+            <thead className="bg-black text-white font-mono">
+              <tr>
+                {encabezadoTabla.map((header) => (
+                  <th key={header} className="border border-white px-4 py-2">{header}</th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+            </thead>
+            <tbody>
+              {Array.isArray(usuarios) && usuarios.map((item, index) => (
+                <tr
+                  key={`${item._id}_${index}`}
+                  onClick={() => handleRowClick(item)}
+                  className={`cursor-pointer ${seleccionado?._id === item?._id ? 'bg-gray-300' : ''}`}
+                >
+                  <td className="border border-black px-4 py-2">{item.cedula}</td>
+                  <td className="border border-black px-4 py-2">{item.nombre}</td>
+                  <td className="border border-black px-4 py-2">{item.telefono}</td>
+                  <td className="border border-black px-4 py-2">{item.cargo}</td>
+                  <td className="border border-black px-4 py-2">{formatDate(item.asistencias.at(-1)?.fecha)}</td>
+                  <td className="border border-black px-4 py-2">{item.asistencias.at(-1)?.hora_ingreso || 'N/A'}</td>
+                  <td className="border border-black px-4 py-2">{item.asistencias.at(-1)?.hora_salida || 'N/A'}</td>
+                  <td className="border border-black px-4 py-2">{item.asistencias.at(-1)?.estado || 'N/A'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )
+      }
       {showModal && <ModalAsistencia handleShow={handleModal} usuario={seleccionado} />}
     </div>
   );
