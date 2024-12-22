@@ -80,7 +80,7 @@ describe("TablaAsistencia", () => {
         expect(screen.getByText("María Rodríguez")).toBeInTheDocument();
     
         // Comprobar que las cédulas están en la tabla
-        expect(screen.getByText("1234567890")).toBeInTheDocument();
+        expect(screen.getByText("1724432251")).toBeInTheDocument();
         expect(screen.getByText("1787654321")).toBeInTheDocument();
     });
 });
