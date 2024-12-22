@@ -4,34 +4,6 @@ import { TablaAsistencia } from "../src/components/Asistencia/TablaAsistencia";
 import { HistoryProvider } from "../src/context/historyProvider";
 import { MemoryRouter } from "react-router-dom";
 
-// Mockear el HistoryContext
-// jest.mock('../src/context/historyProvider', () => ({
-//     HistoryProvider: ({ children }) => <div>{children}</div>, // Mockear el provider
-//     useHistoryContext: jest.fn().mockReturnValue({
-//         fetchAsistencias: jest.fn(),
-//         seleccionado: null,
-//         setSeleccionado: jest.fn(),
-//         showModal: false,
-//         handleModal: jest.fn(),
-//         asistencias: [],
-//         setAsistencias: jest.fn(),
-//     }),
-// }));
-
-// jest.mock('../src/context/historyProvider', () => ({
-//     ...jest.requireActual('../src/context/historyProvider'),
-//     HistoryContext: createContext({
-//         fetchAsistencias: jest.fn(),
-//         seleccionado: null,
-//         setSeleccionado: jest.fn(),
-//         showModal: false,
-//         handleModal: jest.fn(),
-//         asistencias: [],
-//         setAsistencias: jest.fn(),
-//     }),
-// }));
-
-
 // Mockear el contexto
 const usuarios = [
     {
@@ -39,6 +11,7 @@ const usuarios = [
         nombre: "Juan Pérez",
         telefono: "1234567890",
         cargo: "Técnico",
+        direccion: "Calle 123 # 45-67",
         asistencia: {
             fecha: "2021-10-01",
             hora_ingreso: "08:00",
@@ -50,6 +23,7 @@ const usuarios = [
         nombre: "María Rodríguez",
         telefono: "8765432167",
         cargo: "Gerente",
+        direccion: "Carrera 45 # 67-89",
         asistencia: {
             fecha: "2021-10-01",
             hora_ingreso: "08:00",
