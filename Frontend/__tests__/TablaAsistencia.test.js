@@ -7,9 +7,9 @@ import { MemoryRouter } from "react-router-dom";
 // Mockear el contexto
 const usuarios = [
     {
-        cedula: "1234567890",
+        cedula: "1724432251",
         nombre: "Juan Pérez",
-        telefono: "1234567890",
+        telefono: "0978365421",
         cargo: "Técnico",
         direccion: "Calle 123 # 45-67",
         asistencias: [{
@@ -22,7 +22,7 @@ const usuarios = [
     {
         cedula: "1787654321",
         nombre: "María Rodríguez",
-        telefono: "8765432167",
+        telefono: "0998453623",
         cargo: "Gerente",
         direccion: "Carrera 45 # 67-89",
         asistencias: [{
