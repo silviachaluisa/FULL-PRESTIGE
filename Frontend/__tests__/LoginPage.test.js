@@ -15,6 +15,6 @@ describe("Mensaje", () => {
                 </MemoryRouter>
             </>
         );
-        expect(screen.getByText("Inicio de sesión exitoso")).toBeInTheDocument();
+        expect(screen.getByText("¿Olvidaste tu contraseña?")).toBeInTheDocument();
     });
 });

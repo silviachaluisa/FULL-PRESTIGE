@@ -17,6 +17,7 @@ export const HistoryProvider = ({ children }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [contrasenas, setContrasenas] = useState([]);
+  const [mesSeleccionado, setMesSeleccionado] = useState('');
 
   // -------------------------------- Funciones de control en mensajes de validación --------------------------------
   async function mostrarErrores(errors) {
@@ -289,11 +290,12 @@ export const HistoryProvider = ({ children }) => {
   };
 
    // -----------------------------------FUNCIONES PARA ASISTENCIAS--------------------------------------------
-
-   const fetchAsistencias = async (id) => {
+  
+   const fetchAsistencias = async () => {
     const token = localStorage.getItem('token');
     if (!token) return;
     try {
+      setLoading(true); // Activar el estado de carga
       const options = {
         headers: {
           'Content-Type': 'application/json',
@@ -301,11 +303,37 @@ export const HistoryProvider = ({ children }) => {
         },
       };
 
-      const response = await axios.get(`${process.env.VITE_BACKEND_URL}/employee/${id}/assistance`, options);
-
+      const response = await axios.get(`${process.env.VITE_BACKEND_URL}/assistances`, options);
+      setAsistencias(response.data); // Suponiendo que la API retorna un array de asistencias
       return response.data;
     } catch (error) {
       console.error("Error al obtener asistencias", error);
+      setAsistencias([]);
+    } finally {
+      setLoading(false) // Desactivar el estado de carga
+    }
+  };
+
+  const fetchAsistenciasByEmpleado = async (cedula) => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      setLoading(true); // Activar el estado de carga
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+      const response = await axios.get(`${process.env.VITE_BACKEND_URL}/employee/${cedula}/assistance`, options);
+      setAsistencias(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error al obtener asistencias", error);
+      setAsistencias([]);
+      return [];
+    } finally {
+      setLoading(false); // Establecer la carga en falso
     }
   };
 
@@ -327,7 +355,7 @@ export const HistoryProvider = ({ children }) => {
         setSuccessMessage("");
         setErrorMessage("");
         handleModal();
-        fetchUsuarios();
+        fetchAsistencias();
       }, 2000); // Cierra el modal después de 2 segundos
     } catch (error) {
       console.error("Error al actualizar asistencia", error);
@@ -364,7 +392,7 @@ export const HistoryProvider = ({ children }) => {
         setSuccessMessage("");
         setErrorMessage("");
         handleModal();
-        fetchUsuarios();
+        fetchAsistencias();
       }, 2000); // Cierra el modal después de 2 segundos
     } catch (error) {
       console.error("Error al actualizar asistencia", error);
@@ -729,6 +757,38 @@ export const HistoryProvider = ({ children }) => {
     }
   };
   
+  // Filtrar asistencias por el mes seleccionado
+    const handleFilterByMonth = async () => {
+      try {
+        const respuesta = await fetchAsistencias();
+        if (!mesSeleccionado) return;
+        const mesSeleccionadoInt = parseInt(mesSeleccionado.split('-')[1], 10); // Extraemos el mes del valor "YYYY-MM"
+        const filtrado = []
+        respuesta.forEach((registro) => {
+          registro.asistencias.forEach((asistencia) => {
+            const fecha_asistencia = new Date(asistencia.fecha);
+            if (fecha_asistencia.getMonth() === mesSeleccionadoInt - 1) {
+              const reg_asistencias = {
+                _id: asistencia._id,
+                nombre: registro.nombre,
+                cedula: registro.cedula,
+                correo: registro.correo,
+                direccion: registro.direccion,
+                cargo: registro.cargo,
+                telefono: registro.telefono,
+                asistencias: [asistencia]
+              }
+              filtrado.push(reg_asistencias);
+            }
+          });
+        });
+        setAsistencias(filtrado);
+      } catch (error) {
+        console.error("Error al filtrar asistencias", error);
+      }
+    }
+
+  // ----------------------Adicionales ----------------------------------------------//
 
   return (
     <HistoryContext.Provider 
@@ -748,6 +808,7 @@ export const HistoryProvider = ({ children }) => {
       asistencias,
       setAsistencias,
       fetchAsistencias,
+      fetchAsistenciasByEmpleado,
       upDateAssistance,
       registerAssistance,
       seleccionado,
@@ -778,6 +839,9 @@ export const HistoryProvider = ({ children }) => {
       contrasenas,
       setContrasenas,
       changePassword,
+      handleFilterByMonth,
+      mesSeleccionado,
+      setMesSeleccionado
        }}>
       {children}
     </HistoryContext.Provider>

@@ -1,4 +1,3 @@
-import React from 'react';
 import logo from '../../assets/imagenes/logo.jpg';
 import pdf from '../../assets/imagenes/pdf.png'
 import excel from '../../assets/imagenes/excel.png'
@@ -47,15 +46,16 @@ export const Asistencia = () => {
 
   const navigate= useNavigate();
   const {
-    usuarios,
-    loading ,
-    fetchUsuarios,
+    loading,
     fetchAsistencias,
     seleccionado,
-    fetchUsuarioByCedula,
+    fetchAsistenciasByEmpleado,
     handleModal,
     setTipoModal,
-    asistencias
+    asistencias,
+    mesSeleccionado,
+    setMesSeleccionado,
+    handleFilterByMonth,
   }= useContext (HistoryContext);
   const { auth } = useContext(AuthContext);
   
@@ -81,7 +81,7 @@ const handleChange=(e)=>{
 };
  // Llamar a fetchUsuarios una vez cuando el componente carga
  useEffect(() => {
-  fetchUsuarios();
+  fetchAsistencias();
 }, []);
 
 const encabezadoTabla = [
@@ -109,12 +109,22 @@ const handleNewClick = (type) => {
   handleModal();
 };
 
+useEffect(() => {
+  if (mesSeleccionado) {
+    handleFilterByMonth();
+  } else {
+    fetchAsistencias();
+  }
+}, [mesSeleccionado]);
+
 // ------------------------------------------------------------------------------------------------------------
 const handleSearch = async () => {
+  setMesSeleccionado(""); // Limpiar el mes seleccionado
+
   // Validación de la cédula
   const cedulaRegex = /^[0-9]{10}$/;
   if (cedula === "") {
-    await fetchUsuarios(); // Cargar todos los usuarios si la cédula está vacía
+    await fetchAsistencias(); // Cargar todas las asistencias si la cédula está vacía
     return;
   }
 
@@ -126,7 +136,7 @@ const handleSearch = async () => {
   // Verificar que la cédula se está pasando correctamente
   console.log("Buscando usuarios con cédula:", cedula);
 
-  const usuario = await fetchUsuarioByCedula(cedula);
+  const usuario = await fetchAsistenciasByEmpleado(cedula);
 
   // Verificar que el usuario se encontró
   console.log("Usuario encontrado:", usuario);
@@ -134,8 +144,6 @@ const handleSearch = async () => {
   if (!usuario) {
     setErrorMessage("❌ Usuario no se encuentra registrado");
   } else {
-    const asistencias = await fetchAsistencias(cedula);
-    console.log("Asistencias encontradas:", asistencias);
     setErrorMessage(""); // Limpiar mensaje de error
     setSuccessMessage(" ✅ Usuario encontrado con éxito");
   }
@@ -268,10 +276,10 @@ const handleDownloadExcel = () => {
               <button
                 onClick={() => handleNewClick("actualizar")}
                 className="ml-4 px-4 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-500"
-                disabled={Object.keys(seleccionado?.asistencia || {}).length !== 0 ? false : true}
-                style={{ cursor: Object.keys(seleccionado?.asistencia || {}).length !== 0 ? "pointer" : "not-allowed" }}
+                disabled={Object.keys(seleccionado?.asistencias || {}).length !== 0 ? false : true}
+                style={{ cursor: Object.keys(seleccionado?.asistencias || {}).length !== 0 ? "pointer" : "not-allowed" }}
                 data-tooltip-id='actualizar'
-                data-tooltip-content={(Object.keys(seleccionado?.asistencia || {}).length !== 0) ? `Actualizar la asistencia de ${seleccionado.nombre}` : `No puedes actualizar la asistencia`}
+                data-tooltip-content={(Object.keys(seleccionado?.asistencias || {}).length !== 0) ? `Actualizar la asistencia de ${seleccionado.nombre}` : `No puedes actualizar la asistencia`}
               >
                 Actualizar Asistencia
               </button>
@@ -281,11 +289,31 @@ const handleDownloadExcel = () => {
             </div>
           )
         }
+
+        <div className="flex gap-2 mb-4">
+          <div className="flex items-center gap-2 px-2 border border-orange-500">
+            <label htmlFor="mesSeleccionado" className="block font-bold mb-2">Buscar por Mes:</label>
+            <input
+              type="month"
+              id="mesSeleccionado"
+              value={mesSeleccionado}
+              onChange={(e) => setMesSeleccionado(e.target.value)}
+              className="border border-gray-300 rounded px-2 py-1"
+            />
+          </div>
+          <button
+            onClick={() => setMesSeleccionado('')}
+            className="bg-orange-400 text-white px-4 py-2 rounded font-bold hover:bg-gray-700"
+          >
+            Todos los meses
+          </button>
+        </div>
+
         {/* ---------------------------------------------------------------------------------------------------------------------------- */}
    {/* TABLA DEL HISTORIAL */}
    {/* Significa que esta esperando una lista, de lo contrario solo muestra el encabezado, esto se modifica del lado del backend */}
-   {Array.isArray(usuarios) && usuarios.length !== 0 ? (
-  <TablaAsistencia usuarios={usuarios} />
+   {Array.isArray(asistencias) && asistencias.length !== 0 ? (
+      <TablaAsistencia usuarios={asistencias} />
     ) : (
       <div className="overflow-x-auto">
         <table className="w-full text-center border-collapse border border-black">
