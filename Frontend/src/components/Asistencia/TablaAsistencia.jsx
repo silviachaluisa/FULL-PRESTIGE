@@ -4,7 +4,6 @@ import { HistoryContext } from '../../context/HistoryContext';
 import { ModalAsistencia } from '../Modals/ModalAsistencia';
 
 export const TablaAsistencia = ({ usuarios }) => {
-  console.log("Asistencias de empleados ->", usuarios)
   const {
     seleccionado,
     setSeleccionado,
