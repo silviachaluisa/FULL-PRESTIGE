@@ -17,6 +17,7 @@ export const HistoryProvider = ({ children }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [contrasenas, setContrasenas] = useState([]);
+  const [mesSeleccionado, setMesSeleccionado] = useState('');
 
   // -------------------------------- Funciones de control en mensajes de validación --------------------------------
   async function mostrarErrores(errors) {
@@ -62,7 +63,7 @@ export const HistoryProvider = ({ children }) => {
         }
       }
 
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/employees`,options);
+      const response = await axios.get(`${process.env.VITE_BACKEND_URL}/employees`,options);
       console.log("Respuesta fetch usuarios ->",response.data)
       setUsuarios(response.data.empleados); // Suponiendo que la API retorna un array de usuarios
       return response.data.empleados;
@@ -75,7 +76,7 @@ export const HistoryProvider = ({ children }) => {
   };
 
   const upDateUser=async(cedula,registro)=>{
-    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/employee/${cedula}`;
+    const URLActualizar = `${process.env.VITE_BACKEND_URL}/employee/${cedula}`;
     const token=localStorage.getItem("token")
     const options={
         headers:{
@@ -104,7 +105,7 @@ export const HistoryProvider = ({ children }) => {
         },
       };
   
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/employee/${id}`,options);
+      const response = await axios.get(`${process.env.VITE_BACKEND_URL}/employee/${id}`,options);
       console.log(response.data)
       if (response.data && response.data.length > 0) {
         // Retorna el primer cliente encontrado
@@ -135,7 +136,7 @@ export const HistoryProvider = ({ children }) => {
         },
       };
 
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/vehicles`, options);
+      const response = await axios.get(`${process.env.VITE_BACKEND_URL}/vehicles`, options);
       setClientes(response.data); // Suponiendo que la API retorna un array de clientes
       console.log("Clientes ->",response.data)
     } catch (error) {
@@ -146,7 +147,7 @@ export const HistoryProvider = ({ children }) => {
   };
   // -------------------------------------------------------------------------------------
   const upDateClient = async (cedula, regisclientes) => {
-    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/client/${cedula}`;
+    const URLActualizar = `${process.env.VITE_BACKEND_URL}/client/${cedula}`;
     const token = localStorage.getItem("token");
     const options = {
       headers: {
@@ -177,7 +178,7 @@ export const HistoryProvider = ({ children }) => {
         },
       };
   
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/vehicles/client/${id}`, options);
+      const response = await axios.get(`${process.env.VITE_BACKEND_URL}/vehicles/client/${id}`, options);
       console.log(response.data)
       if (response.data && response.data.length > 0) {
         // Retorna el primer cliente encontrado
@@ -198,7 +199,7 @@ export const HistoryProvider = ({ children }) => {
 
   // -------------------------------------------------------------------------------
   const updateClientVehicle = async (placa, updateForm) => {
-    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/vehicle/${placa}`;
+    const URLActualizar = `${process.env.VITE_BACKEND_URL}/vehicle/${placa}`;
     const token = localStorage.getItem("token");
     const options = {
       headers: {
@@ -217,7 +218,7 @@ export const HistoryProvider = ({ children }) => {
   };
 
   const registerClient = async (formRegistro) => {
-    const URLRegistrar = `${import.meta.env.VITE_BACKEND_URL}/client`;
+    const URLRegistrar = `${process.env.VITE_BACKEND_URL}/client`;
     const token = localStorage.getItem("token");
     const options = {
       headers: {
@@ -242,7 +243,7 @@ export const HistoryProvider = ({ children }) => {
   }
 
   const registerVehicle = async (formRegistro) => {
-    const URLRegistrar = `${import.meta.env.VITE_BACKEND_URL}/vehicle`;
+    const URLRegistrar = `${process.env.VITE_BACKEND_URL}/vehicle`;
     const token = localStorage.getItem("token");
     const options = {
       headers: {
@@ -279,7 +280,7 @@ export const HistoryProvider = ({ children }) => {
         },
       }
 
-      const URLAsignar = `${import.meta.env.VITE_BACKEND_URL}/vehicle/assign`;
+      const URLAsignar = `${process.env.VITE_BACKEND_URL}/vehicle/assign`;
       await axios.post(URLAsignar, payload, options);
       return { success: true, message: "Vehículo asignado correctamente" };
     } catch (error) {
@@ -289,11 +290,12 @@ export const HistoryProvider = ({ children }) => {
   };
 
    // -----------------------------------FUNCIONES PARA ASISTENCIAS--------------------------------------------
-
-   const fetchAsistencias = async (id) => {
+  
+   const fetchAsistencias = async () => {
     const token = localStorage.getItem('token');
     if (!token) return;
     try {
+      setLoading(true); // Activar el estado de carga
       const options = {
         headers: {
           'Content-Type': 'application/json',
@@ -301,16 +303,42 @@ export const HistoryProvider = ({ children }) => {
         },
       };
 
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/employee/${id}/assistance`, options);
-
+      const response = await axios.get(`${process.env.VITE_BACKEND_URL}/assistances`, options);
+      setAsistencias(response.data); // Suponiendo que la API retorna un array de asistencias
       return response.data;
     } catch (error) {
       console.error("Error al obtener asistencias", error);
+      setAsistencias([]);
+    } finally {
+      setLoading(false) // Desactivar el estado de carga
+    }
+  };
+
+  const fetchAsistenciasByEmpleado = async (cedula) => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      setLoading(true); // Activar el estado de carga
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+      const response = await axios.get(`${process.env.VITE_BACKEND_URL}/employee/${cedula}/assistance`, options);
+      setAsistencias(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error al obtener asistencias", error);
+      setAsistencias([]);
+      return [];
+    } finally {
+      setLoading(false); // Establecer la carga en falso
     }
   };
 
   const upDateAssistance = async (id, asistencia) => {
-    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/employee/assistance/${id}`;
+    const URLActualizar = `${process.env.VITE_BACKEND_URL}/employee/assistance/${id}`;
     const token = localStorage.getItem("token");
     const options = {
       headers: {
@@ -327,7 +355,7 @@ export const HistoryProvider = ({ children }) => {
         setSuccessMessage("");
         setErrorMessage("");
         handleModal();
-        fetchUsuarios();
+        fetchAsistencias();
       }, 2000); // Cierra el modal después de 2 segundos
     } catch (error) {
       console.error("Error al actualizar asistencia", error);
@@ -347,7 +375,7 @@ export const HistoryProvider = ({ children }) => {
   };
 
   const registerAssistance = async (cedula, asistencia) => {
-    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/employee/${cedula}/assistance`;
+    const URLActualizar = `${process.env.VITE_BACKEND_URL}/employee/${cedula}/assistance`;
     const token = localStorage.getItem("token");
     const options = {
       headers: {
@@ -364,7 +392,7 @@ export const HistoryProvider = ({ children }) => {
         setSuccessMessage("");
         setErrorMessage("");
         handleModal();
-        fetchUsuarios();
+        fetchAsistencias();
       }, 2000); // Cierra el modal después de 2 segundos
     } catch (error) {
       console.error("Error al actualizar asistencia", error);
@@ -396,7 +424,7 @@ export const HistoryProvider = ({ children }) => {
         },
       };
 
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/employee/${id}/payments`, options);
+      const response = await axios.get(`${process.env.VITE_BACKEND_URL}/employee/${id}/payments`, options);
       
       return(response.data); // Suponiendo que la API retorna un array de pagos
     } catch (error) {
@@ -405,7 +433,7 @@ export const HistoryProvider = ({ children }) => {
   };
 
   const upDatePayment = async (id, pago) => {
-    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/employee/payment/${id}`;
+    const URLActualizar = `${process.env.VITE_BACKEND_URL}/employee/payment/${id}`;
     const token = localStorage.getItem("token");
     const options = {
       headers: {
@@ -443,7 +471,7 @@ export const HistoryProvider = ({ children }) => {
   };
 
   const registerPayment = async (cedula, pago) => {
-    const URLRegistrar = `${import.meta.env.VITE_BACKEND_URL}/employee/${cedula}/payments/`;
+    const URLRegistrar = `${process.env.VITE_BACKEND_URL}/employee/${cedula}/payments/`;
     const token = localStorage.getItem("token");
     const options = {
         headers: {
@@ -495,7 +523,7 @@ export const HistoryProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       }
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/maintenances`, options);
+      const response = await axios.get(`${process.env.VITE_BACKEND_URL}/maintenances`, options);
       setMantenimientos(response.data);
       return response.data;
     } catch (error) {
@@ -517,7 +545,7 @@ export const HistoryProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       }
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/maintenance/vehicle/${placa}`, options);
+      const response = await axios.get(`${process.env.VITE_BACKEND_URL}/maintenance/vehicle/${placa}`, options);
       //Para busqueda de una placa que no ha sido asiganada al tecnico
       if (response.data.length === 0) {
         setTimeout(async ()=>{await fetchMantenimientos()} ,3000)//Para que los datos de la tabla regresen despues de no encontrar el vehiculo}
@@ -547,7 +575,7 @@ export const HistoryProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       }
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/maintenance/${id}`, options);
+      const response = await axios.get(`${process.env.VITE_BACKEND_URL}/maintenance/${id}`, options);
       setMantenimientos(response.data);
       return response.data;
     } catch (error) {
@@ -569,7 +597,7 @@ export const HistoryProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       }
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/maintenance/employee/${cedula}`, options);
+      const response = await axios.get(`${process.env.VITE_BACKEND_URL}/maintenance/employee/${cedula}`, options);
       setMantenimientos(response.data);
       return response.data;
     } catch (error) {
@@ -582,7 +610,7 @@ export const HistoryProvider = ({ children }) => {
   };
 
   const upDateMaintance = async (id, mantenimiento) => {
-    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/maintenance/${id}`;
+    const URLActualizar = `${process.env.VITE_BACKEND_URL}/maintenance/${id}`;
     const token = localStorage.getItem("token");
     const options = {
       headers : {
@@ -622,7 +650,7 @@ export const HistoryProvider = ({ children }) => {
   };
 
   const registerMaintance = async (id, infoMantenimiento) => {
-    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/maintenance/register/${id}`;
+    const URLActualizar = `${process.env.VITE_BACKEND_URL}/maintenance/register/${id}`;
     const token = localStorage.getItem("token");
     const options = {
       headers: {
@@ -664,7 +692,7 @@ export const HistoryProvider = ({ children }) => {
   };
 
   const requestUpdateMaintenance = async (id, infoMantenimiento) => {
-    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/maintenance/request/${id}`;
+    const URLActualizar = `${process.env.VITE_BACKEND_URL}/maintenance/request/${id}`;
     const token = localStorage.getItem("token");
     const options = {
       headers: {
@@ -707,7 +735,7 @@ export const HistoryProvider = ({ children }) => {
   const changePassword = async (cedula, password, newPassword, confirmPassword) => {
     const token = localStorage.getItem("token");
 
-    const URLActualizar = `${import.meta.env.VITE_BACKEND_URL}/profile/update-password`;
+    const URLActualizar = `${process.env.VITE_BACKEND_URL}/profile/update-password`;
     try {
       const respuesta = await axios.put(URLActualizar, { 
           contrasena: password,
@@ -729,6 +757,38 @@ export const HistoryProvider = ({ children }) => {
     }
   };
   
+  // Filtrar asistencias por el mes seleccionado
+    const handleFilterByMonth = async () => {
+      try {
+        const respuesta = await fetchAsistencias();
+        if (!mesSeleccionado) return;
+        const mesSeleccionadoInt = parseInt(mesSeleccionado.split('-')[1], 10); // Extraemos el mes del valor "YYYY-MM"
+        const filtrado = []
+        respuesta.forEach((registro) => {
+          registro.asistencias.forEach((asistencia) => {
+            const fecha_asistencia = new Date(asistencia.fecha);
+            if (fecha_asistencia.getMonth() === mesSeleccionadoInt - 1) {
+              const reg_asistencias = {
+                _id: asistencia._id,
+                nombre: registro.nombre,
+                cedula: registro.cedula,
+                correo: registro.correo,
+                direccion: registro.direccion,
+                cargo: registro.cargo,
+                telefono: registro.telefono,
+                asistencias: [asistencia]
+              }
+              filtrado.push(reg_asistencias);
+            }
+          });
+        });
+        setAsistencias(filtrado);
+      } catch (error) {
+        console.error("Error al filtrar asistencias", error);
+      }
+    }
+
+  // ----------------------Adicionales ----------------------------------------------//
 
   return (
     <HistoryContext.Provider 
@@ -748,6 +808,7 @@ export const HistoryProvider = ({ children }) => {
       asistencias,
       setAsistencias,
       fetchAsistencias,
+      fetchAsistenciasByEmpleado,
       upDateAssistance,
       registerAssistance,
       seleccionado,
@@ -778,6 +839,9 @@ export const HistoryProvider = ({ children }) => {
       contrasenas,
       setContrasenas,
       changePassword,
+      handleFilterByMonth,
+      mesSeleccionado,
+      setMesSeleccionado
        }}>
       {children}
     </HistoryContext.Provider>

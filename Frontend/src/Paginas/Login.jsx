@@ -27,7 +27,7 @@ export const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const URLogin = `${import.meta.env.VITE_BACKEND_URL}/login`;
+      const URLogin = `${process.env.VITE_BACKEND_URL}/login`;
       const respuesta = await axios.post(URLogin, loginForm);
       console.log(respuesta)
 

@@ -19,7 +19,7 @@ const Restablecer = () => {
     // Verificación del token al cargar el componente
     const verifyToken = async () => {
         try {
-            const url = `${import.meta.env.VITE_BACKEND_URL}/verify-token/${token}`;
+            const url = `${process.env.VITE_BACKEND_URL}/verify-token/${token}`;
             const respuesta = await axios.get(url);
             setTokenValido(true);
             setMensaje({ respuesta: respuesta.data.message, tipo: true });
@@ -55,7 +55,7 @@ const Restablecer = () => {
         }
 
         try {
-            const url = `${import.meta.env.VITE_BACKEND_URL}/change-password/${token}`;
+            const url = `${process.env.VITE_BACKEND_URL}/change-password/${token}`;
             const respuesta = await axios.put(url, { contrasena: form.password, confirmarContrasena: form.confirmar });
             setMensaje({ respuesta: respuesta.data.message, tipo: true });
 
