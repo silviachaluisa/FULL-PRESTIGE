@@ -118,6 +118,7 @@ export const Login = () => {
               type="button"
               onClick={togglePasswordVisibility}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 mt-4"
+              aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
             >
               {showPassword ? <FaEyeSlash size={24} /> : <FaEye size={24} />} {/* Cambia el ícono */}
             </button>
@@ -132,6 +133,7 @@ export const Login = () => {
           <div className="flex justify-center ">
             <button
               type="submit"
+              disabled={!loginForm.correo || !loginForm.contrasena} // Deshabilitar si algún campo está vacío
               className="w-full py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-800 transition duration-300"
               style={{ maxWidth: '200px' }}
             >
