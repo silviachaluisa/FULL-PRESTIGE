@@ -141,7 +141,7 @@ export const FormularioUsuarios = ({ usuarios }) => {
             }, 4000);
           }else{
             // Construir la URL de la API para el registro
-            const URLRegister = `${import.meta.env.VITE_BACKEND_URL}/register`;
+            const URLRegister = `${process.env.VITE_BACKEND_URL}/register`;
             console.log(registro);
             // Preparar los datos para el registro, excluyendo la propiedad 'estado'
             const DatosRegistrar = { ...registro };

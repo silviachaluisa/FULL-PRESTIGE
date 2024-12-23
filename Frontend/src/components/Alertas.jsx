@@ -1,3 +1,5 @@
+import React from "react";
+
 const Mensaje = ({ mensaje, tipo, errores = {} }) => {
     return (
         <div

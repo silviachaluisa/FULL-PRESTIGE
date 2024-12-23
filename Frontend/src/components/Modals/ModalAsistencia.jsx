@@ -35,9 +35,9 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
   useEffect(() => {
     const obtenerAsistencia = async () => {
       if (usuario) {
-        setFecha(usuario?.asistencia.fecha.split("T")[0]);
-        setHoraIngreso(usuario?.asistencia.hora_ingreso);
-        setHoraSalida(usuario?.asistencia.hora_salida);
+        setFecha(usuario?.asistencias.at(-1)?.fecha.split("T")[0]);
+        setHoraIngreso(usuario?.asistencias.at(-1)?.hora_ingreso);
+        setHoraSalida(usuario?.asistencias.at(-1)?.hora_salida);
       }
     };
 

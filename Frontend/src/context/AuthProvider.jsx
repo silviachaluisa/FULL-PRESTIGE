@@ -33,7 +33,7 @@ const AuthProvider = ({ children }) => {
     
     const perfil = async(token) => {
         try {
-            const url = `${import.meta.env.VITE_BACKEND_URL}/profile`
+            const url = `${process.env.VITE_BACKEND_URL}/profile`
             const options={
                 headers: {
                     'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ const AuthProvider = ({ children }) => {
     const actualizarPerfil = async (form) => {
         const token = localStorage.getItem("token")
         try {
-            const url= `${import.meta.env.VITE_BACKEND_URL}/profile`
+            const url= `${process.env.VITE_BACKEND_URL}/profile`
 
             const respuesta=await axios.put (url, form ,{
                 headers: {
