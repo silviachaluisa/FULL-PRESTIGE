@@ -8,13 +8,10 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-<<<<<<< HEAD
     "cypress:open": "cypress open",
-    "test:e2e": "start-server-and-test dev http://localhost:5173 'cypress open'"
-=======
+    "test:e2e": "start-server-and-test dev http://localhost:5173 'cypress open'",
     "test": "jest",
     "test:watch": "jest --watch"
->>>>>>> main
   },
   "dependencies": {
     "autoprefixer": "^10.4.20",
@@ -48,11 +45,8 @@
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
     "@vitejs/plugin-react-swc": "^3.5.0",
-<<<<<<< HEAD
-    "cypress": "^13.17.0",
-=======
     "babel-jest": "^29.7.0",
->>>>>>> main
+    "cypress": "^13.17.0",
     "eslint": "^9.13.0",
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.0.0",

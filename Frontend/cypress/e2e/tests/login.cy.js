@@ -17,7 +17,7 @@ describe('Pruebas End-to-End del Login', () => {
 
   it('El botón Iniciar Sesión se habilita con campos válidos', () => {
     cy.get('input[name="correo"]').type('pinzonmarcelo759@gmail.com');
-    cy.get('input[name="contrasena"]').type('alejoP@');
+    cy.get('input[name="contrasena"]').type('alejoP@.');
     cy.get('button[type="submit"]').should('not.be.disabled');
   });
 
