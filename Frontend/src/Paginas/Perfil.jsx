@@ -86,7 +86,7 @@ const EditarPerfil = () => {
       <div className="w-full flex justify-between items-center p-4">
         <img src={logo} alt="Full Prestige" style={{ width: '150px', height: 'auto' }} />
         <div className="flex items-center space-x-6">
-          <Link to="/Dashboard/sesiones">
+          <Link to="/dashboard/sesiones">
             <MdMobileFriendly
               className="text-4xl text-red-600 cursor-pointer"
               data-tooltip-id='sesiones'
@@ -95,7 +95,7 @@ const EditarPerfil = () => {
             <ReactTooltip id='sesiones' place='left'/>
           </Link>
           <button
-            onClick={() => navigate('/Dashboard')}
+            onClick={() => navigate('/dashboard')}
             className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
           >
             VOLVER
