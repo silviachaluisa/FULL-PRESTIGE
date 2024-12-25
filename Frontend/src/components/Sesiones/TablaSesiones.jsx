@@ -15,31 +15,12 @@ const TablaSesiones = ({ sesiones }) => {
         if (!isoDate) return 'N/A';
         const date = new Date(isoDate);
         return date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
-    };    
-
-    const handleResponse = (response) => {
-        if (response?.success) {
-            setMessage({ tipo: true, mensaje: response.message });
-        } else {
-            setMessage({ tipo: false, mensaje: response?.message || 'Error desconocido' });
-        }
-        setTimeout(() => setMessage({}), 5000);
-    };
-
-    const fetchSessions = async () => {
-        setLoading(true);
-        const sesiones = await getActiveSessions();
-        setSessions(sesiones || []);
-        setLoading(false);
     };
 
     const handleCloseOne = async (sessionID, token) => {
         const confirm = window.confirm(`¿Está seguro de cerrar ${localStorage.getItem('token') === token ? 'su' : 'esa'} sesión?`);
         if (!confirm) return;
-        setLoading(true);
-        const response = await closeSession(sessionID);
-        handleResponse(response);
-        await fetchSessions();
+        await closeSession(sessionID, token);
     };
 
     return (
@@ -86,7 +67,6 @@ const TablaSesiones = ({ sesiones }) => {
                     </table>
                 )
             }
-        
         </div>
     )
 }

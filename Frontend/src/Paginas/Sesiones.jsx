@@ -10,24 +10,18 @@ import { useNavigate } from 'react-router-dom';
 
 const Sesiones = () => {
     const navigate = useNavigate();
-    const { auth, getActiveSessions, closeSession, closeAllSessions } = useContext(AuthContext);
-    const [sessions, setSessions] = useState([]);
+    const {
+        auth,
+        getActiveSessions,
+        closeAllSessions,
+        sesiones,
+        message,
+    } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState({});
-
-    const handleResponse = (response) => {
-        if (response?.success) {
-            setMessage({ tipo: true, mensaje: response.message });
-        } else {
-            setMessage({ tipo: false, mensaje: response?.message || 'Error desconocido' });
-        }
-        setTimeout(() => setMessage({}), 5000);
-    };
 
     const fetchSessions = async () => {
         setLoading(true);
-        const sesiones = await getActiveSessions();
-        setSessions(sesiones || []);
+        await getActiveSessions();
         setLoading(false);
     };
 
@@ -35,9 +29,8 @@ const Sesiones = () => {
         const confirm = window.confirm('¿Está seguro de cerrar todas las sesiones?');
         if (!confirm) return;
         setLoading(true);
-        const response = await closeAllSessions();
-        handleResponse(response);
-        await fetchSessions();
+        closeAllSessions();
+        setLoading(false);
     };
 
     const encabezadoTabla = [
@@ -45,7 +38,9 @@ const Sesiones = () => {
     ];
 
     useEffect(() => {
-        if (auth) fetchSessions();
+        if (auth) {
+            fetchSessions();
+        }
     }, [auth]);
 
     return (
@@ -65,7 +60,7 @@ const Sesiones = () => {
         
                 </div>
                 <button 
-                    onClick={() => navigate("/dashboard")}
+                    onClick={() => navigate("/dashboard/perfil")}
                     className="bg-green-500 text-white px-4 py-2 rounded"
                 >
                     VOLVER
@@ -81,11 +76,20 @@ const Sesiones = () => {
             <main
                 className="flex-grow w-full p-6 bg-white shadow mt-6 rounded-lg mx-auto border border-black"
             >
-                {message.mensaje && <Mensaje mensaje={message.mensaje} tipo={message.tipo} />}
+                {Object.keys(message).length !== 0 && <Mensaje mensaje={message.respuesta} tipo={message.tipo} />}
+                <div className="flex flex-col items-center justify-between bg-gray-300 p-4 rounded-lg mb-6">
+                    <p>
+                        <span className="text-red-500 font-semibold">Nota:</span> Si cierras una sesión, deberás iniciar sesión nuevamente en el dispositivo eliminado.
+                    </p>
+                    <p>
+                        La fila seleccionada corresponde a tu <span className="text-orange-500 font-semibold">sesión actual</span>,
+                        si la cierras, deberás iniciar sesión en el sitio nuevamente.
+                    </p>
+                </div>
                 <div className="bg-white p-4 rounded-lg mt-4 w-full">
-                    {Array.isArray(sessions) && sessions.length > 0 ? (
+                    {Array.isArray(sesiones) && sesiones.length > 0 ? (
                         <TablaSesiones
-                            sesiones={sessions}
+                            sesiones={sesiones}
                         />
                     ) : (
                         <div className='overflow-x-auto'>

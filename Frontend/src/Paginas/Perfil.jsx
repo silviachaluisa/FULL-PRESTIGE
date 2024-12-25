@@ -1,12 +1,14 @@
 import { useEffect, useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { MdMobileFriendly } from "react-icons/md";
+import { Tooltip as ReactTooltip } from 'react-tooltip';
 import AuthContext from '../context/AuthProvider';
 import logo from '../assets/imagenes/logo.jpg';
 import Mensaje from '../components/Alertas';
 import CambiarContraseña from '../components/Modals/CambiarContraseña';
 
 const EditarPerfil = () => {
-  const { auth, actualizarPerfil, message} = useContext(AuthContext);
+  const { auth, actualizarPerfil} = useContext(AuthContext);
   const [mensaje, setMensaje] = useState("");
   const [errores, setErrores] = useState({});
   const [perfil, setPerfil] = useState({
@@ -83,12 +85,23 @@ const EditarPerfil = () => {
     <div className="bg-black text-white min-h-screen flex flex-col items-center">
       <div className="w-full flex justify-between items-center p-4">
         <img src={logo} alt="Full Prestige" style={{ width: '150px', height: 'auto' }} />
-        <button
-          onClick={() => navigate('/Dashboard')}
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
-        >
-          VOLVER
-        </button>
+        <div className="flex items-center space-x-4">
+          <Link to="/Dashboard/sesiones">
+            <MdMobileFriendly
+              className="text-4xl text-black"
+              data-tooltip-id='sesiones'
+              data-tooltip-content='Ver sesiones activas'
+            />
+            <ReactTooltip id='sesiones' place='left'/>
+          </Link>
+          <button
+            onClick={() => navigate('/Dashboard')}
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
+          >
+            VOLVER
+          </button>
+        </div>
+
       </div>
 
       <h2 className="text-red-600 text-3xl font-bold text-center mb-5 border-t-2 border-b-2 border-red-700 w-full py-2">
