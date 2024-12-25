@@ -51,9 +51,9 @@ const AuthProvider = ({ children }) => {
             console.log(error);
             if (localStorage.getItem("token")){
                 localStorage.removeItem("token");
+                setLoginMessage({respuesta: error.response.data.error ? error.response.data.error : error.response.data.message, tipo: false});
             }
             navigate('/login');
-            setLoginMessage({respuesta: error.response.data.error ? error.response.data.error : error.response.data.message, tipo: false});
         }
     }
 
@@ -104,7 +104,6 @@ const AuthProvider = ({ children }) => {
         } catch(error){
 			console.log(error);
         }
-
     };
 
     const getActiveSessions = async () => {

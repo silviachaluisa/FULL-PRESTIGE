@@ -8,12 +8,10 @@ import tools from '../assets/imagenes/DashboardImage/toolsRBG.png';
 import { Link } from 'react-router-dom';
 import { FaUserAlt, FaCog } from 'react-icons/fa';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
-import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthProvider';
 import { useContext } from 'react';
 
 export const Dashboard = () => {
-    const navigate = useNavigate();
     const { auth, logout } = useContext(AuthContext); // Consumir el contexto
 
     // Función para manejar el clic en el botón "Cerrar Sesión"
