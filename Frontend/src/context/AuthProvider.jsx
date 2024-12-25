@@ -147,7 +147,7 @@ const AuthProvider = ({ children }) => {
             }
         } catch (error) {
             console.error(error)
-            setMessage({tipo: false, respuesta: 'Error al cerrar la sesión'})
+            setMessage({tipo: false, respuesta: 'Error al cerrar la sesión:' + error.response.data.error})
 
             setTimeout(() => {
                 setMessage({})
@@ -157,19 +157,26 @@ const AuthProvider = ({ children }) => {
 
     const closeAllSessions = async () => {
         try {
-            const response = await axios.post(`${process.env.VITE_BACKEND_URL}/logout-all`, {
+            await axios.post(`${process.env.VITE_BACKEND_URL}/logout-all`, {}, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             })
-            await logout()
+            localStorage.removeItem('token');
+            setAuth({});
+            navigate('/login');
+            setLoginMessage({tipo: true, respuesta: 'Sesiones cerradas correctamente'});
             setTimeout(() => {
                 setMessage({})
             }, 5000)
         } catch (error) {
             console.error(error)
-            setMessage({tipo: false, respuesta: 'Error al cerrar todas las sesiones'})
+            setMessage({tipo: false, respuesta: 'Error al cerrar todas las sesiones: ' + error.response.data.error})
+
+            setTimeout(() => {
+                setMessage({})
+            }, 5000)
         }
     };
 

@@ -85,10 +85,10 @@ const EditarPerfil = () => {
     <div className="bg-black text-white min-h-screen flex flex-col items-center">
       <div className="w-full flex justify-between items-center p-4">
         <img src={logo} alt="Full Prestige" style={{ width: '150px', height: 'auto' }} />
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-6">
           <Link to="/Dashboard/sesiones">
             <MdMobileFriendly
-              className="text-4xl text-black"
+              className="text-4xl text-red-600 cursor-pointer"
               data-tooltip-id='sesiones'
               data-tooltip-content='Ver sesiones activas'
             />
