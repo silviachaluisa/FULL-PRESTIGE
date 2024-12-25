@@ -12,6 +12,10 @@ const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState({})
     const [data, setData] = useState("Info del context")
     const [message, setMessage] = useState("")
+    const [loginMessage, setLoginMessage] = useState({
+        respuesta: "",
+        tipo: true
+    })
     const navigate = useNavigate()
 
     // -------------------------------- Funciones de control en mensajes de validación --------------------------------
@@ -44,6 +48,11 @@ const AuthProvider = ({ children }) => {
             setAuth(respuesta.data.empleado)
         } catch (error) {
             console.log(error);
+            if (localStorage.getItem("token")){
+                localStorage.removeItem("token");
+            }
+            navigate('/login');
+            setLoginMessage({respuesta: error.response.data.error ? error.response.data.error : error.response.data.message, tipo: false});
         }
     }
 
@@ -69,15 +78,82 @@ const AuthProvider = ({ children }) => {
                 await mostrarErrores(error.response.data.errors);
                 return {respuesta: error.response.data.errors[0].msg,tipo:false}
             } else {
-                setMessage(error.response.data.message);
+                setMessage(error.response.data.error ? error.response.data.error : error.response.data.message);
                 // Limpiar el mensaje de error después de un breve tiempo
                 setTimeout(() => {
                     setMessage("");
                 }, 5000);
-                return { respuesta: error.response.data.message, tipo: false}
+                return { respuesta: error.response.data.error ? error.response.data.error : error.response.data.message, tipo: false}
             }
         }
     };
+
+    const logout = () => {
+        try{
+            const response = axios.post(`${process.env.VITE_BACKEND_URL}/logout`,{}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+
+            localStorage.removeItem('token')
+            setAuth({})
+            navigate('/login')
+        } catch(error){
+			console.log(error);
+        }
+
+    };
+
+    const getActiveSessions = async () => {
+        try {
+            const response = await axios.get(`${process.env.VITE_BACKEND_URL}/sessions`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+
+            return response.data.sesiones;
+        } catch (error) {
+            console.error(error)
+            return []
+        }
+    };
+
+    const closeSession = async (sessionToken) => {
+        try {
+            const response = await axios.post(`${process.env.VITE_BACKEND_URL}/logout-session/${sessionToken}`,{}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+
+            return response.data;
+        } catch (error) {
+            console.error(error)
+            return { message: 'Error al cerrar la sesión' }
+        }
+    };
+
+    const closeAllSessions = async () => {
+        try {
+            const response = await axios.post(`${process.env.VITE_BACKEND_URL}/logout-all`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+
+            return response.data;
+        } catch (error) {
+            console.error(error)
+            return { message: 'Error al cerrar todas las sesiones' }
+        }
+    };
+
     useEffect(() => {
         const token = localStorage.getItem('token')
         if(token)
@@ -96,6 +172,12 @@ const AuthProvider = ({ children }) => {
                 actualizarPerfil,
                 message,
                 setMessage,
+                loginMessage,
+                setLoginMessage,
+				logout,
+				getActiveSessions,
+				closeSession,
+				closeAllSessions
             }
         }>
             {children}
