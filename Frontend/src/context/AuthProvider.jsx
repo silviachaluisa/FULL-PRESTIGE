@@ -114,7 +114,7 @@ const AuthProvider = ({ children }) => {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             })
-
+            console.log(response.data)
             return response.data.sesiones;
         } catch (error) {
             console.error(error)
@@ -131,10 +131,10 @@ const AuthProvider = ({ children }) => {
                 }
             })
 
-            return response.data;
+            return {message: response.data, success: true};
         } catch (error) {
             console.error(error)
-            return { message: 'Error al cerrar la sesión' }
+            return { message: 'Error al cerrar la sesión', success: false}
         }
     };
 
@@ -147,10 +147,10 @@ const AuthProvider = ({ children }) => {
                 }
             })
 
-            return response.data;
+            return {message: response.data, success: true};
         } catch (error) {
             console.error(error)
-            return { message: 'Error al cerrar todas las sesiones' }
+            return { message: 'Error al cerrar todas las sesiones', success: false}
         }
     };
 
