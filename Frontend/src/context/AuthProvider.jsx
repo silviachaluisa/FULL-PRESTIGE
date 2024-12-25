@@ -98,6 +98,7 @@ const AuthProvider = ({ children }) => {
                 }
             })
 
+            setLoginMessage({})
             localStorage.removeItem('token')
             setAuth({})
             navigate('/login')
