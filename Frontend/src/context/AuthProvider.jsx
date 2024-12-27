@@ -11,7 +11,12 @@ const AuthProvider = ({ children }) => {
     //Cargar la info del perfil del usuario - login
     const [auth, setAuth] = useState({})
     const [data, setData] = useState("Info del context")
-    const [message, setMessage] = useState("")
+    const [message, setMessage] = useState({})
+    const [loginMessage, setLoginMessage] = useState({
+        respuesta: "",
+        tipo: true
+    })
+    const [sesiones, setSesiones] = useState([])
     const navigate = useNavigate()
 
     // -------------------------------- Funciones de control en mensajes de validación --------------------------------
@@ -27,7 +32,7 @@ const AuthProvider = ({ children }) => {
             await new Promise((resolve) => setTimeout(resolve, 5000));
 
             // Limpiar el mensaje de error antes de mostrar el siguiente
-            setMessage("");
+            setMessage({});
         }
     }
     
@@ -44,6 +49,11 @@ const AuthProvider = ({ children }) => {
             setAuth(respuesta.data.empleado)
         } catch (error) {
             console.log(error);
+            if (localStorage.getItem("token")){
+                localStorage.removeItem("token");
+                setLoginMessage({respuesta: error.response.data.error ? error.response.data.error : error.response.data.message, tipo: false});
+            }
+            navigate('/login');
         }
     }
 
@@ -69,15 +79,108 @@ const AuthProvider = ({ children }) => {
                 await mostrarErrores(error.response.data.errors);
                 return {respuesta: error.response.data.errors[0].msg,tipo:false}
             } else {
-                setMessage(error.response.data.message);
+                setMessage({respuesta: error.response.data.error ? error.response.data.error : error.response.data.message, tipo: false});
                 // Limpiar el mensaje de error después de un breve tiempo
                 setTimeout(() => {
-                    setMessage("");
+                    setMessage({});
                 }, 5000);
-                return { respuesta: error.response.data.message, tipo: false}
+                return { respuesta: error.response.data.error ? error.response.data.error : error.response.data.message, tipo: false}
             }
         }
     };
+
+    const logout = async () => {
+        try{
+            const response = await axios.post(`${process.env.VITE_BACKEND_URL}/logout`,{}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+
+            setLoginMessage({})
+            localStorage.removeItem('token')
+            setAuth({})
+            navigate('/login')
+        } catch(error){
+			console.log(error);
+        }
+    };
+
+    const getActiveSessions = async () => {
+        try {
+            const response = await axios.get(`${process.env.VITE_BACKEND_URL}/sessions`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            setSesiones(response.data.sesiones);
+        } catch (error) {
+            console.error(error)
+            setMessage({tipo: false, respuesta: 'Error al obtener las sesiones'});
+            setTimeout(() => {
+                setMessage({})
+            }, 5000);
+        }
+    };
+
+    const closeSession = async (sessionID, sessionToken) => {
+        try {
+            const response = await axios.post(`${process.env.VITE_BACKEND_URL}/logout-session/${sessionID}`,{}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            setMessage({tipo: true, respuesta: response.data.message})
+            setTimeout(() => {
+                setMessage({})
+            }, 5000)
+
+            if (localStorage.getItem('token') === sessionToken) {
+                localStorage.removeItem('token');
+                setAuth({});
+                navigate('/login');
+                setLoginMessage({tipo: true, respuesta: 'Sesión cerrada correctamente'});
+            }else{
+                await getActiveSessions()
+            }
+        } catch (error) {
+            console.error(error)
+            setMessage({tipo: false, respuesta: 'Error al cerrar la sesión:' + error.response.data.error})
+
+            setTimeout(() => {
+                setMessage({})
+            }, 5000)
+        }
+    };
+
+    const closeAllSessions = async () => {
+        try {
+            await axios.post(`${process.env.VITE_BACKEND_URL}/logout-all`, {}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            localStorage.removeItem('token');
+            setAuth({});
+            navigate('/login');
+            setLoginMessage({tipo: true, respuesta: 'Sesiones cerradas correctamente'});
+            setTimeout(() => {
+                setMessage({})
+            }, 5000)
+        } catch (error) {
+            console.error(error)
+            setMessage({tipo: false, respuesta: 'Error al cerrar todas las sesiones: ' + error.response.data.error})
+
+            setTimeout(() => {
+                setMessage({})
+            }, 5000)
+        }
+    };
+
     useEffect(() => {
         const token = localStorage.getItem('token')
         if(token)
@@ -96,6 +199,14 @@ const AuthProvider = ({ children }) => {
                 actualizarPerfil,
                 message,
                 setMessage,
+                loginMessage,
+                setLoginMessage,
+				logout,
+				getActiveSessions,
+				closeSession,
+				closeAllSessions,
+                sesiones,
+                setSesiones
             }
         }>
             {children}

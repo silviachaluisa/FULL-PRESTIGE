@@ -1,27 +1,24 @@
 import logo from '../assets/imagenes/logo.jpg'; 
 import bg from '../assets/imagenes/DashboardImage/Bg.png';
-import users from '../assets/imagenes/DashboardImage/users.png';
-import assistant from '../assets/imagenes/DashboardImage/assistant.png';
-import clients from '../assets/imagenes/DashboardImage/clients.png';
-import pay from '../assets/imagenes/DashboardImage/pay.png';
-import tools from '../assets/imagenes/DashboardImage/tools.png';
+import users from '../assets/imagenes/DashboardImage/usersRBG.png';
+import assistant from '../assets/imagenes/DashboardImage/assistantRBG.png';
+import clients from '../assets/imagenes/DashboardImage/clientsRBG.png';
+import pay from '../assets/imagenes/DashboardImage/payRBG.png';
+import tools from '../assets/imagenes/DashboardImage/toolsRBG.png';
 import { Link } from 'react-router-dom';
 import { FaUserAlt, FaCog } from 'react-icons/fa';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
-import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthProvider';
 import { useContext } from 'react';
 
 export const Dashboard = () => {
-    const navigate = useNavigate();
-    const { auth } = useContext(AuthContext); // Consumir el contexto
+    const { auth, logout } = useContext(AuthContext); // Consumir el contexto
 
     // Función para manejar el clic en el botón "Cerrar Sesión"
     const handleLogout = () => {
         const confirmLogout = window.confirm("¿Estás seguro de que deseas cerrar sesión?");
         if (confirmLogout === true) {
-            localStorage.removeItem('token');
-            navigate('/login');
+            logout();
         }
     };
 
@@ -73,35 +70,35 @@ export const Dashboard = () => {
                 <div>
                     <h1 className="text-3xl font-bold text-black">MENÚ PRINCIPAL</h1> 
                 </div>
-                <div className={`menu grid gap-8 ${auth?.cargo === 'Técnico' ? 'grid-cols-1 place-items-center' : 'grid-cols-1 sm:grid-cols-3'}`}>
+                <div className={`menu px-4 grid gap-8 ${auth?.cargo === 'Técnico' ? 'grid-cols-1 place-items-center' : 'grid-cols-3 sm:grid-cols-3'}`}>
                     {/* Mostrar opciones solo si el cargo no es 'Técnico' */}
                     {auth?.cargo !== 'Técnico' && (
                         <>
                             <Link
                                 to="/dashboard/historial-usuarios"
-                                className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-500 transition max-w-xs mx-auto">
-                                <img src={users} alt="user" className="mx-auto w-40 h-30" />
+                                className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-500 transition max-w-xs">
+                                <img src={users} alt="user" className="mx-auto w-40 h-30 invert" />
                                 <p className="text-white font-semibold">Gestionar Usuarios</p>
                             </Link>
 
                             <Link 
                                 to="/dashboard/historial-asistencia" 
-                                className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-500 transition max-w-xs mx-auto">
-                                <img src={assistant} alt="assistant" className='mx-auto w-40 h-30' />
+                                className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-500 transition max-w-xs">
+                                <img src={assistant} alt="assistant" className='mx-auto w-40 h-30 invert' />
                                 <p className="text-white font-semibold">Control de Asistencia</p>
                             </Link>
                             
                             <Link 
                                 to="/dashboard/historial-clientes" 
-                                className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-500 transition max-w-xs mx-auto">
-                                <img src={clients} alt="clients" className='mx-auto w-40 h-30' />
+                                className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-500 transition max-w-xs">
+                                <img src={clients} alt="clients" className='mx-auto w-40 h-30 invert' />
                                 <p className="text-white font-semibold">Historial de Clientes</p>
                             </Link>
 
                             <Link 
                                 to="/dashboard/historial-pagos" 
-                                className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-500 transition max-w-xs mx-auto">
-                                <img src={pay} alt="pay" className='mx-auto w-40 h-30' />
+                                className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-500 transition max-w-xs">
+                                <img src={pay} alt="pay" className='mx-auto w-40 h-30 invert' />
                                 <p className="text-white font-semibold">Control de Pagos</p>
                             </Link>
                         </>
@@ -109,8 +106,8 @@ export const Dashboard = () => {
                     {/* Los técnicos siempre pueden ver este botón */}
                     <Link
                         to="/dashboard/historial-mantenimiento"
-                        className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-500 transition max-w-xs mx-auto">
-                        <img src={tools} alt="tools" className='mx-auto w-40 h-30' />
+                        className="bg-black border-4 border-red-700 p-9 rounded-lg text-center hover:bg-gray-500 transition max-w-xs">
+                        <img src={tools} alt="tools" className='mx-auto w-40 h-30 invert' />
                         <p className="text-white font-semibold">Registro de mantenimiento vehicular</p>
                     </Link>
                 </div>

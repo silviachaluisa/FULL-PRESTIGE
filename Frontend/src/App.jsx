@@ -6,6 +6,7 @@ import Bienvenida from './Paginas/Bienvenida';
 import Login from './Paginas/Login';
 import NotFoundPage from './Paginas/NotFoundPage.jsx';
 import Dashboard from './Paginas/Dashboard.jsx';
+import Sesiones from './Paginas/Sesiones.jsx';
 import Asistencia from './Paginas/Asistencias/HistorialAsistencia.jsx';
 import ClientesVehiculos from './Paginas/Clientes/HistorialClientes.jsx';
 import RegistrarClientes from './Paginas/Clientes/RegistrarClientes.jsx';
@@ -59,6 +60,7 @@ function App() {
                                         <Route path="historial-usuarios" element={<Usuarios />} />
                                         <Route path="registrar-usuarios" element={<RegistrarUsuarios />} />
                                         <Route path="perfil" element={<VisualizarPerfil />} />
+                                        <Route path="sesiones" element={<Sesiones />} />
                                         <Route path="actualizar-usuarios/:id" element={<ActualizarUsuarios />} />
                                         <Route path="actualizar-clientes/:id" element={<ActualizarClientes />} />
                                         <Route path="historial-mantenimiento" element={<HistorialMantenimiento />} />

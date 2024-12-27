@@ -1,7 +1,7 @@
 import logo from '../assets/imagenes/logo.jpg';
 import user from '../assets/imagenes/user.jpg';
 import { useNavigate } from 'react-router-dom';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import AuthContext from '../context/AuthProvider';
 import Mensaje from '../components/Alertas';
@@ -10,14 +10,23 @@ import fondo2 from '../assets/imagenes/bg2.png'
 
 export const Login = () => {
   const navigate = useNavigate();
-  const { auth, setAuth } = useContext(AuthContext);
-  const [mensaje, setMensaje] = useState("");
+  const { setAuth, loginMessage } = useContext(AuthContext);
+  const [mensaje, setMensaje] = useState({});
   const [errores, setErrores] = useState("");
   const [showPassword, setShowPassword] = useState(false); // Estado para alternar visibilidad
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
+  useEffect(() => {
+    if (loginMessage?.respuesta) {
+      setMensaje(loginMessage);
+      setTimeout(() => {
+        setMensaje({});
+      }, 5000);
+    }
+  }, [loginMessage]);
 
   const [loginForm, setLoginForm] = useState({
     correo: '',
@@ -43,11 +52,12 @@ export const Login = () => {
     } catch (error) {
       //Mensaje de error
       setMensaje({ respuesta: error.response.data.message, tipo: false });
+	  console.log(error);
 
       // Limpiar el formulario después del error
       //setLoginForm({ correo: '', contrasena: '' });
       setTimeout(() => {
-        setMensaje("");
+        setMensaje({});
       }, 3000);
     }
   };
@@ -67,7 +77,7 @@ export const Login = () => {
       <div className="flex flex-col items-center">
         <img src={logo} alt="Full Prestige" className="logo mb-5" style={{ width: '300px', height: 'auto' }} />
         <div className='mb-4'>
-          {mensaje && (<Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} errores={!mensaje.tipo ? errores : {}} 
+          {Object.keys(mensaje).length !== 0 && (<Mensaje mensaje={mensaje.respuesta} tipo={mensaje.tipo} errores={!mensaje.tipo ? errores : {}} 
                 />
                 )}
         </div>
