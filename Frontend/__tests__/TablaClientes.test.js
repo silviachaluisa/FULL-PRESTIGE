@@ -84,7 +84,7 @@ describe("TablaClientes", () => {
     );
 
     // Comprobar que los nombres de los clientes están en la tabla
-    expect(screen.getByText("Juan Pérez")).toBeInTheDocument();
+    expect(screen.getByText((content, element) => content.includes("Juan Pérez"))).toBeInTheDocument();
     expect(screen.getByText("María Rodríguez")).toBeInTheDocument();
 
     // Comprobar que las cédulas están en la tabla

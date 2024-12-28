@@ -27,10 +27,10 @@ describe('TablaSesiones Component', () => {
     test('debería renderizar las sesiones y permitir cerrar una sesión', () => {
         const sesionesMock = [
             {
-                _id: '123',
-                dispositivo: 'Chrome en Windows',
-                fecha: '2024-12-27T02:00:00Z',
-                token: 'mockToken',
+                _id: '676e0e02feea69cac6e79d4e',
+                dispositivo: 'Android 6.0 - Mobile Chrome 131.0.0.0',
+                createdAt: '2024-12-27T02:16:34.659+00:00',
+                token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Mjk5ZTkzNDdiM2Y0MWU2MjgyYWJkZiIsImNhcmdvIjoiQWRtaW5pc3RyYWRvciIsImlhdCI6MTczNTI2NTc5NCwiZXhwIjoxNzM1MzUyMTk0fQ.qi69INHirWR1EkzVeTRd-q1RG9lMQn41wKC7X-FVdDU',
             },
         ];
 
@@ -39,10 +39,10 @@ describe('TablaSesiones Component', () => {
         });
 
         // Verificar que la sesión se renderiza correctamente
-        expect(screen.getByText('123')).toBeInTheDocument();
-        expect(screen.getByText('Chrome en Windows')).toBeInTheDocument();
-        expect(screen.getByText('2024-12-27')).toBeInTheDocument();
-        expect(screen.getByText('02:00')).toBeInTheDocument();
+        expect(screen.getByText('676e0e02feea69cac6e79d4e')).toBeInTheDocument();
+        expect(screen.getByText('Android 6.0 - Mobile Chrome 131.0.0.0')).toBeInTheDocument();
+        expect(screen.getByText('2024-12-27T02:16:34.659+00:00')).toBeInTheDocument();
+        expect(screen.getByText('02:16')).toBeInTheDocument();
 
         // Simular clic en el botón para cerrar sesión
         const deleteButton = screen.getByRole('button', { name: /Cerrar sesión/i });
