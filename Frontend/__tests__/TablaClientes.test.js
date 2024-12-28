@@ -2,7 +2,7 @@ import { render, fireEvent, screen } from "@testing-library/react";
 import { describe, it, expect, beforeEach, afterEach, jest } from "@jest/globals";
 import { TablaClientes } from "../src/components/Clientes/TablaClientes";
 import { HistoryProvider } from "../src/context/historyProvider";
-import { AuthProvider } from "../src/context/AuthProvider";  // Corregir la ruta aquí
+import { AuthProvider } from "../src/context/AuthProvider";
 import { MemoryRouter } from "react-router-dom";
 
 // Datos de prueba
