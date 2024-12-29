@@ -1,8 +1,8 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { TablaUsuarios } from "./TablaUsuarios";
+import { TablaUsuarios } from "../src/components/Usuarios/TablaUsuarios";
 import { MemoryRouter } from "react-router-dom";
-import AuthContext from "../../context/AuthProvider";
-import { HistoryContext } from "../../context/HistoryContext";
+import AuthContext from "../src/context/AuthProvider";
+import { HistoryProvider } from "../src/context/historyProvider";
 
 describe("TablaUsuarios", () => {
   const mockNavigate = jest.fn();
