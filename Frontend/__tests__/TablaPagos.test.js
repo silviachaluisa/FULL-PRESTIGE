@@ -1,9 +1,10 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { TablaPago } from "../components/TablaPago";
-import { HistoryContext } from "../../context/HistoryContext";
+import { TablaPago } from "../src/components/Pagos/TablaPago";
+import { HistoryContext } from "../src/context/HistoryContext";
+
 
 // Mock para el componente ModalPago
-jest.mock("../Modals/ModalPago", () => ({
+jest.mock("../src/components/Modals/ModalPago", () => ({
   ModalPago: ({ handleShow, usuario }) => (
     <div data-testid="modal-pago">
       Modal abierto para: {usuario?.nombre || "N/A"}
