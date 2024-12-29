@@ -3,6 +3,7 @@ import { TablaUsuarios } from "../src/components/Usuarios/TablaUsuarios";
 import { MemoryRouter } from "react-router-dom";
 import AuthContext from "../src/context/AuthProvider";
 import { HistoryProvider } from "../src/context/historyProvider";
+import { HistoryContext } from "../src/context/HistoryContext";
 
 describe("TablaUsuarios", () => {
   const mockNavigate = jest.fn();
