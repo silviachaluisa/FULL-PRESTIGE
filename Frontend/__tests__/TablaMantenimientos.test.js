@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { TablaMantenimiento } from "../components/TablaMantenimiento"; // Ajusta la ruta según tu proyecto
-import { HistoryContext } from "../../context/HistoryContext";
-import AuthContext from "../../context/AuthProvider";
+import { TablaMantenimiento } from "../src/components/Tecnicos/TablaMantenimientos";
+import { HistoryContext } from "../src/context/HistoryContext";
+import AuthContext from "../src/context/AuthProvider";
 
 const mockMantenimientos = [
   {
@@ -118,15 +118,15 @@ describe("TablaMantenimiento", () => {
     expect(mockHistoryContext.setSeleccionado).toHaveBeenCalledWith(mockMantenimientos[0]);
   });
 
-  it("debería mostrar las opciones de administrador", () => {
+  test("debería mostrar las opciones de administrador", () => {
+    const mockUsuario = { rol: "Administrador" };
+  
     render(
-      <AuthContext.Provider value={mockAuthContext}>
-        <HistoryContext.Provider value={mockHistoryContext}>
-          <TablaMantenimiento mantenimientos={mockMantenimientos} />
-        </HistoryContext.Provider>
+      <AuthContext.Provider value={mockUsuario}>
+        <TablaMantenimiento />
       </AuthContext.Provider>
     );
-
+  
     expect(screen.getByTestId("edit_client")).toBeInTheDocument();
   });
 });
