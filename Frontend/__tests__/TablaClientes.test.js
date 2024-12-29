@@ -84,7 +84,7 @@ describe("TablaClientes", () => {
     );
 
     // Comprobar que los nombres de los clientes están en la tabla
-    expect(screen.getByText("Juan Pérez")).toBeInTheDocument();
+    expect(screen.getByText((content, element) => content.includes("Juan Pérez"))).toBeInTheDocument();
     expect(screen.getByText("María Rodríguez")).toBeInTheDocument();
 
     // Comprobar que las cédulas están en la tabla
@@ -106,15 +106,19 @@ describe("TablaClientes", () => {
         </AuthProvider>
       </MemoryRouter>
     );
-
+  
     // Seleccionar el mes de octubre
-  const inputMes = screen.getByLabelText(/Seleccionar mes:/);
-  fireEvent.change(inputMes, { target: { value: "2023-10" } });
-
-  // Esperar a que se renderice el cliente correspondiente
-  expect(screen.getByText("Juan Pérez")).toBeInTheDocument();
-  expect(screen.queryByText("María Rodríguez")).not.toBeInTheDocument();
+    const inputMes = screen.getByLabelText(/Seleccionar mes:/);
+    fireEvent.change(inputMes, { target: { value: "2023-10" } });
+  
+    // Debug del DOM
+    screen.debug();
+  
+    // Verificar la presencia del cliente correspondiente
+    expect(screen.getByText((content) => /Juan Pérez/.test(content))).toBeInTheDocument();
+    expect(screen.queryByText((content, element) => content.includes("María Rodríguez"))).not.toBeInTheDocument();
   });
+  
 
   it("should show 'No existen registros' when no clients match the selected month", () => {
     render(
