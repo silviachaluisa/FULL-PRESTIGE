@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import { HistoryContext } from '../../context/HistoryContext';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ModalPago } from '../Modals/ModalPago';
 
 export const TablaPago = ({ usuarios }) => {
+  const [mesSeleccionado, setMesSeleccionado] = useState(''); // Estado para el mes seleccionado
   // Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
   const formatDate = (isoDate) => {
     try {
@@ -23,10 +24,7 @@ export const TablaPago = ({ usuarios }) => {
   };
 
   const verifyNumber = (value) => {
-    if (isNaN(value)) {
-      return 'N/A'; // Si no hay valor, retornar 'N/A'
-    }
-    return value;
+    return isNaN(value) ? 'N/A' : value.toFixed(2);
   };
 
   const { fetchPagos, seleccionado, setSeleccionado, showModal, handleModal, pagos, setPagos } = useContext(HistoryContext);
@@ -38,7 +36,20 @@ export const TablaPago = ({ usuarios }) => {
     console.log("Usuario seleccionado:", usuario);
   };
 
-  // Cargar las asistencias de los usuarios
+  //Función para filtrar por mes
+  const filtrarPorMes = (pagos) => {
+    if (!mesSeleccionado) return pagos; // Si no se selecciona mes, mostrar todos los pagos
+    // Usamos split('-')[1] para obtener el mes del valor mesSeleccionado (por ejemplo, de 2024-12 obtenemos 12).
+    // Usamos parseInt() para convertirlo en un número entero.
+    // Restamos 1 a mesSeleccionadoInt para que coincida con el formato 0-11 de getMonth().
+    const mesSeleccionadoInt = parseInt(mesSeleccionado.split('-')[1], 10); // Extraemos el mes del valor "YYYY-MM"
+    return pagos.filter((item) => {
+      const fecha = new Date(item.pago.fecha);
+      return fecha.getMonth() === mesSeleccionadoInt - 1; // Filtrar por el mes (0-11)
+    });
+  };
+
+  // Cargar los pagos de los usuarios
   useEffect(() => {
     const obtenerPagos = async () => {
       const nuevasPagos = [];
@@ -84,7 +95,31 @@ export const TablaPago = ({ usuarios }) => {
 
   return (
     <div className="overflow-x-auto">
-      {/* Tabla de Historial */}
+    {/* Filtro de mes */}
+    <div className="flex gap-4 mb-4">
+        <div className='flex items-center gap-2 px-2 border border-orange-500'>
+          <label htmlFor="mes" className="mr-2 font-bold ">Seleccionar mes:</label>
+          <input 
+            type="month"  
+            id="mes"
+            value={mesSeleccionado}
+            onChange={(e) => setMesSeleccionado(e.target.value)}
+            className="border px-4 py-2"
+          />
+        </div>
+        <button
+          onClick={() => setMesSeleccionado('')} // Limpiar el filtro de mes
+          className="bg-orange-400 text-white px-4 py-2 rounded font-bold hover:bg-gray-700"
+        >
+          Todos los meses
+        </button>
+      </div>
+      {/* Mostrar mensaje si no hay registros con el filtro de mes */}
+      {filtrarPorMes(pagos).length === 0 ? (
+        <div className="text-center text-red-500 font-bold">No existen registros para el mes seleccionado.</div>
+      ) : (
+        <div>
+          {/* Tabla de Historial de pagos */}
       <table className="w-full text-center border-collapse border border-black">
         <thead className="bg-black text-white font-mono">
           <tr>
@@ -96,7 +131,7 @@ export const TablaPago = ({ usuarios }) => {
           </tr>
         </thead>
         <tbody>
-          {pagos.map((item, index) => (
+          {filtrarPorMes(pagos).map((item, index) => (
             <tr
               key={index}
               onClick={() => handleRowClick(item)} // Cambiar la fila seleccionada
@@ -110,24 +145,22 @@ export const TablaPago = ({ usuarios }) => {
               <td className="border border-black px-4 py-2">{verifyNumber(item?.pago.multas)}</td>
               <td className="border border-black px-4 py-2">{verifyNumber(item?.pago.atrasos)}</td>
               <td className="border border-black px-4 py-2">{verifyNumber(item?.pago.subtotal)}</td>
-      
             </tr>
           ))}
         </tbody>
-      </table>
+      </table> 
+    </div>
 
-      {/* Modal de Asistencia */}
-      {
-        showModal && (
-          <ModalPago
-            handleShow={handleModal}
-            usuario={seleccionado}
-          />
-        )
-      }
+    )}
+    {showModal && (
+      <ModalPago
+        handleShow={handleModal}
+        usuario={seleccionado}
+      />
+    )}
     </div>
   );
-};
+}
 
 TablaPago.propTypes = {
   usuarios: PropTypes.arrayOf(

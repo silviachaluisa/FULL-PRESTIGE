@@ -34,7 +34,7 @@ export const ModalPago = ({ handleShow, usuario }) => {
     };
 
     console.log("Cargando info del modal");
-    if (usuario && tipoModal === "actualizar") {
+    if (usuario && tipoModal === "actualizar" || "registrar") {
       obtenerPago();
     }else{
       // Cargar el campo fecha con los datos actuales
