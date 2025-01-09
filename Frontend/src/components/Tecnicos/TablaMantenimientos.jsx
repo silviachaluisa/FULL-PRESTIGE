@@ -103,6 +103,8 @@ export const TablaMantenimiento = ({ mantenimientos }) => {
                         className="text-black hover:text-blue-700 cursor-pointer"
                         data-tooltip-id="edit_client"
                         data-tooltip-content="Editar mantenimiento"
+                       
+                       
                       />
                       
                       <ReactTooltip id='edit_client' place='bottom'/>

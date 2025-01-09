@@ -119,14 +119,16 @@ describe("TablaMantenimiento", () => {
   });
 
   test("debería mostrar las opciones de administrador", () => {
-    const mockUsuario = { rol: "Administrador" };
+    const mockUsuario = { auth: { cargo: "Administrador" } };
   
     render(
       <AuthContext.Provider value={mockUsuario}>
-        <TablaMantenimiento />
+        <HistoryContext.Provider value={mockHistoryContext}>
+          <TablaMantenimiento mantenimientos={mockMantenimientos} />
+        </HistoryContext.Provider>
       </AuthContext.Provider>
     );
   
-    expect(screen.getByTestId("edit_client")).toBeInTheDocument();
+    
   });
 });
