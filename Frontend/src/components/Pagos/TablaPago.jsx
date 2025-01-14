@@ -1,10 +1,11 @@
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'; 
 import { HistoryContext } from '../../context/HistoryContext';
 import { useContext, useEffect, useState } from 'react';
 import { ModalPago } from '../Modals/ModalPago';
 
 export const TablaPago = ({ usuarios }) => {
   const [mesSeleccionado, setMesSeleccionado] = useState(''); // Estado para el mes seleccionado
+
   // Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
   const formatDate = (isoDate) => {
     try {
@@ -31,17 +32,13 @@ export const TablaPago = ({ usuarios }) => {
 
   // Función para manejar el clic en una fila
   const handleRowClick = (usuario) => {
-    // Al seleccionar el usuario, se completan los campos automáticamente
     setSeleccionado(usuario); // Actualizar el usuario seleccionado en el contexto
     console.log("Usuario seleccionado:", usuario);
   };
 
-  //Función para filtrar por mes
+  // Función para filtrar por mes
   const filtrarPorMes = (pagos) => {
     if (!mesSeleccionado) return pagos; // Si no se selecciona mes, mostrar todos los pagos
-    // Usamos split('-')[1] para obtener el mes del valor mesSeleccionado (por ejemplo, de 2024-12 obtenemos 12).
-    // Usamos parseInt() para convertirlo en un número entero.
-    // Restamos 1 a mesSeleccionadoInt para que coincida con el formato 0-11 de getMonth().
     const mesSeleccionadoInt = parseInt(mesSeleccionado.split('-')[1], 10); // Extraemos el mes del valor "YYYY-MM"
     return pagos.filter((item) => {
       const fecha = new Date(item.pago.fecha);
@@ -58,7 +55,7 @@ export const TablaPago = ({ usuarios }) => {
       try {
         // Realizar las solicitudes de forma paralela
         const respuestas = await Promise.all(
-          usuarios.map(async usuario => {
+          usuarios.map(async (usuario) => {
             try {
               const pagos = await fetchPagos(usuario.cedula);
               return { usuario, pagos };
@@ -71,15 +68,12 @@ export const TablaPago = ({ usuarios }) => {
   
         // Procesar las respuestas
         respuestas.forEach(({ usuario, pagos }) => {
-          if (pagos.length === 0) {
-            nuevasPagos.push({ ...usuario, pago: {}, indice });
+          // Asegura que 'pago' no sea undefined
+          const pagosConPagoSeguro = pagos.length > 0 ? pagos : [{ ...usuario, pago: {} }];
+          pagosConPagoSeguro.forEach((pago) => {
+            nuevasPagos.push({ ...usuario, pago, indice });
             indice++;
-          } else {
-            pagos.forEach(pago => {
-              nuevasPagos.push({ ...usuario, pago, indice });
-              indice++;
-            });
-          }
+          });
         });
   
         setPagos(nuevasPagos);
@@ -95,12 +89,12 @@ export const TablaPago = ({ usuarios }) => {
 
   return (
     <div className="overflow-x-auto">
-    {/* Filtro de mes */}
-    <div className="flex gap-4 mb-4">
-        <div className='flex items-center gap-2 px-2 border border-orange-500'>
-          <label htmlFor="mes" className="mr-2 font-bold ">Seleccionar mes:</label>
-          <input 
-            type="month"  
+      {/* Filtro de mes */}
+      <div className="flex gap-4 mb-4">
+        <div className="flex items-center gap-2 px-2 border border-orange-500">
+          <label htmlFor="mes" className="mr-2 font-bold">Seleccionar mes:</label>
+          <input
+            type="month"
             id="mes"
             value={mesSeleccionado}
             onChange={(e) => setMesSeleccionado(e.target.value)}
@@ -114,50 +108,55 @@ export const TablaPago = ({ usuarios }) => {
           Todos los meses
         </button>
       </div>
-      {/* Mostrar mensaje si no hay registros con el filtro de mes */}
-      {filtrarPorMes(pagos).length === 0 ? (
-        <div className="text-center text-red-500 font-bold">No existen registros para el mes seleccionado.</div>
-      ) : (
-        <div>
-          {/* Tabla de Historial de pagos */}
-      <table className="w-full text-center border-collapse border border-black">
-        <thead className="bg-black text-white font-mono">
-          <tr>
-            {['Cédula', 'Nombre y Apellido', 'Fecha', 'Adelantos', 'Permisos', 'Multas', 'Atrasos', 'Subtotal'].map((header) => (
-              <th key={header} className="border border-white px-4 py-2">
-                {header}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {filtrarPorMes(pagos).map((item, index) => (
-            <tr
-              key={index}
-              onClick={() => handleRowClick(item)} // Cambiar la fila seleccionada
-              className={`cursor-pointer ${seleccionado?.indice === item?.indice ? 'bg-gray-300' : ''}`} // Marcar la fila seleccionada con color
-            > 
-              <td className="border border-black px-4 py-2">{item.cedula}</td>
-              <td className="border border-black px-4 py-2">{item.nombre}</td>
-              <td className="border border-black px-4 py-2">{formatDate(item?.pago?.fecha || 'N/A')}</td>
-              <td className="border border-black px-4 py-2">{verifyNumber(item?.pago.adelanto)}</td>
-              <td className="border border-black px-4 py-2">{verifyNumber(item?.pago.permisos)}</td>
-              <td className="border border-black px-4 py-2">{verifyNumber(item?.pago.multas)}</td>
-              <td className="border border-black px-4 py-2">{verifyNumber(item?.pago.atrasos)}</td>
-              <td className="border border-black px-4 py-2">{verifyNumber(item?.pago.subtotal)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table> 
-    </div>
 
+      {/* Mostrar mensaje si no hay registros con el filtro de mes */}
+        <div>
+          {/* ---------------------Tabla de Historial de pagos-------------------- */}
+          <table className="w-full text-center border-collapse border border-black">
+          <thead className="bg-black text-white font-mono">
+            <tr>
+              {['Cédula', 'Nombre y Apellido', 'Fecha', 'Adelantos', 'Permisos', 'Multas', 'Atrasos', 'Subtotal'].map((header) => (
+                <th key={header} className="border border-white px-4 py-2">
+                  {header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+  <tbody>
+    {filtrarPorMes(pagos).length === 0 ? (
+      <tr>
+        <td colSpan="8" className="text-center text-red-500 font-bold">No existen registros para el mes seleccionado.</td>
+      </tr>
+    ) : (
+      filtrarPorMes(pagos).map((item, index) => (
+        <tr
+          key={index}
+          onClick={() => handleRowClick(item)} // Cambiar la fila seleccionada
+          className={`cursor-pointer ${seleccionado?.indice === item?.indice ? 'bg-gray-300' : ''}`} // Marcar la fila seleccionada con color
+        >
+          <td className="border border-black px-4 py-2">{item.cedula}</td>
+          <td className="border border-black px-4 py-2">{item.nombre}</td>
+          <td className="border border-black px-4 py-2">{formatDate(item?.pago?.fecha || 'N/A')}</td>
+          <td className="border border-black px-4 py-2">{verifyNumber(item?.pago.adelanto)}</td>
+          <td className="border border-black px-4 py-2">{verifyNumber(item?.pago.permisos)}</td>
+          <td className="border border-black px-4 py-2">{verifyNumber(item?.pago.multas)}</td>
+          <td className="border border-black px-4 py-2">{verifyNumber(item?.pago.atrasos)}</td>
+          <td className="border border-black px-4 py-2">{verifyNumber(item?.pago.subtotal)}</td>
+        </tr>
+      ))
     )}
-    {showModal && (
-      <ModalPago
-        handleShow={handleModal}
-        usuario={seleccionado}
-      />
-    )}
+  </tbody>
+</table>
+
+        </div>
+      
+
+      {showModal && (
+        <ModalPago
+          handleShow={handleModal}
+          usuario={seleccionado}
+        />
+      )}
     </div>
   );
 }
@@ -169,7 +168,7 @@ TablaPago.propTypes = {
       nombre: PropTypes.string.isRequired,
       fecha: PropTypes.string.isRequired,
       adelantos: PropTypes.string.isRequired,
-      permisos: PropTypes.string.isRequired, 
+      permisos: PropTypes.string.isRequired,
       multas: PropTypes.string.isRequired,
       atrasos: PropTypes.string.isRequired,
       subtotal: PropTypes.string.isRequired,
