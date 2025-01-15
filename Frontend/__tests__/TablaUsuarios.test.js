@@ -70,12 +70,15 @@ describe("TablaUsuarios", () => {
   });
 
   it("debería mostrar la columna 'Opciones' solo para administradores", () => {
-    renderComponent({ cargo: "Administrador" });
-    expect(screen.getByText("Opciones")).toBeInTheDocument();
-
+    // Si el cargo es "Técnico", no debe aparecer "Opciones"
     renderComponent({ cargo: "Técnico" });
     expect(screen.queryByText("Opciones")).not.toBeInTheDocument();
-  });
+
+    // Si el cargo es "Administrador", debe aparecer "Opciones"
+    renderComponent({ cargo: "Administrador" });
+    expect(screen.getByText("Opciones")).toBeInTheDocument();
+});
+
 
   it("debería manejar el clic en una fila y actualizar el contexto", () => {
     renderComponent({ cargo: "Administrador" });
