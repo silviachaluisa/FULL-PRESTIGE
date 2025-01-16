@@ -135,6 +135,7 @@ const handleSearch = async () => {
     }
   }, [startDate, endDate, clientes]);
 
+  // --------------------Descarga en formato PDF-------------------------------------
   const handleDownloadPDF = () => {
     const doc = new jsPDF({ orientation: 'landscape' }); // Configuración para orientación horizontal
     doc.text('Historial de Clientes Registrados', 10, 10);

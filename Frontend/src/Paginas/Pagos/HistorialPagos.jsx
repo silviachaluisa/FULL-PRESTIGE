@@ -142,41 +142,54 @@ export const Pago = () => {
     }, 4000);
   };
 
-  // ---------------------------------------------------------------------------------------------------
-const handleDownloadPDF = () => {
-  const doc = new jsPDF();
-  doc.text('Historial de Pagos', 10, 10);
-  doc.autoTable({
-    head: [['Cédula', 'Nombre y Apellido', 'Fecha', 'Adelantos', 'Permisos', 'Multas', 'Atrasos','Subtotal']],
-    body: pagos.map((usuario) => [
-      usuario.cedula,
-      usuario.nombre,
-      formatDate(usuario?.pago.fecha),
-      usuario?.pago.adelanto|| 'N/A',
-      usuario?.pago.permisos || 'N/A',
-      usuario?.pago.multas || 'N/A',
-      usuario?.pago.atrasos || 'N/A',
-      usuario?.pago.subtotal || 'N/A',
-    ]),
-  });
-  doc.save('HistorialPagos.pdf');
-};
-const handleDownloadExcel = () => {
-  const data = pagos.map((usuario) => ({
-    Cédula: usuario.cedula,
-    Nombre: usuario.nombre,
-    Fecha: formatDate(usuario?.pago.fecha),
-    Adelantos:usuario?.pago.adelanto || 'N/A',
-    Permisos:usuario?.pago.permisos || 'N/A',
-    Multas:usuario?.pago.multas || 'N/A',
-    Atrasos:usuario?.pago.atrasos || 'N/A',
-    Subtotal:usuario?.pago.subtotal || 'N/A',
-  }));
-  const worksheet = XLSX.utils.json_to_sheet(data);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'HistoriaPagos');
-  XLSX.writeFile(workbook, 'HistoriaPagos.xlsx');
-};
+  // --------------------Descarga en formato PDF-------------------------------------
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+    doc.text('Historial de Pagos', 10, 10);
+  
+    doc.autoTable({
+      head: [['Cédula', 'Nombre y Apellido', 'Fecha', 'Adelantos', 'Permisos', 'Multas', 'Atrasos', 'Subtotal']],
+      body: pagos.map((usuario) => [
+        usuario.cedula,
+        usuario.nombre,
+        formatDate(usuario?.pago.fecha) || 'No disponible',
+        formatNumber(usuario?.pago.adelanto) || 'No disponible',
+        formatNumber(usuario?.pago.permisos) || 'No disponible',
+        formatNumber(usuario?.pago.multas) || 'No disponible',
+        formatNumber(usuario?.pago.atrasos) || 'No disponible',
+        formatNumber(usuario?.pago.subtotal) || 'No disponible',
+      ]),
+    });
+  
+    doc.save('HistorialPagos.pdf');
+  };
+  
+  // --------------------Descarga en formato Excel--------------------------------------------
+  const handleDownloadExcel = () => {
+    const data = pagos.map((usuario) => ({
+      Cédula: usuario.cedula,
+      Nombre: usuario.nombre,
+      Fecha: formatDate(usuario?.pago.fecha),
+      Adelantos: formatNumber(usuario?.pago.adelanto) ,
+      Permisos:formatNumber(usuario?.pago.permisos) || 'No disponible',
+      Multas:formatNumber(usuario?.pago.multas) || 'No disponible',
+      Atrasos:formatNumber(usuario?.pago.atrasos) || 'No disponible',
+      Subtotal:formatNumber(usuario?.pago.subtotal) || 'No disponible',
+    }));
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'HistoriaPagos');
+    XLSX.writeFile(workbook, 'HistoriaPagos.xlsx');
+  };
+  
+  // Función para formatear números con dos decimales (utilizado en la descarga de archivos)
+  const formatNumber = (value) => {
+    if (typeof value === 'number') {
+      return value.toFixed(2); // Redondea a 2 decimales
+    }
+    return value || '0.00'; // Devuelve un valor predeterminado si no es un número
+  };
+
 
 
   return (
