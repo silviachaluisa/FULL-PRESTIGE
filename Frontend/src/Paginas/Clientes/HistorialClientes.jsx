@@ -169,19 +169,19 @@ const handleSearch = async () => {
   
   const handleDownloadExcel = () => {
     const data = filteredData.map((cliente) => ({
-      Cédula: cliente.propietario.cedula,
-      Nombre: cliente.propietario.nombre,
-      Teléfono: cliente.propietario.telefono,
-      Email: cliente.propietario.correo,
-      Dirección: cliente.propietario.direccion,
-      Orden: cliente.n_orden,
-      Marca: cliente.marca,
-      Modelo: cliente.modelo,
-      Placa: cliente.placa,
-      FechaIngreso: formatDate(cliente.fecha_ingreso),
-      FechaSalida: formatDate(cliente.fecha_salida),
-      Técnico: cliente.encargado.nombre,
-      Estado: cliente.estado,
+      Cédula: cliente.propietario?.cedula || 'No disponible', //Uso de operador: encadenamiento opcional y un valor predeterminado para las propiedades que podrían no existir
+      Nombre: cliente.propietario?.nombre || 'No disponible',
+      Teléfono: cliente.propietario.telefono || 'No disponible',
+      Email: cliente.propietario.correo || 'No disponible',
+      Dirección: cliente.propietario.direccion || 'No disponible',
+      Orden: cliente.n_orden  || 'No disponible',
+      Marca: cliente.marca || 'No disponible',
+      Modelo: cliente.modelo  || 'No disponible',
+      Placa: cliente.placa || 'No disponible',
+      FechaIngreso: formatDate(cliente.fecha_ingreso) || 'No disponible',
+      FechaSalida: formatDate(cliente.fecha_salida)   || 'No disponible',
+      Técnico: cliente.encargado?.nombre  || 'No disponible',
+      Estado: cliente.estado  || 'No disponible',
     }));
     const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
