@@ -7,34 +7,30 @@ export const TablaPago = ({ usuarios }) => {
   const [mesSeleccionado, setMesSeleccionado] = useState(''); // Estado para el mes seleccionado
 
   // Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
+  // Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
   const formatDate = (isoDate) => {
-    try {
-      if (!isoDate || typeof isoDate !== 'string') {
-        return 'N/A'; // Si no hay fecha, retornar 'N/A'
-      }
-
-      const date = new Date(isoDate);
-      if (isNaN(date)) {
-        throw new Error('Sin registro');
-      }
-      return date.toISOString().split('T')[0];
-    } catch (error) {
-      console.error(`Error formateando fecha: ${error.message}`);
+    if (!isoDate || typeof isoDate !== 'string') {
       return 'Sin registro';
     }
+    const date = new Date(isoDate);
+    return isNaN(date) ? 'Sin registro' : date.toISOString().split('T')[0];
   };
 
+  // Validar número
   const verifyNumber = (value) => {
-    return isNaN(value) ? 'N/A' : value.toFixed(2);
+    if (value === null || value === undefined || isNaN(value)) {
+      return 'Sin registro';
+    }
+    return Number(value).toFixed(2);
   };
 
   const { fetchPagos, seleccionado, setSeleccionado, showModal, handleModal, pagos, setPagos } = useContext(HistoryContext);
 
-  // Función para manejar el clic en una fila
   const handleRowClick = (usuario) => {
-    setSeleccionado(usuario); // Actualizar el usuario seleccionado en el contexto
-    console.log("Usuario seleccionado:", usuario);
+    setSeleccionado(usuario);
+    console.log('Usuario seleccionado:', usuario);
   };
+
 
   // Función para filtrar por mes
   const filtrarPorMes = (pagos) => {
