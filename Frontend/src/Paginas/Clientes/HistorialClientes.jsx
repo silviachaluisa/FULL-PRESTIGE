@@ -138,31 +138,35 @@ const handleSearch = async () => {
   const handleDownloadPDF = () => {
     const doc = new jsPDF({ orientation: 'landscape' }); // Configuración para orientación horizontal
     doc.text('Historial de Clientes Registrados', 10, 10);
-    
+  
     doc.autoTable({
-      head: [['Cédula','Nombre/Apellido', 'Contacto', 'Email', 'Dirección', 'N° Orden',
-              'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida', 'Técnico Responsable', 'Estado']],
+      head: [
+        [
+          'Cédula', 'Nombre/Apellido', 'Contacto', 'Email', 'Dirección', 'N° Orden',
+          'Marca', 'Modelo', 'Placa', 'Fecha Ingreso', 'Fecha Salida', 'Técnico Responsable', 'Estado'
+        ]
+      ],
       body: filteredData.map((cliente) => [
-        cliente.propietario.cedula,
-        cliente.propietario.nombre,
-        cliente.propietario.telefono,
-        cliente.propietario.correo,
-        cliente.propietario.direccion,
-        cliente.n_orden,
-        cliente.marca,
-        cliente.modelo,
-        cliente.placa,
-        formatDate(cliente.fecha_ingreso),
-        formatDate(cliente.fecha_salida),
-        cliente.encargado.nombre,
-        cliente.estado,
+        cliente.propietario?.cedula || 'No disponible', // Verificación de propietario
+        cliente.propietario?.nombre || 'No disponible', // Verificación de nombre
+        cliente.propietario?.telefono || 'No disponible', // Verificación de teléfono
+        cliente.propietario?.correo || 'No disponible', // Verificación de correo
+        cliente.propietario?.direccion || 'No disponible', // Verificación de dirección
+        cliente.n_orden || 'No disponible', // Verificación de orden
+        cliente.marca || 'No disponible', // Verificación de marca
+        cliente.modelo || 'No disponible', // Verificación de modelo
+        cliente.placa || 'No disponible', // Verificación de placa
+        formatDate(cliente.fecha_ingreso) || 'No disponible', // Verificación de fecha de ingreso
+        formatDate(cliente.fecha_salida) || 'No disponible', // Verificación de fecha de salida
+        cliente.encargado?.nombre || 'No disponible', // Verificación de encargado
+        cliente.estado || 'No disponible' // Verificación de estado
       ]),
       startY: 20, // Opcional: deja un espacio debajo del título
     });
-    
+  
     doc.save('HistorialClientes.pdf');
   };
-
+  
   const handleDownloadExcel = () => {
     const data = filteredData.map((cliente) => ({
       Cédula: cliente.propietario.cedula,
