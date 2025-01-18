@@ -25,13 +25,20 @@ export const ModalPago = ({ handleShow, usuario }) => {
   useEffect(() => {
     const obtenerPago = async () => {
       if (usuario) {
-        setFecha(usuario?.pago.fecha.split("T")[0] || "N/A");
-        setAdelanto(usuario?.pago.adelanto || "0");
-        setPermisos(usuario?.pago.permisos || "0");
-        setMultas(usuario?.pago.multas || "0");
-        setAtrasos(usuario?.pago.atrasos || "0");
+          // Validar que usuario.pago y usuario.pago.fecha existan antes de dividir
+          const fecha = usuario?.pago?.fecha && typeof usuario.pago.fecha === 'string' 
+              ? usuario.pago.fecha.split("T")[0] 
+              : "N/A";
+  
+          setFecha(fecha);
+          setAdelanto(usuario?.pago?.adelanto || "0");
+          setPermisos(usuario?.pago?.permisos || "0");
+          setMultas(usuario?.pago?.multas || "0");
+          setAtrasos(usuario?.pago?.atrasos || "0");
+      } else {
+          console.error("El objeto usuario es null o undefined");
       }
-    };
+  };
 
     console.log("Cargando info del modal");
     if (usuario && tipoModal === "actualizar" || "registrar") {
