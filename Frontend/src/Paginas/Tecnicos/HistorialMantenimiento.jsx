@@ -162,8 +162,7 @@ const handleSearch = async () => {
 };
 // ----------------------------------------------------------------------------------
   const handleDownloadPDF = () => {
-    try{
-      const doc = new jsPDF({ orientation: 'landscape' }); // Configuración para orientación horizontal
+    const doc = new jsPDF({ orientation: 'landscape' }); // Configuración para orientación horizontal
       doc.text('Historial de Mantenimientos Registrados', 10, 10);
       doc.autoTable({
         head: [['Cédula','Nombre/Apellido','N° Orden',
@@ -183,36 +182,27 @@ const handleSearch = async () => {
         ]),
       });
       doc.save('HistorialMantenimientos.pdf');
-      alert("PDF generado con éxito");
-      }catch (error){
-        console.error("Error al generar PDF:", error);
-        alert("Error al generar PDF");
-      }
+      
     };
 
   const handleDownloadExcel = () => {
-    try{
-      const data= mantenimientos.map((cliente) => ({
-        Cédula: cliente.vehiculo.propietario?.cedula || 'N/A',
-        Nombre: cliente.vehiculo.propietario?.nombre || 'N/A',
-        N_Orden: cliente.vehiculo?.n_orden || 'N/A',
-        Marca: cliente.vehiculo?.marca || 'N/A',
-        Modelo: cliente.vehiculo?.modelo || 'N/A',
-        Placa: cliente.vehiculo?.placa|| 'N/A',
-        FechaIngreso: formatDate(cliente.vehiculo?.fecha_ingreso || 'N/A'),
-        FechaSalida: formatDate(cliente.vehiculo?.fecha_salida || 'N/A'),
-        Descripción:cliente.descripcion || 'N/A',
-        Técnico: cliente.encargado.nombre || 'N/A',
-      }));
-      const worksheet = XLSX.utils.json_to_sheet(data);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, 'HistorialMantenimientos');
-      XLSX.writeFile(workbook, 'HistorialMantenimientos.xlsx');
-      alert
-    }catch (error){
-      console.error("Error al generar Excel:", error);
-      alert("Error al generar Excel");
-    }
+    const data= mantenimientos.map((cliente) => ({
+      Cédula: cliente.vehiculo.propietario?.cedula || 'N/A',
+      Nombre: cliente.vehiculo.propietario?.nombre || 'N/A',
+      N_Orden: cliente.vehiculo?.n_orden || 'N/A',
+      Marca: cliente.vehiculo?.marca || 'N/A',
+      Modelo: cliente.vehiculo?.modelo || 'N/A',
+      Placa: cliente.vehiculo?.placa|| 'N/A',
+      FechaIngreso: formatDate(cliente.vehiculo?.fecha_ingreso || 'N/A'),
+      FechaSalida: formatDate(cliente.vehiculo?.fecha_salida || 'N/A'),
+      Descripción:cliente?.descripcion || 'N/A',
+      Técnico: cliente.encargado?.nombre || 'N/A',
+    }));
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'HistorialMantenimientos');
+    XLSX.writeFile(workbook, 'HistorialMantenimientos.xlsx');   
+   
   };
 
 
