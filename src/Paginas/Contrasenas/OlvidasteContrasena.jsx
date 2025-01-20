@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom'; // Asegúrate de tener Link y useNavigate importados
 import Mensaje from '../../components/Alertas.jsx';
 
-const RecuperarContraseña = () => {
+const Recuperar = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -117,4 +117,4 @@ const RecuperarContraseña = () => {
   );
 };
 
-export default RecuperarContraseña;
+export default Recuperar;
