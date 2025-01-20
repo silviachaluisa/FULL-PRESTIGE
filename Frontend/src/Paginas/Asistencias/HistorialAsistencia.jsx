@@ -342,7 +342,7 @@ const handleDownloadExcel = () => {
           <tbody>
             <tr>
               <td colSpan={encabezadoTabla.length} className="text-center py-4 text-red-700">
-                { loading ? 'Cargando...' : 'No hay usuarios registrados'}
+                { loading ? 'Cargando...' : 'No existen registros de asistencia' }
               </td>
             </tr>
           </tbody>
