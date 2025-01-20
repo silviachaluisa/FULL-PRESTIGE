@@ -159,34 +159,49 @@ const handleSearch = async () => {
 
 // ---------------------------------------------------------------------------------------------------
 const handleDownloadPDF = () => {
+  const encabezadoTabla = [['Cédula', 'Nombre', 'Teléfono', 'Cargo', 'Fecha', 'Hora de Ingreso', 'Hora de Salida', 'Estado']];
+  const formatDate = (fecha) => fecha ? new Date(fecha).toLocaleDateString() : 'N/A';
+
+  const bodyData = asistencias.map((usuario) => {
+    const asistencia = usuario?.asistencia || {}; // Si asistencia es undefined, usa un objeto vacío
+    return [
+      usuario.cedula || 'N/A',
+      usuario.nombre || 'N/A',
+      usuario.telefono || 'N/A',
+      usuario.cargo || 'N/A',
+      formatDate(asistencia.fecha),
+      asistencia.hora_ingreso || 'N/A',
+      asistencia.hora_salida || 'N/A',
+      asistencia.estado || 'N/A',
+    ];
+  });
+
   const doc = new jsPDF();
   doc.text('Historial de Usuarios Registrados', 10, 10);
   doc.autoTable({
-    head: [encabezadoTabla],
-    body: asistencias.map((usuario) => [
-      usuario.cedula,
-      usuario.nombre,
-      usuario.telefono,
-      usuario.cargo,
-      formatDate(usuario?.asistencia.fecha),
-      usuario?.asistencia.hora_ingreso || 'N/A',
-      usuario?.asistencia.hora_salida || 'N/A',
-      usuario?.asistencia.estado || 'N/A',   
-    ]),
+    head: encabezadoTabla,
+    body: bodyData,
   });
   doc.save('HistorialAsistencia.pdf');
 };
+
 const handleDownloadExcel = () => {
-  const data = asistencias.map((usuario) => ({
-    Cédula: usuario.cedula,
-    Nombre: usuario.nombre,
-    Teléfono: usuario.telefono,
-    Cargo: usuario.cargo,
-    Fecha: formatDate(usuario?.asistencia.fecha),
-    HoraIngreso: usuario?.asistencia.hora_ingreso || 'N/A',
-    HoraSalida: usuario?.asistencia.hora_salida || 'N/A',
-    Estado: usuario?.asistencia.estado || 'N/A',
-  }));
+  const formatDate = (fecha) => (fecha ? new Date(fecha).toLocaleDateString() : 'N/A');
+
+  const data = asistencias.map((usuario) => {
+    const asistencia = usuario?.asistencia || {}; // Si asistencia es undefined, usa un objeto vacío
+    return {
+      Cédula: usuario.cedula || 'N/A',
+      Nombre: usuario.nombre || 'N/A',
+      Teléfono: usuario.telefono || 'N/A',
+      Cargo: usuario.cargo || 'N/A',
+      Fecha: formatDate(asistencia.fecha),
+      HoraIngreso: asistencia.hora_ingreso || 'N/A',
+      HoraSalida: asistencia.hora_salida || 'N/A',
+      Estado: asistencia.estado || 'N/A',
+    };
+  });
+
   const worksheet = XLSX.utils.json_to_sheet(data);
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, 'HistorialAsistencia');
