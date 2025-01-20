@@ -10,10 +10,7 @@ export const TablaClientes = ({clientes}) => {
   const navigate = useNavigate();
   const {seleccionado, setSeleccionado} = useContext(HistoryContext);
   const { auth } = useContext(AuthContext);
-  console.log("auth", auth);
   const [mesSeleccionado, setMesSeleccionado] = useState(''); // Estado para el mes seleccionado
-
-  console.log(clientes);
 
   // Convertir la fecha ISO 8601 a formato 'YYYY-MM-DD'
   const formatDate = (isoDate) => {
