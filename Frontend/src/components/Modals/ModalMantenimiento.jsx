@@ -101,7 +101,6 @@ const ModalMantenimiento = ({info, handleShow}) => {
                     descripcion: infoMantenimiento.descripcion,
                     estado: infoMantenimiento.estado,
                 });
-                console.log("Mantenimiento actualizado:", infoMantenimiento.id);
             } catch (error) {
                 console.error("Error al actualizar:", error);
             } finally {
@@ -116,7 +115,6 @@ const ModalMantenimiento = ({info, handleShow}) => {
                     nuevo_costo: infoMantenimiento.costo,
                     nuevo_estado: infoMantenimiento.estado,
                 });
-                console.log("Solicitud de actualización enviada");
             } catch (error) {
                 console.error("Error al solicitar actualización:", error);
             } finally {
@@ -139,7 +137,6 @@ const ModalMantenimiento = ({info, handleShow}) => {
                     descripcion: infoMantenimiento.descripcion,
                     estado: infoMantenimiento.estado,
                 });
-                console.log("Nuevo mantenimiento registrado");
             } catch (error) {
                 console.error("Error al registrar:", error);
             } finally {

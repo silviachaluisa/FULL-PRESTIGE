@@ -87,14 +87,8 @@ export const Usuarios = () => {
       setErrorMessage("⚠️La cédula debe contener solo 10 dígitos numéricos.");
       return;
     }
-    // Verificar que la cédula se está pasando correctamente
-    console.log("Buscando usuario con cédula:", cedula);
 
     const usuario = await fetchUsuarioByCedula(cedula);
-
-    // Verificar que el usuario se encontró
-    console.log("Usuario encontrado:", usuario);
-    
 
     if (!usuario) {
       setErrorMessage("❌ Usuario no se encuentra registrado"); 

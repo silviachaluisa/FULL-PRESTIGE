@@ -14,7 +14,6 @@ export const TablaUsuarios = ({usuarios}) => {
     const handleRowClick = (usuario) => {
         //Al seleccionar el usuario, se completan los campos automáticamente
         setSeleccionado(usuario); //Actualizar el usuario seleccionado en el contexto
-        console.log("Usuario seleccionado:", usuario);
     }
 
     const encabezadoTabla = [

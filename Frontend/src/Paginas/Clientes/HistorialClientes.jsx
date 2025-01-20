@@ -96,14 +96,7 @@ const handleSearch = async () => {
     return;
   }
 
-
-  // Verificar que la cédula se está pasando correctamente
-  console.log("Buscando cliente con cédula:", cedula);
-
   const cliente = await fetchClienteByCedula(cedula);
-
-  // Verificar que el cliente se encontró
-  console.log("Cliente encontrado:", cliente);
 
   if (!cliente) {
     setErrorMessage("❌ Cliente no se encuentra registrado");

@@ -97,7 +97,6 @@ export const Pago = () => {
     toyota: toyotaLogo,
   };
   const handleNewClick = (type) => {
-    console.log("Tipo de modal:", type);
     setTipoModal(type);
     handleModal(true);
   };
@@ -115,20 +114,13 @@ export const Pago = () => {
       return;
     }
   
-    // Verificar que la cédula se está pasando correctamente
-    console.log("Buscando usuarios con cédula:", cedula);
-  
     const usuario = await fetchUsuarioByCedula(cedula);
-  
-    // Verificar que el usuario se encontró
-    console.log("Usuario encontrado:", usuario);
     
   
     if (!usuario) {
       setErrorMessage("❌ Usuario no se encuentra registrado");
     } else {
       const pagos = await fetchPagos(cedula);
-      console.log("Pagos encontrado:", pagos);
       setErrorMessage(""); // Limpiar mensaje de error
       setSuccessMessage(" ✅ Usuario encontrado con éxito");
     }

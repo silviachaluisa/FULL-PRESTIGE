@@ -65,7 +65,6 @@ export const FormularioUsuarios = ({ usuarios }) => {
         
         //Iniciliza un objeto para los errores
         const nuevosErrores = {};
-            console.log(usuarios)
             // Validaciones de cédula
             if (!registro.cedula) {
               nuevosErrores.cedula = "La cédula es obligatoria.";
@@ -127,7 +126,6 @@ export const FormularioUsuarios = ({ usuarios }) => {
             delete updateinfo.estado
             delete updateinfo.contrasena
             updateinfo.estado = registro?.estado === "Activo" ? true : false;
-            console.log(updateinfo)
             // Llamar a la función para actualizar el usuario
             await upDateUser(usuarios?.cedula, updateinfo);
             // Configurar el mensaje de éxito
@@ -142,16 +140,13 @@ export const FormularioUsuarios = ({ usuarios }) => {
           }else{
             // Construir la URL de la API para el registro
             const URLRegister = `${process.env.VITE_BACKEND_URL}/register`;
-            console.log(registro);
             // Preparar los datos para el registro, excluyendo la propiedad 'estado'
             const DatosRegistrar = { ...registro };
             delete DatosRegistrar.estado;
             const respuesta = await axios.post(URLRegister, DatosRegistrar);
-            console.log(respuesta);
 
             // Configurar el mensaje de éxito
             setMensaje({ respuesta: "Usuario registrado con éxito", tipo: true });
-            console.log(respuesta)
             // Limpiar el mensaje después de 3 segundos
             setTimeout(() => {
               setMensaje(null);

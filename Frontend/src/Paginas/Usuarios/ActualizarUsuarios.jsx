@@ -12,7 +12,6 @@ export const ActualizarUsuarios = () => {
  
   const {id}=useParams();
   const {usuarios,fetchUsuarioByCedula}= useContext (HistoryContext)
-  console.log(usuarios)
   const UsuarioSeleccionado=usuarios[0]
 
   useEffect(() => {

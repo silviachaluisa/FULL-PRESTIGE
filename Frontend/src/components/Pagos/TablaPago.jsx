@@ -28,7 +28,6 @@ export const TablaPago = ({ usuarios }) => {
 
   const handleRowClick = (usuario) => {
     setSeleccionado(usuario);
-    console.log('Usuario seleccionado:', usuario);
   };
 
 
@@ -73,7 +72,6 @@ export const TablaPago = ({ usuarios }) => {
         });
   
         setPagos(nuevasPagos);
-        console.log("Nuevos pagos ->", nuevasPagos);
       } catch (error) {
         console.error("Error al obtener los pagos:", error);
       }

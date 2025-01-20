@@ -10,8 +10,7 @@ export const ActualizarClientes = () => {
   const navigate = useNavigate();
 
   const {id}=useParams();
-  const {clientes,fetchClienteByCedula}= useContext (HistoryContext)
-  console.log(clientes)
+  const {clientes,fetchClienteByCedula}= useContext (HistoryContext);
   const ClienteSeleccionado=clientes[0];
 
   //const { pathname } = useLocation(); //Para la ruta actualizar

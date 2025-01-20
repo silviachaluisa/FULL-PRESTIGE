@@ -33,7 +33,6 @@ export const TablaClientes = ({clientes}) => {
   // Función para manejar el click en una fila
   const handleRowClick = (cliente) => {
     setSeleccionado(cliente); //Actualizar el cliente seleccionado en el contexto
-    console.log("Cliente seleccionado:", cliente);
   };
 
 // Función para filtrar por mes
@@ -45,12 +44,9 @@ const filtrarPorMes = (clientes) => {
     const mesSeleccionadoInt = parseInt(mesSeleccionado.split('-')[1], 10); // Extraemos el mes del valor "YYYY-MM"
     const anioSeleccionadoInt = parseInt(mesSeleccionado.split('-')[0], 10); // Extraemos el año del valor "YYYY-MM"
 
-    console.log("mesSeleccionadoInt", mesSeleccionadoInt);
     return clientes.filter((item) => {
       // Extraemos las partes de la fecha de ingreso directamente
       const [anioIngreso, mesIngreso] = item.fecha_ingreso.split('-').map(Number); // Convertimos a números
-
-      console.log("Fecha de ingreso (año, mes):", anioIngreso, mesIngreso);
 
       // Comparamos año y mes
       return anioIngreso === anioSeleccionadoInt && mesIngreso === mesSeleccionadoInt;

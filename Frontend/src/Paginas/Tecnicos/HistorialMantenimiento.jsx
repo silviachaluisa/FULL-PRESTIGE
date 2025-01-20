@@ -101,7 +101,6 @@ const brandLogos = {
   toyota:toyotaLogo
 };
 const handleNewClick = (type) => {
-  console.log("Tipo de modal:", type);
   setTipoModal(type);
   handleModal();
 };
@@ -128,7 +127,6 @@ const handleSearch = async () => {
     } else if (auth?.cargo === "Técnico") {
       await fetchMantenimientosByEmpleado(auth?.cedula);
     }
-    console.log("Buscando todos los mantenimientos", mantenimientos);
     return;
   }
 
@@ -137,13 +135,7 @@ const handleSearch = async () => {
     return;
   }
 
-  // Verificar que la placa se está pasando correctamente
-  console.log("Buscando cliente con placa:", placa);
-
   const cliente = await fetchMantenimientosByPlaca(placa);
-
-  // Verificar que el vehículo se encontró
-  console.log("Vehículo encontrado:", cliente);
 
   if (cliente.length === 0) {
     setErrorMessage("❌ Vehículo no se encuentra registrado");

@@ -21,7 +21,6 @@ export const TablaAsistencia = ({ usuarios }) => {
   // Manejar selección de filas
   const handleRowClick = (usuario) => {
     setSeleccionado(usuario);
-    console.log('Usuario seleccionado:', usuario);
   };
 
   const encabezadoTabla = ['Cédula', 'Nombre y Apellido', 'Teléfono', 'Cargo', 'Fecha', 'Hora de Ingreso', 'Hora de Salida', 'Estado'];

@@ -64,7 +64,6 @@ export const HistoryProvider = ({ children }) => {
       }
 
       const response = await axios.get(`${process.env.VITE_BACKEND_URL}/employees`,options);
-      console.log("Respuesta fetch usuarios ->",response.data)
       setUsuarios(response.data.empleados); // Suponiendo que la API retorna un array de usuarios
       return response.data.empleados;
     } catch (error) {
@@ -87,7 +86,6 @@ export const HistoryProvider = ({ children }) => {
     try {
       // Enviar la solicitud PUT al backend
       const respuesta = await axios.put(URLActualizar, registro, options);
-      console.log(respuesta);
     } catch (error) {
       console.error("Error al actualizar usuario", error);
     }
@@ -106,7 +104,7 @@ export const HistoryProvider = ({ children }) => {
       };
   
       const response = await axios.get(`${process.env.VITE_BACKEND_URL}/employee/${id}`,options);
-      console.log(response.data)
+      
       if (response.data && response.data.length > 0) {
         // Retorna el primer cliente encontrado
 
@@ -138,7 +136,6 @@ export const HistoryProvider = ({ children }) => {
 
       const response = await axios.get(`${process.env.VITE_BACKEND_URL}/vehicles`, options);
       setClientes(response.data); // Suponiendo que la API retorna un array de clientes
-      console.log("Clientes ->",response.data)
     } catch (error) {
       console.error("Error al obtener clientes", error);
     } finally {
@@ -157,7 +154,6 @@ export const HistoryProvider = ({ children }) => {
     };
     try {
       const respuesta = await axios.put(URLActualizar, regisclientes, options);
-      console.log(respuesta);
       return { success: true, message: "Cliente actualizado correctamente" };
     } catch (error) {
       console.error("Error al actualizar cliente", error);
@@ -179,7 +175,6 @@ export const HistoryProvider = ({ children }) => {
       };
   
       const response = await axios.get(`${process.env.VITE_BACKEND_URL}/vehicles/client/${id}`, options);
-      console.log(response.data)
       if (response.data && response.data.length > 0) {
         // Retorna el primer cliente encontrado
         setClientes(response.data)//Filtrando todos los usuarios
@@ -209,7 +204,6 @@ export const HistoryProvider = ({ children }) => {
     };
     try {
       const respuesta = await axios.put(URLActualizar, updateForm, options);
-      console.log(respuesta);
       return { success: true, message: "Vehículo actualizado correctamente" };
     } catch (error) {
       console.error("Error al actualizar vehículo", error);
@@ -228,7 +222,6 @@ export const HistoryProvider = ({ children }) => {
     };
     try {
       const respuesta = await axios.post(URLRegistrar, formRegistro, options);
-      console.log(respuesta);
 
       return { success: true, message: "Cliente registrado correctamente" };
     } catch (error) {
@@ -253,7 +246,6 @@ export const HistoryProvider = ({ children }) => {
     };
     try {
       const respuesta = await axios.post(URLRegistrar, formRegistro, options);
-      console.log(respuesta);
 
       return { success: true, message: "Vehículo registrado correctamente" };
     } catch (error) {
@@ -327,7 +319,7 @@ export const HistoryProvider = ({ children }) => {
       }
       const response = await axios.get(`${process.env.VITE_BACKEND_URL}/employee/${cedula}/assistance`, options);
       setAsistencias(response.data);
-      console.log("Asistencias ->",response.data)
+      
       return response.data;
     } catch (error) {
       console.error("Error al obtener asistencias", error);
@@ -349,7 +341,6 @@ export const HistoryProvider = ({ children }) => {
     };
     try {
       const respuesta = await axios.put(URLActualizar, asistencia, options);
-      console.log(respuesta);
       setSuccessMessage("Asistencia actualizada correctamente");
       // Cerrar el modal automáticamente después de un breve tiempo
       setTimeout(() => {
@@ -386,7 +377,6 @@ export const HistoryProvider = ({ children }) => {
     };
     try {
       const respuesta = await axios.post(URLActualizar, asistencia, options);
-      console.log(respuesta);
       setSuccessMessage("Asistencia registrada correctamente");
       // Cerrar el modal automáticamente después de un breve tiempo
       setTimeout(() => {
@@ -445,7 +435,6 @@ export const HistoryProvider = ({ children }) => {
     
       try {
         const respuesta = await axios.put(URLActualizar, pago, options);
-        console.log(respuesta);
         setSuccessMessage("Pago actualizado correctamente");
         //Cerrar el modal automáticamente después de un breve tiempo
         setTimeout(() => {
@@ -481,12 +470,8 @@ export const HistoryProvider = ({ children }) => {
         },
       };
 
-      console.log("URLRegistrar:", URLRegistrar);
-      console.log("Payload enviando", pago);
-
       try {
         const respuesta = await axios.post(URLRegistrar, pago, options);
-        console.log(respuesta);
         setSuccessMessage("Pago registrado correctamente");
 
         //Cerrar el modal automáticamente después de un breve tiempo
@@ -622,7 +607,6 @@ export const HistoryProvider = ({ children }) => {
 
     try {
       const respuesta = await axios.put(URLActualizar, mantenimiento, options);
-      console.log(respuesta);
       setSuccessMessage("Mantenimiento actualizado correctamente");
       //Cerrar el modal automáticamente después de un breve tiempo
       setTimeout(() => {
@@ -661,7 +645,6 @@ export const HistoryProvider = ({ children }) => {
     };
     try{
       const respuesta = await axios.post(URLActualizar, infoMantenimiento, options);
-      console.log(respuesta);
       setSuccessMessage("Mantenimiento registrado correctamente");
       //Cerrar el modal automáticamente después de un breve tiempo
       setTimeout(() => {
@@ -703,7 +686,6 @@ export const HistoryProvider = ({ children }) => {
     };
     try{
       const respuesta = await axios.put(URLActualizar, infoMantenimiento, options);
-      console.log(respuesta);
       setSuccessMessage("Solicitud enviada correctamente");
       //Cerrar el modal automáticamente después de un breve tiempo
       setTimeout(() => {
@@ -750,7 +732,6 @@ export const HistoryProvider = ({ children }) => {
           },
         }
       );
-      console.log(respuesta);
       return { success: true, message: "Contraseña actualizada correctamente" };
     }catch (error) {
       console.error("Error al actualizar contraseña", error);

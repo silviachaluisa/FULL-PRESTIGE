@@ -40,7 +40,6 @@ export const ModalMantenimiento = ({handleShow, cliente}) => {
       }
     };
 
-    console.log("Cargando info del modal")
     if (cliente && tipoModal === "actualizar") {
       obtenerMantenimientos();
     } else {
@@ -80,7 +79,6 @@ export const ModalMantenimiento = ({handleShow, cliente}) => {
 
   const handleSubmit = () => {
     const error = validarMantenimiento();
-    console.log(cliente, { fecha, detalle, justificacion });
     
     if (error) {
       setErrorMessage(error);

@@ -9,7 +9,6 @@ import { FormularioUsuarios } from '../../components/Usuarios/FormularioUsuarios
 export const RegistrarUsuarios = () => {
   const navigate = useNavigate();
   const {usuarios}= useContext (HistoryContext)
-  console.log(usuarios)
   //const { pathname } = useLocation(); //Para la ruta actualizar
   
   const handleLogout = () => {

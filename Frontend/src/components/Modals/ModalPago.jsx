@@ -40,7 +40,6 @@ export const ModalPago = ({ handleShow, usuario }) => {
       }
   };
 
-    console.log("Cargando info del modal");
     if (usuario && tipoModal === "actualizar" || "registrar") {
       obtenerPago();
     }else{
@@ -102,8 +101,7 @@ export const ModalPago = ({ handleShow, usuario }) => {
 
   const handleSubmit = () => {
     const error = validarPago();
-    console.log("Datos del usuario: ", usuario);
-    console.log("Datos enviados", {fecha, adelanto, permisos, multas, atrasos,justificacion, subtotal})
+    
     if (error) {
       setErrorMessage(error);
       setTimeout(() => {

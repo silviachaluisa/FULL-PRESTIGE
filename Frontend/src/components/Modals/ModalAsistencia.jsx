@@ -41,7 +41,6 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
       }
     };
 
-    console.log("Cargando info del modal")
     if (usuario && tipoModal === "actualizar") {
       obtenerAsistencia();
     } else {
@@ -92,7 +91,6 @@ export const ModalAsistencia = ({handleShow, usuario }) => {
 
   const handleSubmit = () => {
     const error = validarAsistencia();
-    console.log(usuario, { fecha, horaIngreso, horaSalida,justificacion });
     
     if (error) {
       setErrorMessage(error);

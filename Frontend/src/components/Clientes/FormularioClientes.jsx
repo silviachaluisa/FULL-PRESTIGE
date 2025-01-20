@@ -162,11 +162,7 @@ export const FormularioClientes = ({clientes}) => {
       estado: updateinfo.estado
     };
      if (clientes?.propietario.cedula) {
-        console.log("Actualizando cliente...");
-        console.log(clientes);
-        console.log(clientInfo);
         vehicleInfo.cedula_cliente = clientes.propietario.cedula;
-        console.log(vehicleInfo);
 
         // Llamar a la función para actualizar el usuario
         const res1 = await upDateClient(clientes?.propietario.cedula, clientInfo);
@@ -193,7 +189,6 @@ export const FormularioClientes = ({clientes}) => {
         let res3 = {
           success: true,
         };
-        console.log("Actualizacion tecnico encargado ->", clientes)
         // Comprobar si se selecciono un nuevo tecnico
         if (clientes?.encargado?.cedula !== regisclientes.cedula_tecnico) {
           res3 = await asignarVehiculo({placa: vehicleInfo.placa, cedula_tecnico: vehicleInfo.cedula_tecnico});
@@ -237,9 +232,6 @@ export const FormularioClientes = ({clientes}) => {
       clientInfo.cedula = regisclientes.cedula;
       vehicleInfo.cedula_cliente = regisclientes.cedula;
       delete vehicleInfo.estado;
-      console.log("Registrando cliente...");
-      console.log(clientInfo);
-      console.log(vehicleInfo);
           
       const respuesta = await registerClient(clientInfo);
       if (respuesta.success){

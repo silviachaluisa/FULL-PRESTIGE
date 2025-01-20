@@ -8,7 +8,6 @@ import client from '../../assets/imagenes/client.png';
 export const RegistrarClientes= () => {
   const navigate = useNavigate();
   const {clientes} = useContext(HistoryContext)
-  console.log(clientes)
 
 
 
