@@ -18,9 +18,9 @@ import ActualizarUsuarios from './Paginas/Usuarios/ActualizarUsuarios.jsx';
 import { HistoryProvider } from './context/historyProvider.jsx';
 import ActualizarClientes from './Paginas/Clientes/ActualizarClientes.jsx';
 import HistorialMantenimiento from './Paginas/Tecnicos/HistorialMantenimiento.jsx';
-import Reestablecer from './Paginas/Contraseñas/Reestablecer.jsx';
-import RecuperarContraseña from './Paginas/Contraseñas/OlvidasteContraseña.jsx';
-import { Confirmar } from './Paginas/Contraseñas/Confirmar.jsx';
+import Reestablecer from './Paginas/Contrasenas/Reestablecer.jsx';
+import Recuperar from './Paginas/Contrasenas/OlvidasteContrasena.jsx';
+import { Confirmar } from './Paginas/Contrasenas/Confirmar.jsx';
 
 function App() {
     return (
@@ -37,7 +37,7 @@ function App() {
                             {/* Ruta para recuperación de contraseña */}
                             <Route path="/restablecer-contrasena/:token" element={<Reestablecer />} />
                             {/* Ruta para olvido de contraseña */}
-                            <Route path="/olvidaste-contrasena" element={<RecuperarContraseña />} />
+                            <Route path="/olvidaste-contrasena" element={<Recuperar />} />
                             {/* Ruta para confirmar inicio de sesion */}
                             <Route path="/confirmar/:token" element={<Confirmar />} />
                         </Route>
