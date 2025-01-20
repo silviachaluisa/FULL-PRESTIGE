@@ -37,7 +37,7 @@ function App() {
                             {/* Ruta para recuperación de contraseña */}
                             <Route path="/restablecer-contrasena/:token" element={<Reestablecer />} />
                             {/* Ruta para olvido de contraseña */}
-                            <Route path="/olvidaste-contrasena/id" element={<RecuperarContraseña />} />
+                            <Route path="/olvidaste-contrasena" element={<RecuperarContraseña />} />
                             {/* Ruta para confirmar inicio de sesion */}
                             <Route path="/confirmar/:token" element={<Confirmar />} />
                         </Route>
