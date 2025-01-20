@@ -29,17 +29,18 @@ function App() {
                 <HistoryProvider>
                     <Routes>
                         {/* Ruta pública principal */}
-                        <Route path="/" element={<Bienvenida />} />
-
-                        {/* Ruta de autenticación */}
-                        <Route path="/login" element={<Login />} />
-                        {/* Ruta para recuperación de contraseña */}
-                        <Route path="/restablecer-contrasena/:token" element={<Reestablecer />} />
-                        {/* Ruta para olvido de contraseña */}
-                        <Route path="/olvidaste-contrasena/id" element={<RecuperarContraseña />} />
-                        {/* Ruta para confirmar inicio de sesion */}
-                        <Route path="/confirmar/:token" element={<Confirmar />} />
-
+                        <Route index element={<Bienvenida />} />
+                        
+                        <Route path="/" element={<Auth />}>
+                            {/* Ruta de autenticación */}
+                            <Route path="/login" element={<Login />} />
+                            {/* Ruta para recuperación de contraseña */}
+                            <Route path="/restablecer-contrasena/:token" element={<Reestablecer />} />
+                            {/* Ruta para olvido de contraseña */}
+                            <Route path="/olvidaste-contrasena/id" element={<RecuperarContraseña />} />
+                            {/* Ruta para confirmar inicio de sesion */}
+                            <Route path="/confirmar/:token" element={<Confirmar />} />
+                        </Route>
 
                         {/* <Route path='forgot/:id' element={<Forgot/>}/>
                         <Route path='confirmar/:token' element={<Confirmar/>}/>
