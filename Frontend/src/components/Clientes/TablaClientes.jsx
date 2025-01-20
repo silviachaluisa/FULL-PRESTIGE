@@ -10,6 +10,7 @@ export const TablaClientes = ({clientes}) => {
   const navigate = useNavigate();
   const {seleccionado, setSeleccionado} = useContext(HistoryContext);
   const { auth } = useContext(AuthContext);
+  console.log("auth", auth);
   const [mesSeleccionado, setMesSeleccionado] = useState(''); // Estado para el mes seleccionado
 
   console.log(clientes);
@@ -45,10 +46,17 @@ const filtrarPorMes = (clientes) => {
   // Usamos parseInt() para convertirlo en un número entero.
   // Restamos 1 a mesSeleccionadoInt para que coincida con el formato 0-11 de getMonth().
     const mesSeleccionadoInt = parseInt(mesSeleccionado.split('-')[1], 10); // Extraemos el mes del valor "YYYY-MM"
-  
+    const anioSeleccionadoInt = parseInt(mesSeleccionado.split('-')[0], 10); // Extraemos el año del valor "YYYY-MM"
+
+    console.log("mesSeleccionadoInt", mesSeleccionadoInt);
     return clientes.filter((item) => {
-      const fechaIngreso = new Date(item.fecha_ingreso);
-      return fechaIngreso.getMonth() === mesSeleccionadoInt - 1; // Filtrar por el mes (0-11)
+      // Extraemos las partes de la fecha de ingreso directamente
+      const [anioIngreso, mesIngreso] = item.fecha_ingreso.split('-').map(Number); // Convertimos a números
+
+      console.log("Fecha de ingreso (año, mes):", anioIngreso, mesIngreso);
+
+      // Comparamos año y mes
+      return anioIngreso === anioSeleccionadoInt && mesIngreso === mesSeleccionadoInt;
     });
   };
   
@@ -72,6 +80,7 @@ const filtrarPorMes = (clientes) => {
           <input 
             type="month"  
             id="mes"
+            data-testid="mes"
             value={mesSeleccionado}
             onChange={(e) => setMesSeleccionado(e.target.value)}
             className="border px-4 py-2"
@@ -125,6 +134,7 @@ const filtrarPorMes = (clientes) => {
                         <FaPencilAlt
                           onClick={() => navigate(`/dashboard/actualizar-clientes/${item.propietario.cedula}`)}
                           className="text-black hover:text-blue-700 cursor-pointer"
+                          data-testid="edit_client"
                           data-tooltip-id="edit_client"
                           data-tooltip-content="Editar cliente"
                         />

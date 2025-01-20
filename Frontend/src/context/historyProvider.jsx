@@ -327,6 +327,7 @@ export const HistoryProvider = ({ children }) => {
       }
       const response = await axios.get(`${process.env.VITE_BACKEND_URL}/employee/${cedula}/assistance`, options);
       setAsistencias(response.data);
+      console.log("Asistencias ->",response.data)
       return response.data;
     } catch (error) {
       console.error("Error al obtener asistencias", error);
