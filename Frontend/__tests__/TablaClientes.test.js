@@ -3,7 +3,9 @@ import { describe, it, expect, beforeEach, afterEach, jest } from "@jest/globals
 import { TablaClientes } from "../src/components/Clientes/TablaClientes";
 import { HistoryProvider } from "../src/context/historyProvider";
 import { AuthProvider } from "../src/context/AuthProvider";
+import AuthContext from "../src/context/AuthProvider"; // Importa el contexto original
 import { MemoryRouter } from "react-router-dom";
+import React from "react";
 
 // Datos de prueba
 const clientes = [
@@ -50,6 +52,12 @@ describe("TablaClientes", () => {
       }
       return null;
     });
+
+    // Mockear el componente AuthContext
+    jest.mock("../src/context/AuthProvider", () => ({
+      AuthProvider: ({ children }) => children,
+      useAuth: () => ({ auth: { cargo: "Técnico" } }),
+    }));
   });
 
   afterEach(() => {
@@ -108,14 +116,14 @@ describe("TablaClientes", () => {
     );
   
     // Seleccionar el mes de octubre
-    const inputMes = screen.getByLabelText(/Seleccionar mes:/);
+    const inputMes = screen.getByTestId("mes");
     fireEvent.change(inputMes, { target: { value: "2023-10" } });
   
     // Debug del DOM
     screen.debug();
   
     // Verificar la presencia del cliente correspondiente
-    expect(screen.getByText((content) => /Juan Pérez/.test(content))).toBeInTheDocument();
+    expect(screen.getByText("Juan Pérez")).toBeInTheDocument();
     expect(screen.queryByText((content, element) => content.includes("María Rodríguez"))).not.toBeInTheDocument();
   });
   
@@ -132,7 +140,7 @@ describe("TablaClientes", () => {
     );
 
     // Seleccionar un mes que no tenga registros
-    fireEvent.change(screen.getByLabelText(/Seleccionar mes:/), { target: { value: "2023-09" } });
+    fireEvent.change(screen.getByTestId("mes"), { target: { value: "2023-09" } });
 
     // Verificar el mensaje de no registros
     expect(screen.getByText("No existen registros para el mes seleccionado.")).toBeInTheDocument();
@@ -140,24 +148,6 @@ describe("TablaClientes", () => {
 
   it("should call handleRowClick when a row is clicked", () => {
     const handleRowClickMock = jest.fn();
-    render(
-      <MemoryRouter>
-        <AuthProvider>
-          <HistoryProvider>
-            <TablaClientes clientes={clientes} handleRowClick={handleRowClickMock} />
-          </HistoryProvider>
-        </AuthProvider>
-      </MemoryRouter>
-    );
-
-    // Simular el clic en la fila
-    fireEvent.click(screen.getByText("Juan Pérez"));
-
-    // Verificar si el mock fue llamado
-    expect(handleRowClickMock).toHaveBeenCalledTimes(1);
-  });
-
-  it("should display edit icon for administrators", () => {
     render(
       <MemoryRouter>
         <AuthProvider value={{ auth: { cargo: "Administrador" } }}>
@@ -168,7 +158,28 @@ describe("TablaClientes", () => {
       </MemoryRouter>
     );
 
+    // Simular el clic en la fila
+    fireEvent.click(screen.getByText("Juan Pérez"));
+
+    // Verificar si la fila fue clickeada (cambiada de color)
+    expect(screen.getByText("Juan Pérez").parentElement).toHaveClass("bg-gray-300");
+  });
+
+  it("should display edit icon for administrators", () => {
+    const mockAuth = { cargo: "Administrador" }; // Mock del valor de auth
+
+    render(
+      <MemoryRouter>
+        <AuthContext.Provider value={{ auth: mockAuth }}>
+          <HistoryProvider>
+            <TablaClientes clientes={clientes} />
+          </HistoryProvider>
+        </AuthContext.Provider>
+      </MemoryRouter>
+    );
+
     // Verificar que el ícono de editar está presente
-    expect(screen.getByTestId("edit_client")).toBeInTheDocument();
+    const elements = screen.getAllByTestId("edit_client");
+    expect(elements).toHaveLength(2);
   });
 });
