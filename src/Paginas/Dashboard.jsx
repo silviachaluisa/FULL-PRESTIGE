@@ -25,7 +25,7 @@ export const Dashboard = () => {
     return (
         <div className="bg-black min-h-screen flex flex-col justify-between">
             {/* Encabezado */}
-            <header className="flex items-center justify-between bg-black py-4 px-6 border-b border-white-500">
+            <header className="flex flex-col sm:flex-row items-center justify-between bg-black py-4 px-6 border-b border-white-500">
                 <div className="flex items-center">
                     <img src={logo} alt="Full Prestige" className="h-14 logo-header" />
                     <p className="ml-4 text-white italic font-semibold text-sm">
@@ -70,7 +70,7 @@ export const Dashboard = () => {
                 <div>
                     <h1 className="text-3xl font-bold text-black">MENÚ PRINCIPAL</h1> 
                 </div>
-                <div className={`menu px-4 grid gap-8 ${auth?.cargo === 'Técnico' ? 'grid-cols-1 place-items-center' : 'grid-cols-3 sm:grid-cols-3'}`}>
+                <div className={`menu px-4 grid gap-8 ${auth?.cargo === 'Técnico' ? 'grid-cols-1 place-items-center' : 'grid-cols-1 sm:grid-cols-3'}`}>
                     {/* Mostrar opciones solo si el cargo no es 'Técnico' */}
                     {auth?.cargo !== 'Técnico' && (
                         <>
